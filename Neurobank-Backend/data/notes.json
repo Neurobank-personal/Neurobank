@@ -8,14 +8,5 @@
     "createdAt": "2025-06-27T16:08:16.317Z",
     "updatedAt": "2025-06-27T16:08:21.689Z",
     "processedContent": "Metodiken för felsökning av nätverk är viktig för att effektivt hitta och lösa problem. Första steget är att begränsa omfattningen av undersökningen genom att förstå det rapporterade problemet och samla information om symptomen. Sedan undersöks nätverkskonfigurationer för att se till att de är korrekt inställda och verktyg som ping och traceroute används för att testa anslutningar och identifiera flaskhalsar. DNS och namnupplösning kontrolleras och vid behov används paketfångstverktyg som Wireshark för att analysera nätverkstrafik.\n\nFör att underlätta felsökningen kan en checklista användas med steg som att definiera problemet, identifiera påverkade system, isolera problemet och granska konfigurationer. Vanliga verktyg för nätverksfelsökning inkluderar Ping, Traceroute, Wireshark, NSlookup och TCPDump.\n\nNätverksanslutning delas in i tre primära lager: fysiska, datalänk och nätverk. Vid felsökning i fysiska lagret kontrolleras nätverkskort, kablar och switchportar. På datalänklagret testas kommunikationen mellan värdar och switcharna, medan nätverkslagret fokuserar på rörelsen av IP-paket mellan nätverk. Vanliga saker att kontrollera här inkluderar IP-adresser, subnetmasker, standardgateway och DNS-serverkonfigurationer.\n\nMetoden för felsökning i nätverk bör följa en strukturerad process för att effektivt hitta och lösa problem i olika lag av nätverket."
-  },
-  {
-    "id": "17510507450541ay1ot4f3",
-    "title": "detta är ett test",
-    "content": "hejsan",
-    "processType": "none",
-    "userId": "1751033764233vfurc86wp",
-    "createdAt": "2025-06-27T18:59:05.054Z",
-    "updatedAt": "2025-06-27T18:59:05.054Z"
   }
 ]
