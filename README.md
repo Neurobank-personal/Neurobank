@@ -1,5 +1,52 @@
-# Vue 3 + TypeScript + Vite
+# SecondBrain Project
 
-This template should help get you started developing with Vue 3 and TypeScript in Vite. The template uses Vue 3 `<script setup>` SFCs, check out the [script setup docs](https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup) to learn more.
+A full-stack note-taking application with AI capabilities.
 
-Learn more about the recommended Project Setup and IDE Support in the [Vue Docs TypeScript Guide](https://vuejs.org/guide/typescript/overview.html#project-setup).
+## Project Structure
+
+```
+SecondBrain-project/
+├── Neurobank-Frontend/    # Vue.js frontend application
+└── Neurobank-Backend/     # Node.js backend server
+```
+
+## Getting Started
+
+### Prerequisites
+- Node.js (v16 or higher)
+- npm or yarn
+
+### Frontend (Neurobank-Frontend)
+```bash
+cd Neurobank-Frontend
+npm install
+npm run dev
+```
+
+### Backend (Neurobank-Backend)
+```bash
+cd Neurobank-Backend
+npm install
+npm start
+```
+
+## Development
+
+Both frontend and backend need to be running simultaneously for the application to work properly.
+
+- Frontend runs on: http://localhost:5173
+- Backend runs on: http://localhost:3000
+
+## Features
+
+- User authentication (login/register)
+- Note management (create, read, update, delete)
+- Modern Vue.js frontend with TypeScript
+- RESTful API backend with Express.js
+
+## Contributing
+
+1. Make changes in the appropriate frontend or backend directory
+2. Test your changes locally
+3. Commit with descriptive messages
+4. Push to your branch and create a pull request

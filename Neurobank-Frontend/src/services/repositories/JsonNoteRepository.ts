@@ -1,8 +1,9 @@
 import type { INoteRepository } from '../interfaces/INoteRepository'
 import type { Note, CreateNoteRequest } from '../../types/Note'
+import { getApiUrl, API_CONFIG } from '../../config/api'
 
 export class JsonNoteRepository implements INoteRepository {
-    private readonly apiUrl = 'http://localhost:3001/api/notes'
+    private readonly apiUrl = getApiUrl(API_CONFIG.ENDPOINTS.NOTES)
 
     async createNote(noteData: CreateNoteRequest): Promise<Note> {
         const response = await fetch(this.apiUrl, {

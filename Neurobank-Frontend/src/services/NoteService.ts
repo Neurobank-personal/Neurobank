@@ -1,6 +1,7 @@
 import type { INoteRepository } from './interfaces/INoteRepository'
 import { JsonNoteRepository } from './repositories/JsonNoteRepository'
 import type { Note, CreateNoteRequest, ProcessNoteRequest } from '../types/Note'
+import { getApiUrl, API_CONFIG } from '../config/api'
 
 export class NoteService {
     private noteRepository: INoteRepository
@@ -15,7 +16,7 @@ export class NoteService {
     }
 
     async processNote(request: ProcessNoteRequest): Promise<Note> {
-        const response = await fetch('http://localhost:3001/api/notes/process', {
+        const response = await fetch(getApiUrl(API_CONFIG.ENDPOINTS.NOTES_PROCESS), {
             method: 'POST',
             headers: { 'Content-Type': 'application/json' },
             body: JSON.stringify(request)

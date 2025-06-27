@@ -1,8 +1,9 @@
 import type { IUserRepository } from '../interfaces/IUserRepository'
 import type { User, CreateUserRequest } from '../../types/User'
+import { getApiUrl, API_CONFIG } from '../../config/api'
 
 export class JsonUserRepository implements IUserRepository {
-    private readonly apiUrl = 'http://localhost:3001/api/users'
+    private readonly apiUrl = getApiUrl(API_CONFIG.ENDPOINTS.USERS)
 
     private async readUsers(): Promise<User[]> {
         try {
