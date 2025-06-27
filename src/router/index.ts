@@ -1,18 +1,21 @@
 import { createRouter, createWebHistory } from "vue-router";
+import { useAuth } from "../stores/auth";
 
 import HomePage from "../views/HomePage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegisterPage from "../views/RegisterPage.vue";
+import NotesPage from "../views/NotesPage.vue";
 import NotFoundPage from "../views/NotFoundPage.vue";
 
 const routes = [
     {
         path: "/",
-        redirect: "/loginpage"
+        redirect: "/homepage"
     },
     {
         path: "/homepage",
         component: HomePage,
+        meta: { requiresAuth: true }
     },
     {
         path: "/loginpage",
@@ -21,6 +24,11 @@ const routes = [
     {
         path: "/registerpage",
         component: RegisterPage
+    },
+    {
+        path: "/notes",
+        component: NotesPage,
+        meta: { requiresAuth: true }
     },
     {
         path: "/:pathMatch(.*)*",
@@ -32,6 +40,19 @@ const routes = [
 const router = createRouter({
     history: createWebHistory(),
     routes,
+})
+
+// Route guard för autentisering
+router.beforeEach((to, _from, next) => {
+    const { isAuthenticated } = useAuth()
+
+    if (to.meta.requiresAuth && !isAuthenticated.value) {
+        next('/loginpage')
+    } else if ((to.path === '/loginpage' || to.path === '/registerpage') && isAuthenticated.value) {
+        next('/homepage')
+    } else {
+        next()
+    }
 })
 
 export default router;

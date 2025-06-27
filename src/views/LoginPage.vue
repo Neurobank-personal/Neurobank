@@ -2,8 +2,10 @@
 import { ref } from 'vue'
 import { useRouter } from 'vue-router'
 import { handleLogin } from '../services/handleLogin'
+import { useAuth } from '../stores/auth'
 
 const router = useRouter()
+const { login } = useAuth()
 
 const email = ref('')
 const password = ref('')
@@ -23,7 +25,17 @@ const handleSubmit = async () => {
   try {
     const result = await handleLogin(email.value, password.value)
     
-    if (result.success) {
+    if (result.success && result.user) {
+      // Spara användaren i auth store
+      login({
+        id: result.user.id,
+        firstName: result.user.firstName,
+        lastName: result.user.lastName,
+        email: result.user.email,
+        password: '', // Vi sparar inte lösenordet i frontend
+        createdAt: new Date() // Vi kan hämta detta från backend senare
+      })
+      
       // Navigera till homepage vid lyckad inloggning
       router.push('/homepage')
     } else {
