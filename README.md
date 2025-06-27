@@ -15,20 +15,25 @@ SecondBrain-project/
 ### Prerequisites
 - Node.js (v16 or higher)
 - npm or yarn
+- make (usually pre-installed on macOS/Linux)
 
-### Frontend (Neurobank-Frontend)
+### Quick Start
 ```bash
-cd Neurobank-Frontend
-npm install
-npm run dev
+# Install all dependencies
+make install
+
+# Start both frontend and backend
+make dev
 ```
 
-### Backend (Neurobank-Backend)
-```bash
-cd Neurobank-Backend
-npm install
-npm start
-```
+### Available Commands
+- `make dev` - Start both servers in development mode
+- `make dev-frontend` - Start only frontend
+- `make dev-backend` - Start only backend
+- `make install` - Install all dependencies
+- `make build` - Build frontend for production
+- `make clean` - Clean all node_modules and build files
+- `make help` - Show all available commands
 
 ## Development
 
