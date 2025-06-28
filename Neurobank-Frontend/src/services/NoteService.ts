@@ -34,6 +34,10 @@ export class NoteService {
         return await this.noteRepository.findNotesByUserId(userId)
     }
 
+    async updateNote(noteId: string, updates: Partial<Pick<Note, 'title' | 'content' | 'processedContent'>>): Promise<Note> {
+        return await this.noteRepository.updateNote(noteId, updates)
+    }
+
     private validateNoteData(noteData: CreateNoteRequest): void {
         if (!noteData.title || noteData.title.trim().length === 0) {
             throw new Error('Titel krävs')

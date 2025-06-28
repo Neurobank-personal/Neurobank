@@ -45,6 +45,16 @@ router.put('/:noteId', async (req, res, next) => {
     }
 })
 
+// Partiell uppdatering av anteckning
+router.patch('/:noteId', async (req, res, next) => {
+    try {
+        const updatedNote = await noteService.updateNote(req.params.noteId, req.body)
+        res.json(updatedNote)
+    } catch (error) {
+        next(error)
+    }
+})
+
 // Ta bort anteckning
 router.delete('/:noteId', async (req, res, next) => {
     try {

@@ -25,6 +25,27 @@ interface ProcessNoteError {
     error: string
 }
 
+interface GetNotesResponse {
+    success: true
+    notes: Note[]
+}
+
+interface GetNotesError {
+    success: false
+    error: string
+}
+
+interface UpdateNoteResponse {
+    success: true
+    note: Note
+    message: string
+}
+
+interface UpdateNoteError {
+    success: false
+    error: string
+}
+
 export const handleCreateNote = async (noteData: CreateNoteRequest): Promise<CreateNoteResponse | CreateNoteError> => {
     try {
         const note = await noteService.createNote(noteData)
@@ -68,6 +89,41 @@ export const handleGetUserNotes = async (userId: string) => {
         return {
             success: false,
             error: error instanceof Error ? error.message : 'Kunde inte hämta anteckningar'
+        }
+    }
+}
+
+export const handleGetNotes = async (userId: string): Promise<GetNotesResponse | GetNotesError> => {
+    try {
+        const notes = await noteService.getUserNotes(userId)
+        return {
+            success: true,
+            notes
+        }
+    } catch (error) {
+        console.error('Fel vid hämtning av anteckningar:', error)
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Ett oväntat fel uppstod'
+        }
+    }
+}
+
+export const handleUpdateNote = async (
+    noteId: string,
+    updates: Partial<Pick<Note, 'title' | 'content' | 'processedContent'>>
+): Promise<UpdateNoteResponse | UpdateNoteError> => {
+    try {
+        const note = await noteService.updateNote(noteId, updates)
+        return {
+            success: true,
+            note,
+            message: 'Anteckning uppdaterad!'
+        }
+    } catch (error) {
+        return {
+            success: false,
+            error: error instanceof Error ? error.message : 'Kunde inte uppdatera anteckning'
         }
     }
 }

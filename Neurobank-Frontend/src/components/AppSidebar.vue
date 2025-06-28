@@ -1,32 +1,23 @@
 <script setup lang="ts">
-import { useRouter } from 'vue-router'
-
 interface Props {
   isOpen?: boolean
+  currentSection?: string
 }
 
 interface Emits {
   (e: 'toggle'): void
+  (e: 'navigate', section: string): void
 }
 
 withDefaults(defineProps<Props>(), {
-  isOpen: true
+  isOpen: true,
+  currentSection: 'home'
 })
 
 const emit = defineEmits<Emits>()
-const router = useRouter()
 
-const goToNotes = () => {
-  router.push('/notes')
-}
-
-const goToFlashcards = () => {
-  // TODO: Implementera flashcards-sidan
-  console.log('Flashcards kommer snart')
-}
-
-const goToHome = () => {
-  router.push('/homepage')
+const navigateToSection = (section: string) => {
+  emit('navigate', section)
 }
 </script>
 
@@ -45,14 +36,22 @@ const goToHome = () => {
     
     <!-- Navigation Items -->
     <div class="nav-items">
-      <div class="nav-item active" @click="goToHome">
+      <div 
+        class="nav-item" 
+        :class="{ active: currentSection === 'home' }"
+        @click="navigateToSection('home')"
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/>
           <polyline points="9,22 9,12 15,12 15,22"/>
         </svg>
         <span v-show="isOpen">Home</span>
       </div>
-      <div class="nav-item" @click="goToNotes">
+      <div 
+        class="nav-item" 
+        :class="{ active: currentSection === 'notes' }"
+        @click="navigateToSection('notes')"
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
           <polyline points="14,2 14,8 20,8"/>
@@ -62,7 +61,11 @@ const goToHome = () => {
         </svg>
         <span v-show="isOpen">Notes</span>
       </div>
-      <div class="nav-item" @click="goToFlashcards">
+      <div 
+        class="nav-item" 
+        :class="{ active: currentSection === 'flashcards' }"
+        @click="navigateToSection('flashcards')"
+      >
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <rect x="3" y="4" width="18" height="12" rx="2"/>
           <rect x="5" y="6" width="14" height="8" rx="1"/>

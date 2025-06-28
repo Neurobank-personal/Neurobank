@@ -4,7 +4,6 @@ import { useAuth } from "../stores/auth";
 import HomePage from "../views/HomePage.vue";
 import LoginPage from "../views/LoginPage.vue";
 import RegisterPage from "../views/RegisterPage.vue";
-import NotesPage from "../views/NotesPage.vue";
 import NotFoundPage from "../views/NotFoundPage.vue";
 
 const routes = [
@@ -24,11 +23,6 @@ const routes = [
     {
         path: "/registerpage",
         component: RegisterPage
-    },
-    {
-        path: "/notes",
-        component: NotesPage,
-        meta: { requiresAuth: true }
     },
     {
         path: "/:pathMatch(.*)*",
