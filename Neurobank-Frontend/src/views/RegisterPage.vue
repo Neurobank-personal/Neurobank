@@ -17,7 +17,7 @@ const handleSubmit = async () => {
   errorMessage.value = ''
   
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'Lösenorden matchar inte!'
+    errorMessage.value = 'Passwords do not match!'
     return
   }
   
@@ -32,13 +32,13 @@ const handleSubmit = async () => {
     })
     
     if (result.success) {
-      alert('Registrering lyckades! Du kan nu logga in.')
+      alert('Registration successful! You can now log in.')
       router.push('/loginpage')
     } else {
-      errorMessage.value = result.error || 'Ett fel uppstod'
+      errorMessage.value = result.error || 'An error occurred'
     }
   } catch (error) {
-    errorMessage.value = 'Ett oväntat fel uppstod'
+    errorMessage.value = 'An unexpected error occurred'
   } finally {
     isLoading.value = false
   }
@@ -66,8 +66,8 @@ const goToLogin = () => {
       <!-- Register Section -->
       <div class="register-section">
         <div class="register-content">
-          <h2>Skapa konto</h2>
-          <p class="subtitle">Skapa din andra hjärna</p>
+          <h2>Create Account</h2>
+          <p class="subtitle">Create your second brain</p>
           
           <div v-if="errorMessage" class="error-message">
             {{ errorMessage }}
@@ -80,7 +80,7 @@ const goToLogin = () => {
                   id="firstName"
                   type="text" 
                   v-model="firstName" 
-                  placeholder="Förnamn"
+                  placeholder="First name"
                   required
                   :disabled="isLoading"
                 />
@@ -91,7 +91,7 @@ const goToLogin = () => {
                   id="lastName"
                   type="text" 
                   v-model="lastName" 
-                  placeholder="Efternamn"
+                  placeholder="Last name"
                   required
                   :disabled="isLoading"
                 />
@@ -103,7 +103,7 @@ const goToLogin = () => {
                 id="email"
                 type="email" 
                 v-model="email" 
-                placeholder="E-post"
+                placeholder="Email"
                 required
                 :disabled="isLoading"
               />
@@ -114,7 +114,7 @@ const goToLogin = () => {
                 id="password"
                 type="password" 
                 v-model="password" 
-                placeholder="Lösenord (minst 6 tecken)"
+                placeholder="Password (at least 6 characters)"
                 required
                 :disabled="isLoading"
               />
@@ -125,20 +125,20 @@ const goToLogin = () => {
                 id="confirmPassword"
                 type="password" 
                 v-model="confirmPassword" 
-                placeholder="Bekräfta lösenord"
+                placeholder="Confirm password"
                 required
                 :disabled="isLoading"
               />
             </div>
             
             <button type="submit" class="register-btn" :disabled="isLoading">
-              {{ isLoading ? 'Skapar konto...' : 'Skapa konto' }}
+              {{ isLoading ? 'Creating account...' : 'Create account' }}
             </button>
           </form>
           
           <div class="login-link">
-            <p>Har du redan ett konto? 
-              <button @click="goToLogin" class="link-btn" :disabled="isLoading">Logga in här</button>
+            <p>Already have an account? 
+              <button @click="goToLogin" class="link-btn" :disabled="isLoading">Log in here</button>
             </p>
           </div>
         </div>

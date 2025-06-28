@@ -2,7 +2,7 @@
   <div class="dashboard">
     <div class="dashboard-header">
       <h2>Home</h2>
-      <p class="subtitle" v-if="currentUser">Översikt av ditt konto</p>
+      <p class="subtitle" v-if="currentUser">Overview of your account</p>
     </div>
 
     <!-- Content Grid -->
@@ -12,7 +12,7 @@
         <!-- Notes Card -->
         <div class="content-card notes-card" @click="$emit('navigate', 'notes')">
           <div class="card-header">
-            <h3>Anteckningar</h3>
+            <h3>Notes</h3>
           </div>
           <div class="card-number">{{ notesCount }}</div>
         </div>
@@ -49,21 +49,21 @@
         <!-- Tasks Card -->
         <div class="content-card tasks-card">
           <div class="card-header">
-            <h3>Uppgifter</h3>
+            <h3>Tasks</h3>
             <button class="add-task-btn">+</button>
           </div>
           <ul class="task-list">
             <li class="task-item">
-              <span class="task-text">Slutför anteckningar för kapitlet</span>
-              <span class="task-priority high">Hög</span>
+              <span class="task-text">Complete notes for the chapter</span>
+              <span class="task-priority high">High</span>
             </li>
             <li class="task-item">
-              <span class="task-text">Granska flashcards</span>
+              <span class="task-text">Review flashcards</span>
               <span class="task-priority medium">Medium</span>
             </li>
             <li class="task-item">
-              <span class="task-text">Organisera studiegrupp</span>
-              <span class="task-priority low">Låg</span>
+              <span class="task-text">Organize study group</span>
+              <span class="task-priority low">Low</span>
             </li>
           </ul>
         </div>
@@ -81,7 +81,7 @@ const { currentUser } = useAuth()
 const noteService = new NoteService()
 
 const notesCount = ref(0)
-const flashcardsCount = ref(8) // Håller flashcards som hårdkodat tills vidare
+const flashcardsCount = ref(8) // Keep flashcards hardcoded for now
 
 defineEmits<{
   navigate: [section: string]
@@ -93,7 +93,7 @@ const loadNotesCount = async () => {
       const notes = await noteService.getUserNotes(currentUser.value.id)
       notesCount.value = notes.length
     } catch (error) {
-      console.error('Kunde inte hämta anteckningar:', error)
+      console.error('Could not fetch notes:', error)
       notesCount.value = 0
     }
   }

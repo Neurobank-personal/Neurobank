@@ -2,37 +2,37 @@
   <div class="flashcards-container">
     <div class="flashcards-header">
       <h2>Flashcards</h2>
-      <p class="subtitle">Granska och träna med dina flashcards</p>
+      <p class="subtitle">Review and practice with your flashcards</p>
     </div>
 
     <div class="flashcards-stats">
       <div class="stat-card">
         <div class="stat-number">25</div>
-        <div class="stat-label">Totala kort</div>
+        <div class="stat-label">Total cards</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">18</div>
-        <div class="stat-label">Avklarade</div>
+        <div class="stat-label">Completed</div>
       </div>
       <div class="stat-card">
         <div class="stat-number">7</div>
-        <div class="stat-label">Återstående</div>
+        <div class="stat-label">Remaining</div>
       </div>
     </div>
 
     <div class="flashcards-content">
       <div class="flashcard-deck">
-        <h3>Aktiv uppsättning</h3>
+        <h3>Active set</h3>
         <div class="flashcard" :class="{ flipped: isFlipped }" @click="flipCard">
           <div class="flashcard-inner">
             <div class="flashcard-front">
-              <div class="card-type">Fråga</div>
+              <div class="card-type">Question</div>
               <div class="card-content">
                 {{ currentCard.question }}
               </div>
             </div>
             <div class="flashcard-back">
-              <div class="card-type">Svar</div>
+              <div class="card-type">Answer</div>
               <div class="card-content">
                 {{ currentCard.answer }}
               </div>

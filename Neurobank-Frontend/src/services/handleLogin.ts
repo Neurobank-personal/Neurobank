@@ -10,7 +10,7 @@ export const handleLogin = async (email: string, password: string) => {
         if (!user) {
             return {
                 success: false,
-                error: 'Ogiltiga inloggningsuppgifter'
+                error: 'Invalid login credentials'
             }
         }
 
@@ -22,12 +22,12 @@ export const handleLogin = async (email: string, password: string) => {
                 lastName: user.lastName,
                 email: user.email
             },
-            message: 'Inloggning lyckades!'
+            message: 'Login successful!'
         }
     } catch (error) {
         return {
             success: false,
-            error: error instanceof Error ? error.message : 'Ett fel uppstod'
+            error: error instanceof Error ? error.message : 'An error occurred'
         }
     }
 }

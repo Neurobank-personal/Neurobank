@@ -14,7 +14,7 @@ export class UserService {
         // Validering
         this.validateUserData(userData)
 
-        // Hash lösenord (enkelt för nu, byt till bcrypt senare)
+        // Hash password (simple for now, switch to bcrypt later)
         const hashedPassword = this.hashPassword(userData.password)
 
         return await this.userRepository.createUser({
@@ -30,7 +30,7 @@ export class UserService {
             return null
         }
 
-        // Verifiera lösenord
+        // Verify password
         const isValidPassword = this.verifyPassword(loginData.password, user.password)
 
         return isValidPassword ? user : null
@@ -42,7 +42,7 @@ export class UserService {
         }
 
         if (!userData.password || userData.password.length < 6) {
-            throw new Error('Lösenordet måste vara minst 6 tecken')
+            throw new Error('Password must be at least 6 characters')
         }
 
         if (!userData.firstName || !userData.lastName) {

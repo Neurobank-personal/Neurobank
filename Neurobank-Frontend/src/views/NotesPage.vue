@@ -15,10 +15,10 @@ const errorMessage = ref('')
 const successMessage = ref('')
 const processedContent = ref('')
 
-// Hämta användar-ID från auth store
+// Get user ID from auth store
 const userId = computed(() => getCurrentUserId())
 
-// Omdirigera till login om inte inloggad
+// Redirect to login if not logged in
 onMounted(() => {
   if (!isAuthenticated.value) {
     router.push('/loginpage')
@@ -27,7 +27,7 @@ onMounted(() => {
 
 const handleSubmit = async () => {
   if (!userId.value) {
-    errorMessage.value = 'Du måste vara inloggad för att skapa anteckningar'
+    errorMessage.value = 'You must be logged in to create notes'
     router.push('/loginpage')
     return
   }
@@ -45,7 +45,7 @@ const handleSubmit = async () => {
     })
     
     if (result.success) {
-      successMessage.value = result.message || 'Anteckning skapad!'
+      successMessage.value = result.message || 'Note created!'
       
       // Om AI-bearbetning valdes
       if (processType.value !== 'none' && result.note) {
@@ -56,19 +56,19 @@ const handleSubmit = async () => {
         
         if (processResult.success && processResult.note) {
           processedContent.value = processResult.note.processedContent || ''
-          successMessage.value += ' AI-bearbetning klar!'
+          successMessage.value += ' AI processing complete!'
         }
       }
       
-      // Rensa formulär
+      // Clear form
       title.value = ''
       content.value = ''
       processType.value = 'none'
     } else {
-      errorMessage.value = result.error || 'Ett fel uppstod'
+      errorMessage.value = result.error || 'An error occurred'
     }
   } catch (error) {
-    errorMessage.value = 'Ett oväntat fel uppstod'
+    errorMessage.value = 'An unexpected error occurred'
   } finally {
     isLoading.value = false
   }
@@ -78,7 +78,7 @@ const handleSubmit = async () => {
 <template>
   <div class="notes-container">
     <div class="notes-card">
-      <h1>Skapa Anteckning</h1>
+      <h1>Create Note</h1>
       
       <div v-if="errorMessage" class="error-message">
         {{ errorMessage }}
@@ -90,47 +90,47 @@ const handleSubmit = async () => {
       
       <form @submit.prevent="handleSubmit" class="notes-form">
         <div class="input-group">
-          <label for="title">Titel</label>
+          <label for="title">Title</label>
           <input 
             id="title"
             type="text" 
             v-model="title" 
-            placeholder="Ange en titel för din anteckning"
+            placeholder="Enter a title for your note"
             required
             :disabled="isLoading"
           />
         </div>
         
         <div class="input-group">
-          <label for="content">Innehåll (upp till 20,000 tecken)</label>
+          <label for="content">Content (up to 20,000 characters)</label>
           <textarea 
             id="content"
             v-model="content" 
-            placeholder="Skriv din anteckning här..."
+            placeholder="Write your note here..."
             rows="15"
             maxlength="20000"
             required
             :disabled="isLoading"
           ></textarea>
-          <small>{{ content.length }}/20,000 tecken</small>
+          <small>{{ content.length }}/20,000 characters</small>
         </div>
         
         <div class="input-group">
-          <label for="processType">AI-bearbetning</label>
+          <label for="processType">AI Processing</label>
           <select id="processType" v-model="processType" :disabled="isLoading">
-            <option value="none">Ingen bearbetning</option>
-            <option value="summarize">Låt AI sammanfatta</option>
-            <option value="expand">Låt AI utveckla texten</option>
+            <option value="none">No processing</option>
+            <option value="summarize">Let AI summarize</option>
+            <option value="expand">Let AI expand the text</option>
           </select>
         </div>
         
         <button type="submit" class="submit-btn" :disabled="isLoading">
-          {{ isLoading ? 'Bearbetar...' : 'Spara anteckning' }}
+          {{ isLoading ? 'Processing...' : 'Save note' }}
         </button>
       </form>
       
       <div v-if="processedContent" class="processed-content">
-        <h3>AI-bearbetad text:</h3>
+        <h3>AI-processed text:</h3>
         <div class="content-box">
           {{ processedContent }}
         </div>

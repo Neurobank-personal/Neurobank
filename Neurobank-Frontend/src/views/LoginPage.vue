@@ -16,7 +16,7 @@ const handleSubmit = async () => {
   errorMessage.value = ''
   
   if (!email.value || !password.value) {
-    errorMessage.value = 'Fyll i både e-post och lösenord'
+    errorMessage.value = 'Fill in both email and password'
     return
   }
   
@@ -26,23 +26,23 @@ const handleSubmit = async () => {
     const result = await handleLogin(email.value, password.value)
     
     if (result.success && result.user) {
-      // Spara användaren i auth store
+      // Save the user in auth store
       login({
         id: result.user.id,
         firstName: result.user.firstName,
         lastName: result.user.lastName,
         email: result.user.email,
-        password: '', // Vi sparar inte lösenordet i frontend
-        createdAt: new Date() // Vi kan hämta detta från backend senare
+        password: '', // We don't save the password in frontend
+        createdAt: new Date() // We can fetch this from backend later
       })
       
-      // Navigera till homepage vid lyckad inloggning
+      // Navigate to homepage on successful login
       router.push('/homepage')
     } else {
-      errorMessage.value = result.error || 'Inloggning misslyckades'
+      errorMessage.value = result.error || 'Login failed'
     }
   } catch (error) {
-    errorMessage.value = 'Ett oväntat fel uppstod'
+    errorMessage.value = 'An unexpected error occurred'
   } finally {
     isLoading.value = false
   }
@@ -70,8 +70,8 @@ const goToRegister = () => {
       <!-- Login Section -->
       <div class="login-section">
         <div class="login-content">
-          <h2>Logga in</h2>
-          <p class="subtitle">Ditt andra hjärna för anteckningar och flashcards</p>
+          <h2>Log in</h2>
+          <p class="subtitle">Your second brain for notes and flashcards</p>
           
           <div v-if="errorMessage" class="error-message">
             {{ errorMessage }}
@@ -83,7 +83,7 @@ const goToRegister = () => {
                 id="email"
                 type="email" 
                 v-model="email" 
-                placeholder="E-post"
+                placeholder="Email"
                 required
                 :disabled="isLoading"
               />
@@ -94,23 +94,23 @@ const goToRegister = () => {
                 id="password"
                 type="password" 
                 v-model="password" 
-                placeholder="Lösenord"
+                placeholder="Password"
                 required
                 :disabled="isLoading"
               />
               <div class="forgot-password">
-                <a href="#" class="forgot-link">glömt?</a>
+                <a href="#" class="forgot-link">forgot?</a>
               </div>
             </div>
             
             <button type="submit" class="login-btn" :disabled="isLoading">
-              {{ isLoading ? 'Loggar in...' : 'Logga in' }}
+              {{ isLoading ? 'Logging in...' : 'Log in' }}
             </button>
           </form>
           
           <div class="register-link">
-            <p>Ny här? 
-              <button @click="goToRegister" class="link-btn" :disabled="isLoading">Skapa konto</button>
+            <p>New here? 
+              <button @click="goToRegister" class="link-btn" :disabled="isLoading">Create account</button>
             </p>
           </div>
         </div>

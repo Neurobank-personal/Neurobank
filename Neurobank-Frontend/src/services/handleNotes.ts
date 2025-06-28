@@ -52,12 +52,12 @@ export const handleCreateNote = async (noteData: CreateNoteRequest): Promise<Cre
         return {
             success: true,
             note,
-            message: 'Anteckning skapad!'
+            message: 'Note created!'
         }
     } catch (error) {
         return {
             success: false,
-            error: error instanceof Error ? error.message : 'Ett fel uppstod'
+            error: error instanceof Error ? error.message : 'An error occurred'
         }
     }
 }
@@ -68,12 +68,12 @@ export const handleProcessNote = async (request: ProcessNoteRequest): Promise<Pr
         return {
             success: true,
             note,
-            message: 'AI-bearbetning klar!'
+            message: 'AI processing complete!'
         }
     } catch (error) {
         return {
             success: false,
-            error: error instanceof Error ? error.message : 'AI-bearbetning misslyckades'
+            error: error instanceof Error ? error.message : 'AI processing failed'
         }
     }
 }

@@ -1,8 +1,8 @@
 <template>
   <div class="notes-container">
     <div class="notes-header">
-      <h2>Anteckningar</h2>
-      <p class="subtitle">Skapa och hantera dina anteckningar med AI-stöd</p>
+      <h2>Notes</h2>
+      <p class="subtitle">Create and manage your notes with AI support</p>
     </div>
 
     <!-- Tabs for switching between views -->
@@ -15,7 +15,7 @@
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
           <path d="M12 5v14M5 12h14"/>
         </svg>
-        Skapa ny
+        Create new
       </button>
       <button 
         class="tab-btn" 
@@ -26,7 +26,7 @@
           <path d="M3 12h18m-9-6v12"/>
           <path d="M8 6h13M8 12h13M8 18h13"/>
         </svg>
-        Mina anteckningar ({{ notes.length }})
+        My notes ({{ notes.length }})
       </button>
     </div>
 
@@ -46,8 +46,8 @@
               </svg>
             </div>
             <div class="header-text">
-              <h3>Skapa ny anteckning</h3>
-              <p>Skriv din anteckning och låt AI hjälpa dig bearbeta den</p>
+              <h3>Create new note</h3>
+              <p>Write your note and let AI help you process it</p>
             </div>
           </div>
 
@@ -75,13 +75,13 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M4 6h16M4 12h16M4 18h7"/>
                   </svg>
-                  Titel
+                  Title
                 </label>
                 <input 
                   id="title"
                   type="text" 
                   v-model="title" 
-                  placeholder="Ange en beskrivande titel för din anteckning"
+                  placeholder="Enter a descriptive title for your note"
                   required
                   :disabled="isLoading"
                   class="modern-input"
@@ -99,13 +99,13 @@
                     <line x1="16" y1="17" x2="8" y2="17"/>
                     <line x1="10" y1="9" x2="8" y2="9"/>
                   </svg>
-                  Innehåll
+                  Content
                 </label>
                 <div class="textarea-container">
                   <textarea 
                     id="content"
                     v-model="content" 
-                    placeholder="Skriv din anteckning här... Du kan använda markdown-format för att strukturera texten."
+                    placeholder="Write your note here... You can use markdown format to structure the text."
                     rows="12"
                     maxlength="20000"
                     required
@@ -114,7 +114,7 @@
                   ></textarea>
                   <div class="character-count">
                     <span :class="{ 'near-limit': content.length > 18000 }">
-                      {{ content.length.toLocaleString() }}/20,000 tecken
+                      {{ content.length.toLocaleString() }}/20,000 characters
                     </span>
                   </div>
                 </div>
@@ -127,7 +127,7 @@
                   <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                     <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
                   </svg>
-                  AI-bearbetning
+                  AI Processing
                 </label>
                 <div class="ai-process-selector">
                   <button 
@@ -145,8 +145,8 @@
                       </svg>
                     </div>
                     <div class="option-content">
-                      <div class="option-title">Ingen bearbetning</div>
-                      <div class="option-desc">Spara anteckningen som den är</div>
+                      <div class="option-title">No processing</div>
+                      <div class="option-desc">Save the note as it is</div>
                     </div>
                   </button>
                   
@@ -163,8 +163,8 @@
                       </svg>
                     </div>
                     <div class="option-content">
-                      <div class="option-title">Sammanfatta</div>
-                      <div class="option-desc">AI skapar en kortare version</div>
+                      <div class="option-title">Summarize</div>
+                      <div class="option-desc">AI creates a shorter version</div>
                     </div>
                   </button>
                   
@@ -182,12 +182,12 @@
                       </svg>
                     </div>
                     <div class="option-content">
-                      <div class="option-title">Utveckla</div>
-                      <div class="option-desc">AI utökar och förbättrar texten</div>
+                      <div class="option-title">Expand</div>
+                      <div class="option-desc">AI expands and improves the text</div>
                     </div>
                   </button>
                 </div>
-                <p class="help-text">AI kan hjälpa dig att förbättra din anteckning genom att sammanfatta eller utveckla innehållet.</p>
+                <p class="help-text">AI can help you improve your note by summarizing or expanding the content.</p>
               </div>
             </div>
             
@@ -199,7 +199,7 @@
                   <polyline points="7,3 7,8 15,8"/>
                 </svg>
                 <div v-else class="loading-spinner-small"></div>
-                {{ isLoading ? 'Bearbetar...' : 'Spara anteckning' }}
+                {{ isLoading ? 'Processing...' : 'Save note' }}
               </button>
               
               <button type="button" class="secondary-btn" @click="clearForm" :disabled="isLoading">
@@ -207,7 +207,7 @@
                   <polyline points="3,6 5,6 21,6"/>
                   <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
                 </svg>
-                Rensa
+                Clear
               </button>
             </div>
           </form>
@@ -220,13 +220,13 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
               </svg>
-              <h4>Tips för bra anteckningar</h4>
+              <h4>Tips for good notes</h4>
             </div>
             <ul class="tips-list">
-              <li>Använd beskrivande titlar som gör det lätt att hitta senare</li>
-              <li>Strukturera texten med rubriker och stycken</li>
-              <li>Inkludera viktiga nyckelord för bättre sökbarhet</li>
-              <li>Använd AI-bearbetning för att förbättra kvaliteten</li>
+              <li>Use descriptive titles that make it easy to find later</li>
+              <li>Structure the text with headings and paragraphs</li>
+              <li>Include important keywords for better searchability</li>
+              <li>Use AI processing to improve quality</li>
             </ul>
           </div>
 
@@ -236,10 +236,10 @@
                 <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
                 <circle cx="12" cy="12" r="3"/>
               </svg>
-              <h4>Förhandsvisning</h4>
+              <h4>Preview</h4>
             </div>
             <div class="preview-content">
-              <h5>{{ title || 'Utan titel' }}</h5>
+              <h5>{{ title || 'Untitled' }}</h5>
               <p>{{ getPreviewText(content) }}</p>
             </div>
           </div>
@@ -249,20 +249,20 @@
               <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
                 <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
               </svg>
-              <h4>Statistik</h4>
+              <h4>Statistics</h4>
             </div>
             <div class="stats-grid">
               <div class="stat-item">
                 <span class="stat-value">{{ getWordCount(content) }}</span>
-                <span class="stat-label">Ord</span>
+                <span class="stat-label">Words</span>
               </div>
               <div class="stat-item">
                 <span class="stat-value">{{ content.length }}</span>
-                <span class="stat-label">Tecken</span>
+                <span class="stat-label">Characters</span>
               </div>
               <div class="stat-item">
                 <span class="stat-value">{{ getReadingTime(content) }}</span>
-                <span class="stat-label">Min läsning</span>
+                <span class="stat-label">Min reading</span>
               </div>
             </div>
           </div>
@@ -278,8 +278,8 @@
             </svg>
           </div>
           <div class="processed-text">
-            <h3>AI-bearbetad text</h3>
-            <p>Din anteckning har bearbetats av AI enligt dina önskemål</p>
+            <h3>AI-processed text</h3>
+            <p>Your note has been processed by AI according to your preferences</p>
           </div>
         </div>
         <div class="processed-content-box">
@@ -342,11 +342,11 @@
                   AI: {{ getProcessTypeLabel(note.processType) }}
                 </span>
                 <span v-if="note.processedContent" class="tag processed-tag">
-                  Bearbetad
+                  Processed
                 </span>
               </div>
               <div class="note-length">
-                {{ note.content.length }} tecken
+                {{ note.content.length }} characters
               </div>
             </div>
           </div>
@@ -440,7 +440,7 @@ const handleSubmit = async () => {
         }
       }
       
-      // Rensa formulär
+      // Clear form
       title.value = ''
       content.value = ''
       processType.value = 'none'
@@ -481,14 +481,14 @@ const formatRelativeDate = (dateInput: string | Date) => {
   const now = new Date()
   const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
   
-  if (diffInMinutes < 1) return 'Just nu'
-  if (diffInMinutes < 60) return `${diffInMinutes} min sedan`
+  if (diffInMinutes < 1) return 'Just now'
+  if (diffInMinutes < 60) return `${diffInMinutes} min ago`
   
   const diffInHours = Math.floor(diffInMinutes / 60)
-  if (diffInHours < 24) return `${diffInHours} tim sedan`
+  if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
   
   const diffInDays = Math.floor(diffInHours / 24)
-  if (diffInDays < 7) return `${diffInDays} dag${diffInDays > 1 ? 'ar' : ''} sedan`
+  if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
   
   return date.toLocaleDateString('sv-SE', {
     year: 'numeric',
@@ -505,8 +505,8 @@ const getPreviewText = (content: string) => {
 
 const getProcessTypeLabel = (processType: string) => {
   switch (processType) {
-    case 'summarize': return 'Sammanfattning'
-    case 'expand': return 'Utökning'
+    case 'summarize': return 'Summary'
+    case 'expand': return 'Expansion'
     default: return processType
   }
 }

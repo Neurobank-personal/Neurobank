@@ -33,7 +33,7 @@ const closeDropdown = () => {
   showDropdown.value = false
 }
 
-// Stäng dropdown när man klickar utanför
+// Close dropdown when clicking outside
 const handleClickOutside = (event: Event) => {
   const target = event.target as HTMLElement
   if (!target.closest('.user-menu-container')) {
@@ -41,7 +41,7 @@ const handleClickOutside = (event: Event) => {
   }
 }
 
-// Kontrollera skärmstorlek
+// Check screen size
 const checkScreenSize = () => {
   isMobile.value = window.innerWidth <= 768
 }
@@ -93,7 +93,7 @@ onUnmounted(() => {
                 <polyline points="16,17 21,12 16,7"/>
                 <line x1="21" y1="12" x2="9" y2="12"/>
               </svg>
-              <span>Logga ut</span>
+              <span>Log out</span>
             </button>
           </div>
         </div>
