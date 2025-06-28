@@ -7,12 +7,13 @@ import AppNavbar from '../components/AppNavbar.vue'
 import HomeComponent from '../components/HomeComponent.vue'
 import NotesComponent from '../components/NotesComponent.vue'
 import FlashcardsComponent from '../components/FlashcardsComponent.vue'
+import TasksComponent from '../components/TasksComponent.vue'
 
 const router = useRouter()
 const { isAuthenticated, logout } = useAuth()
 
 const sidebarOpen = ref(true)
-const currentSection = ref('home') // 'home', 'notes', 'flashcards'
+const currentSection = ref('home') // 'home', 'notes', 'flashcards', 'tasks'
 
 // Omdirigera till login om inte inloggad
 onMounted(() => {
@@ -64,6 +65,9 @@ const navigateToSection = (section: string) => {
         />
         <FlashcardsComponent 
           v-else-if="currentSection === 'flashcards'"
+        />
+        <TasksComponent 
+          v-else-if="currentSection === 'tasks'"
         />
       </div>
     </div>

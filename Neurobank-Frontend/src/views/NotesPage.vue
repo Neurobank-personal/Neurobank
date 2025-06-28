@@ -1,4 +1,5 @@
 <script setup lang="ts">
+// NOTE: används inte längre men ger error i tsconfig om jag tar bort den
 import { ref, computed, onMounted } from 'vue'
 import { useRouter } from 'vue-router'
 import { handleCreateNote, handleProcessNote } from '../services/handleNotes'

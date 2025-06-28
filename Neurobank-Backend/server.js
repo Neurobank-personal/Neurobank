@@ -8,6 +8,7 @@ const healthRoutes = require('./src/routes/health')
 const userRoutes = require('./src/routes/users')
 const noteRoutes = require('./src/routes/notes')
 const flashcardRoutes = require('./src/routes/flashcards')
+const taskRoutes = require('./src/routes/tasks')
 
 const app = express()
 
@@ -24,6 +25,7 @@ app.use('/health', healthRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/notes', noteRoutes)
 app.use('/api/flashcards', flashcardRoutes)
+app.use('/api/tasks', taskRoutes)
 
 // Error handling middleware
 app.use(notFoundHandler)

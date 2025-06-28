@@ -231,14 +231,6 @@ watch(() => props.note, (newNote) => {
   editProcessedContent.value = newNote.processedContent || ''
 }, { deep: true })
 
-const toggleEditMode = () => {
-  if (isEditMode.value) {
-    // Save all changes
-    saveAllChanges()
-  } else {
-    isEditMode.value = true
-  }
-}
 
 const startEditingOriginal = () => {
   editingOriginal.value = true
@@ -338,13 +330,6 @@ const saveProcessed = async () => {
   } finally {
     isLoading.value = false
   }
-}
-
-const saveAllChanges = async () => {
-  // This would be called when the main edit button is clicked
-  isEditMode.value = false
-  editingOriginal.value = false
-  editingProcessed.value = false
 }
 
 const formatDate = (dateInput: string | Date) => {

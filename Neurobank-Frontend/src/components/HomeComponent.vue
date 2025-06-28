@@ -17,20 +17,50 @@
           <div class="card-number">{{ notesCount }}</div>
         </div>
 
-        <!-- Activity Chart -->
+        <!-- Activity Charts -->
         <div class="content-card activity-card">
           <div class="card-header">
-            <h3>Activity</h3>
+            <h3>Notes Created This Week</h3>
           </div>
           <div class="activity-chart">
             <div class="chart-bars">
-              <div class="bar" style="height: 40%"><span>M</span></div>
-              <div class="bar" style="height: 60%"><span>T</span></div>
-              <div class="bar" style="height: 55%"><span>W</span></div>
-              <div class="bar" style="height: 80%"><span>T</span></div>
-              <div class="bar" style="height: 70%"><span>F</span></div>
-              <div class="bar" style="height: 90%"><span>S</span></div>
-              <div class="bar" style="height: 65%"><span>S</span></div>
+              <div 
+                v-for="(day, index) in weekDays" 
+                :key="index"
+                class="bar-container"
+              >
+                <div class="activity-count">{{ notesActivity[index] }}</div>
+                <div 
+                  class="bar" 
+                  :style="{ height: `${getNotesActivityHeight(index)}%` }"
+                >
+                  <span>{{ day }}</span>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Flashcard Activity Chart -->
+        <div class="content-card activity-card">
+          <div class="card-header">
+            <h3>Flashcards Reviewed This Week</h3>
+          </div>
+          <div class="activity-chart">
+            <div class="chart-bars">
+              <div 
+                v-for="(day, index) in weekDays" 
+                :key="index"
+                class="bar-container"
+              >
+                <div class="activity-count">{{ flashcardsActivity[index] }}</div>
+                <div 
+                  class="bar flashcard-bar" 
+                  :style="{ height: `${getFlashcardsActivityHeight(index)}%` }"
+                >
+                  <span>{{ day }}</span>
+                </div>
+              </div>
             </div>
           </div>
         </div>
@@ -49,23 +79,48 @@
         <!-- Tasks Card -->
         <div class="content-card tasks-card">
           <div class="card-header">
-            <h3>Tasks</h3>
-            <button class="add-task-btn">+</button>
+            <h3>Pending Tasks</h3>
+            <button class="add-task-btn" @click="$emit('navigate', 'tasks')">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <line x1="12" y1="5" x2="12" y2="19"/>
+                <line x1="5" y1="12" x2="19" y2="12"/>
+              </svg>
+            </button>
           </div>
-          <ul class="task-list">
-            <li class="task-item">
-              <span class="task-text">Complete notes for the chapter</span>
-              <span class="task-priority high">High</span>
-            </li>
-            <li class="task-item">
-              <span class="task-text">Review flashcards</span>
-              <span class="task-priority medium">Medium</span>
-            </li>
-            <li class="task-item">
-              <span class="task-text">Organize study group</span>
-              <span class="task-priority low">Low</span>
-            </li>
-          </ul>
+          <div class="tasks-container-home">
+            <div v-if="pendingTasks.length === 0" class="no-tasks">
+              <p>No pending tasks! 🎉</p>
+            </div>
+            <div v-else class="tasks-list">
+              <div 
+                v-for="task in pendingTasks.slice(0, 15)" 
+                :key="task.id"
+                class="task-item"
+                :class="{ overdue: isTaskOverdue(task) }"
+              >
+                <div class="task-checkbox">
+                  <input 
+                    type="checkbox" 
+                    @change="completeTask(task)"
+                  />
+                </div>
+                <div class="task-content" @click="editTask(task)">
+                  <div class="task-title">{{ task.title }}</div>
+                  <div class="task-meta">
+                    <span class="task-priority" :class="task.priority">{{ task.priority }}</span>
+                    <span v-if="task.dueDate" class="task-due-date">
+                      Due: {{ formatTaskDate(task.dueDate) }}
+                    </span>
+                  </div>
+                </div>
+              </div>
+              <div v-if="pendingTasks.length > 15" class="more-tasks">
+                <button @click="$emit('navigate', 'tasks')" class="view-all-btn">
+                  View all {{ pendingTasks.length }} pending tasks
+                </button>
+              </div>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -73,17 +128,26 @@
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted } from 'vue'
+import { ref, onMounted, computed } from 'vue'
 import { useAuth } from '../stores/auth'
 import { NoteService } from '../services/NoteService'
+import FlashcardService from '../services/FlashcardService'
+import { TaskService } from '../services/TaskService'
+import type { Task } from '../types/Task'
 
 const { currentUser } = useAuth()
 const noteService = new NoteService()
+const taskService = new TaskService()
 
 const notesCount = ref(0)
-const flashcardsCount = ref(8) // Keep flashcards hardcoded for now
+const flashcardsCount = ref(0)
+const allTasks = ref<Task[]>([])
+const tasksCount = ref(0)
+const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
+const notesActivity = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
+const flashcardsActivity = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
 
-defineEmits<{
+const emit = defineEmits<{
   navigate: [section: string]
 }>()
 
@@ -92,6 +156,7 @@ const loadNotesCount = async () => {
     try {
       const notes = await noteService.getUserNotes(currentUser.value.id)
       notesCount.value = notes.length
+      calculateNotesActivity(notes)
     } catch (error) {
       console.error('Could not fetch notes:', error)
       notesCount.value = 0
@@ -99,8 +164,120 @@ const loadNotesCount = async () => {
   }
 }
 
+const loadFlashcardsCount = async () => {
+  if (currentUser?.value?.id) {
+    try {
+      const flashcards = await FlashcardService.getUserFlashcards(currentUser.value.id)
+      flashcardsCount.value = flashcards.length
+      calculateFlashcardsActivity(flashcards)
+    } catch (error) {
+      console.error('Could not fetch flashcards:', error)
+      flashcardsCount.value = 0
+    }
+  }
+}
+
+const loadTasksCount = async () => {
+  if (currentUser?.value?.id) {
+    try {
+      const tasks = await taskService.getUserTasks(currentUser.value.id)
+      allTasks.value = tasks
+      tasksCount.value = tasks.length
+    } catch (error) {
+      console.error('Could not fetch tasks:', error)
+      tasksCount.value = 0
+      allTasks.value = []
+    }
+  }
+}
+
+// Computed property for pending tasks
+const pendingTasks = computed(() => 
+  allTasks.value.filter(task => task.status === 'pending')
+)
+
+// Task-related functions
+const isTaskOverdue = (task: Task) => {
+  if (!task.dueDate || task.status === 'completed') return false
+  return new Date(task.dueDate) < new Date()
+}
+
+const formatTaskDate = (dateString: string) => {
+  return new Date(dateString).toLocaleDateString('sv-SE')
+}
+
+const completeTask = async (task: Task) => {
+  try {
+    await taskService.toggleTaskStatus(task.id, 'completed')
+    await loadTasksCount() // Reload tasks to update the list
+  } catch (error) {
+    console.error('Error completing task:', error)
+  }
+}
+
+const editTask = (task: Task) => {
+  // Store the task to edit in localStorage temporarily
+  localStorage.setItem('editTask', JSON.stringify(task))
+  // Navigate to tasks page
+  emit('navigate', 'tasks')
+}
+
+const calculateNotesActivity = (notes: any[]) => {
+  const weekStart = new Date()
+  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1) // Start from Monday
+  weekStart.setHours(0, 0, 0, 0)
+  
+  const activity = [0, 0, 0, 0, 0, 0, 0]
+  
+  notes.forEach(note => {
+    const noteDate = new Date(note.createdAt)
+    const daysDiff = Math.floor((noteDate.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24))
+    
+    if (daysDiff >= 0 && daysDiff < 7) {
+      activity[daysDiff]++
+    }
+  })
+  
+  notesActivity.value = activity
+}
+
+const calculateFlashcardsActivity = (flashcards: any[]) => {
+  const weekStart = new Date()
+  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1) // Start from Monday
+  weekStart.setHours(0, 0, 0, 0)
+  
+  const activity = [0, 0, 0, 0, 0, 0, 0]
+  
+  flashcards.forEach(card => {
+    if (card.lastReviewed) {
+      const reviewDate = new Date(card.lastReviewed)
+      const daysDiff = Math.floor((reviewDate.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24))
+      
+      if (daysDiff >= 0 && daysDiff < 7) {
+        activity[daysDiff]++
+      }
+    }
+  })
+  
+  flashcardsActivity.value = activity
+}
+
+const getNotesActivityHeight = (dayIndex: number) => {
+  const maxActivity = Math.max(...notesActivity.value, 1)
+  const height = (notesActivity.value[dayIndex] / maxActivity) * 80 + 20 // Min 20%, max 100%
+  return Math.min(height, 100)
+}
+
+const getFlashcardsActivityHeight = (dayIndex: number) => {
+  const maxActivity = Math.max(...flashcardsActivity.value, 1)
+  const height = (flashcardsActivity.value[dayIndex] / maxActivity) * 80 + 20 // Min 20%, max 100%
+  return Math.min(height, 100)
+}
+
 onMounted(() => {
   loadNotesCount()
+  loadFlashcardsCount()
+  loadTasksCount()
 })
 </script>
 
@@ -181,8 +358,12 @@ onMounted(() => {
   color: #ed8936;
 }
 
+.tasks-card .card-number {
+  color: #667eea;
+}
+
 .activity-chart {
-  height: 120px;
+  height: 140px;
   display: flex;
   align-items: end;
   justify-content: center;
@@ -193,6 +374,24 @@ onMounted(() => {
   align-items: end;
   gap: 8px;
   height: 100%;
+}
+
+.bar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  height: 100%;
+  justify-content: end;
+}
+
+.activity-count {
+  font-size: 0.75rem;
+  font-weight: 600;
+  color: #4a5568;
+  margin-bottom: 4px;
+  min-height: 16px;
+  display: flex;
+  align-items: center;
 }
 
 .bar {
@@ -206,24 +405,41 @@ onMounted(() => {
   min-height: 20px;
 }
 
+.bar.flashcard-bar {
+  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+}
+
 .bar span {
   color: white;
   font-size: 0.7rem;
   font-weight: 500;
 }
 
+/* Task-related styles */
+.tasks-card {
+  min-height: 300px; /* Same as activity cards */
+  display: flex;
+  flex-direction: column;
+}
+
+.tasks-container-home {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-height: 200px; /* Ensure minimum height even when empty */
+}
+
 .add-task-btn {
-  width: 30px;
-  height: 30px;
+  width: 32px;
+  height: 32px;
   border-radius: 50%;
   border: none;
   background: #667eea;
   color: white;
-  font-size: 1.2rem;
-  cursor: pointer;
   display: flex;
   align-items: center;
   justify-content: center;
+  cursor: pointer;
   transition: background-color 0.2s ease;
 }
 
@@ -231,34 +447,108 @@ onMounted(() => {
   background: #5a67d8;
 }
 
-.task-list {
-  list-style: none;
-  padding: 0;
+.no-tasks {
+  flex: 1;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  color: #718096;
+  min-height: 200px;
+}
+
+.no-tasks p {
   margin: 0;
+  font-size: 1rem;
+}
+
+.tasks-list {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  max-height: 400px;
+  overflow-y: auto;
+  padding-right: 4px;
+}
+
+/* Custom scrollbar for tasks list */
+.tasks-list::-webkit-scrollbar {
+  width: 4px;
+}
+
+.tasks-list::-webkit-scrollbar-track {
+  background: #f1f1f1;
+  border-radius: 2px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb {
+  background: #cbd5e0;
+  border-radius: 2px;
+}
+
+.tasks-list::-webkit-scrollbar-thumb:hover {
+  background: #a0aec0;
 }
 
 .task-item {
   display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 0.75rem 0;
-  border-bottom: 1px solid #e2e8f0;
+  align-items: flex-start;
+  gap: 0.75rem;
+  padding: 0.75rem;
+  border: 1px solid #e2e8f0;
+  border-radius: 6px;
+  transition: all 0.2s ease;
+  background: white;
 }
 
-.task-item:last-child {
-  border-bottom: none;
+.task-item:hover {
+  border-color: #cbd5e0;
+  background: #f9fafb;
+  transform: translateX(2px);
 }
 
-.task-text {
-  color: #4a5568;
+.task-item.overdue {
+  border-color: #fed7d7;
+  background: #fef5e7;
+}
+
+.task-checkbox input {
+  width: 16px;
+  height: 16px;
+  cursor: pointer;
+  margin-top: 2px;
+}
+
+.task-content {
+  flex: 1;
+  cursor: pointer;
+}
+
+.task-title {
+  font-weight: 600;
+  color: #2d3748;
+  margin-bottom: 0.25rem;
   font-size: 0.9rem;
+  line-height: 1.3;
+  transition: color 0.2s ease;
+}
+
+.task-meta {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 0.75rem;
+  color: #a0aec0;
+  flex-wrap: wrap;
 }
 
 .task-priority {
-  font-size: 0.8rem;
-  padding: 0.25rem 0.5rem;
-  border-radius: 4px;
+  padding: 0.125rem 0.375rem;
+  border-radius: 3px;
   font-weight: 500;
+  text-transform: uppercase;
+  font-size: 0.625rem;
 }
 
 .task-priority.high {
@@ -274,6 +564,39 @@ onMounted(() => {
 .task-priority.low {
   background: #c6f6d5;
   color: #38a169;
+}
+
+.task-due-date {
+  font-weight: 500;
+}
+
+.task-item.overdue .task-due-date {
+  color: #e53e3e;
+  font-weight: 600;
+}
+
+.more-tasks {
+  margin-top: 0.5rem;
+  text-align: center;
+  padding-top: 0.5rem;
+  border-top: 1px solid #e2e8f0;
+}
+
+.view-all-btn {
+  background: none;
+  border: none;
+  color: #667eea;
+  font-size: 0.85rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+  font-weight: 500;
+}
+
+.view-all-btn:hover {
+  background: #f7fafc;
+  color: #5a67d8;
 }
 
 @media (max-width: 768px) {

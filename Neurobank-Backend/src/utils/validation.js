@@ -53,9 +53,32 @@ const validateProcessType = (processType) => {
     }
 }
 
+const validateRequired = (fields) => {
+    const missingFields = []
+
+    for (const [fieldName, value] of Object.entries(fields)) {
+        if (!value || (typeof value === 'string' && value.trim().length === 0)) {
+            missingFields.push(fieldName)
+        }
+    }
+
+    if (missingFields.length > 0) {
+        return {
+            isValid: false,
+            message: `Required fields missing: ${missingFields.join(', ')}`
+        }
+    }
+
+    return {
+        isValid: true,
+        message: null
+    }
+}
+
 module.exports = {
     ValidationError,
     validateNote,
     validateUser,
-    validateProcessType
+    validateProcessType,
+    validateRequired
 }
