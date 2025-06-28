@@ -7,6 +7,7 @@ const { errorHandler, notFoundHandler } = require('./src/middleware/errorHandler
 const healthRoutes = require('./src/routes/health')
 const userRoutes = require('./src/routes/users')
 const noteRoutes = require('./src/routes/notes')
+const flashcardRoutes = require('./src/routes/flashcards')
 
 const app = express()
 
@@ -22,6 +23,7 @@ app.use(express.json())
 app.use('/health', healthRoutes)
 app.use('/api/users', userRoutes)
 app.use('/api/notes', noteRoutes)
+app.use('/api/flashcards', flashcardRoutes)
 
 // Error handling middleware
 app.use(notFoundHandler)

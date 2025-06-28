@@ -83,4 +83,28 @@ router.post('/process', async (req, res, next) => {
     }
 })
 
+// Generera flashcards från anteckningar
+router.post('/generate-flashcards', async (req, res, next) => {
+    try {
+        const { noteIds, userId } = req.body
+
+        if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
+            return res.status(400).json({
+                error: 'noteIds krävs och måste vara en array med minst ett ID'
+            })
+        }
+
+        if (!userId) {
+            return res.status(400).json({
+                error: 'userId krävs'
+            })
+        }
+
+        const flashcards = await noteService.generateFlashcardsFromNotes(noteIds, userId)
+        res.json(flashcards)
+    } catch (error) {
+        next(error)
+    }
+})
+
 module.exports = router

@@ -1,0 +1,53 @@
+[
+  {
+    "id": "1751115533863dxsy1t5ch",
+    "question": "What is the first goal in resolving any network problem?",
+    "answer": "To narrow down the scope of the investigation.",
+    "category": "Network Troubleshooting Methodology",
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-28T12:58:53.863Z",
+    "updatedAt": "2025-06-28T13:18:52.258Z",
+    "categories": [
+      null
+    ]
+  },
+  {
+    "id": "17511155338637grlhlsju",
+    "question": "What are the steps in the simplified troubleshooting checklist?",
+    "answer": "Define the Problem, Identify Affected Systems, Isolate the Problem, Check Physical Connectivity, Review Configuration, Ping and Trace Route, Check DNS and Name Resolution, Examine Network Traffic.",
+    "category": "Network Troubleshooting Methodology",
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-28T12:58:53.863Z",
+    "updatedAt": "2025-06-28T12:58:53.863Z"
+  },
+  {
+    "id": "17511155338634g3ohen10",
+    "question": "What are some common tools used for network troubleshooting?",
+    "answer": "Tools include Ping, Traceroute/Tracert, Netstat, Wireshark, Nslookup/Dig, Ipconfig/Ifconfig/ip a, TCPDump, and Cable testers.",
+    "category": "Tools of the Trade",
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": "2025-06-28T12:59:54.756Z",
+    "createdAt": "2025-06-28T12:58:53.863Z",
+    "updatedAt": "2025-06-28T12:59:54.757Z"
+  },
+  {
+    "id": "1751115533863fbeye7u13",
+    "question": "What are some common issues to check for at Layer 3 troubleshooting?",
+    "answer": "Issues to check include correct IP Address, subnet mask, default gateway, host's ability to reach the gateway, and vice versa.",
+    "category": "Troubleshooting at Layer 3",
+    "difficulty": "hard",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": "2025-06-28T12:59:28.444Z",
+    "createdAt": "2025-06-28T12:58:53.863Z",
+    "updatedAt": "2025-06-28T12:59:28.446Z"
+  }
+]

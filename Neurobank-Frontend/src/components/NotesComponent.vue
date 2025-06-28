@@ -300,6 +300,38 @@
       
       <!-- Notes List -->
       <div v-else>
+        <!-- Flashcard Generation Toolbar -->
+        <div v-if="notes.length > 0" class="notes-toolbar">
+          <div class="toolbar-left">
+            <h3>Your Notes</h3>
+            <p class="notes-count">{{ notes.length }} notes available</p>
+          </div>
+          <div class="toolbar-right">
+            <div class="selection-info" v-if="selectedNoteIds.length > 0">
+              <span>{{ selectedNoteIds.length }} selected</span>
+              <button class="btn-secondary" @click="selectedNoteIds = []">Clear</button>
+            </div>
+            <button 
+              class="btn-secondary" 
+              @click="selectAllNotes"
+              :disabled="notes.length === 0"
+            >
+              {{ selectedNoteIds.length === notes.length ? 'Deselect All' : 'Select All' }}
+            </button>
+            <button 
+              class="btn-primary flashcard-btn" 
+              @click="startFlashcardGeneration"
+              :disabled="!canGenerateFlashcards"
+            >
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+                <line x1="8" y1="21" x2="16" y2="21"/>
+                <line x1="12" y1="17" x2="12" y2="21"/>
+              </svg>
+              Generate Flashcards ({{ selectedNoteIds.length }})
+            </button>
+          </div>
+        </div>
         <div v-if="loadingNotes" class="loading-state">
           <div class="loading-spinner"></div>
           <p>Laddar anteckningar...</p>
@@ -325,29 +357,117 @@
             v-for="note in notes" 
             :key="note.id" 
             class="note-card"
-            @click="openNoteViewer(note)"
+            :class="{ selected: isNoteSelected(note.id) }"
           >
-            <div class="note-card-header">
-              <h3>{{ note.title }}</h3>
-              <div class="note-date">
-                {{ formatRelativeDate(note.createdAt) }}
+            <div class="note-selection">
+              <label class="checkbox-container" @click.stop>
+                <input 
+                  type="checkbox" 
+                  :checked="isNoteSelected(note.id)"
+                  @change="toggleNoteSelection(note.id)"
+                />
+                <span class="checkmark"></span>
+              </label>
+            </div>
+            <div class="note-content" @click="openNoteViewer(note)">
+              <div class="note-card-header">
+                <h3>{{ note.title }}</h3>
+                <div class="note-date">
+                  {{ formatRelativeDate(note.createdAt) }}
+                </div>
+              </div>
+              <div class="note-preview">
+                {{ getPreviewText(note.content) }}
+              </div>
+              <div class="note-card-footer">
+                <div class="note-tags">
+                  <span v-if="note.processType && note.processType !== 'none'" class="tag ai-tag">
+                    AI: {{ getProcessTypeLabel(note.processType) }}
+                  </span>
+                  <span v-if="note.processedContent" class="tag processed-tag">
+                    Processed
+                  </span>
+                </div>
+                <div class="note-length">
+                  {{ note.content.length }} characters
+                </div>
               </div>
             </div>
-            <div class="note-preview">
-              {{ getPreviewText(note.content) }}
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Flashcard Generation Modal -->
+    <div v-if="showFlashcardModal" class="modal-overlay" @click="closeFlashcardModal">
+      <div class="modal-content" @click.stop>
+        <div class="modal-header">
+          <h3>Generate Flashcards</h3>
+          <button class="close-btn" @click="closeFlashcardModal">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="18" y1="6" x2="6" y2="18"/>
+              <line x1="6" y1="6" x2="18" y2="18"/>
+            </svg>
+          </button>
+        </div>
+        
+        <div class="modal-body">
+          <div v-if="!generatingFlashcards && generatedFlashcards.length === 0">
+            <p class="generation-info">
+              Generate flashcards from {{ selectedNoteIds.length }} selected note{{ selectedNoteIds.length > 1 ? 's' : '' }}.
+              AI will create questions and answers based on the most important content and categorize them.
+            </p>
+            
+            <div v-if="flashcardError" class="error-message">
+              {{ flashcardError }}
             </div>
-            <div class="note-card-footer">
-              <div class="note-tags">
-                <span v-if="note.processType && note.processType !== 'none'" class="tag ai-tag">
-                  AI: {{ getProcessTypeLabel(note.processType) }}
-                </span>
-                <span v-if="note.processedContent" class="tag processed-tag">
-                  Processed
-                </span>
+            
+            <div class="modal-actions">
+              <button class="btn-secondary" @click="closeFlashcardModal">Cancel</button>
+              <button class="btn-primary" @click="generateFlashcards" :disabled="generatingFlashcards">
+                Generate Flashcards
+              </button>
+            </div>
+          </div>
+          
+          <div v-else-if="generatingFlashcards" class="loading-state">
+            <div class="loading-spinner"></div>
+            <p>Generating flashcards with AI...</p>
+            <p class="loading-subtitle">This may take a few moments</p>
+          </div>
+          
+          <div v-else-if="generatedFlashcards.length > 0" class="flashcards-result">
+            <div class="result-header">
+              <h4>Generated {{ generatedFlashcards.length }} Flashcards</h4>
+              <p class="result-subtitle">Review your new flashcards below</p>
+            </div>
+            
+            <div class="flashcards-list">
+              <div v-for="(flashcard, index) in generatedFlashcards" :key="index" class="flashcard-preview">
+                <div class="flashcard-categories">
+                  <span 
+                    v-for="category in flashcard.categories" 
+                    :key="category" 
+                    class="category-tag"
+                  >
+                    {{ category }}
+                  </span>
+                </div>
+                <div class="flashcard-content">
+                  <div class="flashcard-question">
+                    <strong>Q:</strong> {{ flashcard.question }}
+                  </div>
+                  <div class="flashcard-answer">
+                    <strong>A:</strong> {{ flashcard.answer }}
+                  </div>
+                </div>
               </div>
-              <div class="note-length">
-                {{ note.content.length }} characters
-              </div>
+            </div>
+            
+            <div class="modal-actions">
+              <button class="btn-primary" @click="closeFlashcardModal">
+                Done
+              </button>
             </div>
           </div>
         </div>
@@ -361,7 +481,9 @@ import { ref, computed, onMounted } from 'vue'
 import { handleCreateNote, handleProcessNote, handleGetNotes } from '../services/handleNotes'
 import { useAuth } from '../stores/auth'
 import NoteViewer from './NoteViewer.vue'
+import FlashcardService from '../services/FlashcardService'
 import type { Note } from '../types/Note'
+import type { Flashcard } from '../types/Flashcard'
 
 const { getCurrentUserId } = useAuth()
 
@@ -379,6 +501,13 @@ const activeTab = ref<'create' | 'list'>('list')
 const notes = ref<Note[]>([])
 const loadingNotes = ref(false)
 const selectedNote = ref<Note | null>(null)
+
+// Flashcard generation data
+const selectedNoteIds = ref<string[]>([])
+const showFlashcardModal = ref(false)
+const generatingFlashcards = ref(false)
+const generatedFlashcards = ref<Flashcard[]>([])
+const flashcardError = ref('')
 
 // Hämta användar-ID från auth store
 const userId = computed(() => getCurrentUserId())
@@ -531,6 +660,70 @@ const getReadingTime = (text: string) => {
   const minutes = Math.ceil(wordCount / wordsPerMinute)
   return minutes
 }
+
+// Flashcard functions
+const toggleNoteSelection = (noteId: string) => {
+  const index = selectedNoteIds.value.indexOf(noteId)
+  if (index > -1) {
+    selectedNoteIds.value.splice(index, 1)
+  } else {
+    selectedNoteIds.value.push(noteId)
+  }
+}
+
+const selectAllNotes = () => {
+  if (selectedNoteIds.value.length === notes.value.length) {
+    selectedNoteIds.value = []
+  } else {
+    selectedNoteIds.value = notes.value.map(note => note.id)
+  }
+}
+
+const startFlashcardGeneration = () => {
+  if (selectedNoteIds.value.length === 0) {
+    flashcardError.value = 'Please select at least one note to generate flashcards'
+    return
+  }
+  showFlashcardModal.value = true
+  flashcardError.value = ''
+}
+
+const generateFlashcards = async () => {
+  if (!userId.value || selectedNoteIds.value.length === 0) {
+    flashcardError.value = 'Please select notes and ensure you are logged in'
+    return
+  }
+
+  generatingFlashcards.value = true
+  flashcardError.value = ''
+  
+  try {
+    const flashcards = await FlashcardService.generateFromNotes(selectedNoteIds.value, userId.value)
+    generatedFlashcards.value = flashcards
+    
+    // Clear selection after successful generation
+    selectedNoteIds.value = []
+  } catch (error) {
+    flashcardError.value = error instanceof Error ? error.message : 'Failed to generate flashcards'
+    console.error('Error generating flashcards:', error)
+  } finally {
+    generatingFlashcards.value = false
+  }
+}
+
+const closeFlashcardModal = () => {
+  showFlashcardModal.value = false
+  generatedFlashcards.value = []
+  flashcardError.value = ''
+}
+
+const isNoteSelected = (noteId: string) => {
+  return selectedNoteIds.value.includes(noteId)
+}
+
+const canGenerateFlashcards = computed(() => {
+  return selectedNoteIds.value.length > 0 && !generatingFlashcards.value
+})
 </script>
 
 <style scoped>
@@ -1381,6 +1574,349 @@ const getReadingTime = (text: string) => {
   
   .note-card-header h3 {
     margin-right: 0;
+  }
+}
+
+/* Flashcard Generation Styles */
+.notes-toolbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background: white;
+  padding: 1.5rem;
+  border-radius: 12px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+  margin-bottom: 2rem;
+}
+
+.toolbar-left h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.notes-count {
+  margin: 0.25rem 0 0 0;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.toolbar-right {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+.selection-info {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  color: #4a5568;
+  font-size: 0.875rem;
+}
+
+.flashcard-btn {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.flashcard-btn:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+/* Note Card with Selection */
+.note-card {
+  position: relative;
+  transition: all 0.2s ease;
+}
+
+.note-card.selected {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  border: 2px solid #4299e1;
+}
+
+.note-selection {
+  position: absolute;
+  top: 1rem;
+  left: 1rem;
+  z-index: 2;
+}
+
+.checkbox-container {
+  position: relative;
+  display: block;
+  cursor: pointer;
+  font-size: 22px;
+  user-select: none;
+}
+
+.checkbox-container input {
+  position: absolute;
+  opacity: 0;
+  cursor: pointer;
+  height: 0;
+  width: 0;
+}
+
+.checkmark {
+  position: absolute;
+  top: 0;
+  left: 0;
+  height: 20px;
+  width: 20px;
+  background-color: #fff;
+  border: 2px solid #e2e8f0;
+  border-radius: 4px;
+  transition: all 0.2s ease;
+}
+
+.checkbox-container:hover input ~ .checkmark {
+  border-color: #4299e1;
+}
+
+.checkbox-container input:checked ~ .checkmark {
+  background-color: #4299e1;
+  border-color: #4299e1;
+}
+
+.checkmark:after {
+  content: "";
+  position: absolute;
+  display: none;
+}
+
+.checkbox-container input:checked ~ .checkmark:after {
+  display: block;
+}
+
+.checkbox-container .checkmark:after {
+  left: 6px;
+  top: 2px;
+  width: 6px;
+  height: 10px;
+  border: solid white;
+  border-width: 0 2px 2px 0;
+  transform: rotate(45deg);
+}
+
+.note-content {
+  cursor: pointer;
+  padding-left: 3rem;
+}
+
+/* Modal Styles */
+.modal-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.5);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+}
+
+.modal-content {
+  background: white;
+  border-radius: 12px;
+  max-width: 800px;
+  max-height: 90vh;
+  width: 90%;
+  overflow-y: auto;
+  box-shadow: 0 20px 25px rgba(0, 0, 0, 0.1);
+}
+
+.modal-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 1.5rem;
+  border-bottom: 1px solid #e2e8f0;
+}
+
+.modal-header h3 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.25rem;
+  font-weight: 600;
+}
+
+.close-btn {
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+  color: #718096;
+  transition: all 0.2s ease;
+}
+
+.close-btn:hover {
+  background-color: #f7fafc;
+  color: #2d3748;
+}
+
+.modal-body {
+  padding: 1.5rem;
+}
+
+.generation-info {
+  color: #4a5568;
+  margin: 0 0 1.5rem 0;
+  line-height: 1.6;
+}
+
+.modal-actions {
+  display: flex;
+  justify-content: flex-end;
+  gap: 1rem;
+  margin-top: 2rem;
+}
+
+.loading-subtitle {
+  color: #718096;
+  font-size: 0.875rem;
+  margin: 0.5rem 0 0 0;
+}
+
+/* Flashcards Result */
+.result-header {
+  margin-bottom: 2rem;
+}
+
+.result-header h4 {
+  margin: 0;
+  color: #2d3748;
+  font-size: 1.125rem;
+  font-weight: 600;
+}
+
+.result-subtitle {
+  margin: 0.5rem 0 0 0;
+  color: #718096;
+  font-size: 0.875rem;
+}
+
+.flashcards-list {
+  display: flex;
+  flex-direction: column;
+  gap: 1rem;
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.flashcard-preview {
+  border: 1px solid #e2e8f0;
+  border-radius: 8px;
+  padding: 1rem;
+  background: #f7fafc;
+}
+
+.flashcard-categories {
+  margin-bottom: 0.75rem;
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+.category-tag {
+  display: inline-block;
+  background: #4299e1;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 20px;
+  font-size: 0.75rem;
+  font-weight: 500;
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+}
+
+.flashcard-content {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+}
+
+.flashcard-question,
+.flashcard-answer {
+  color: #2d3748;
+  line-height: 1.5;
+}
+
+.flashcard-question strong,
+.flashcard-answer strong {
+  color: #4a5568;
+  margin-right: 0.5rem;
+}
+
+/* Button Styles */
+.btn-primary,
+.btn-secondary {
+  padding: 0.75rem 1.5rem;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  transition: all 0.2s ease;
+  border: none;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.btn-primary {
+  background: #4299e1;
+  color: white;
+}
+
+.btn-primary:hover:not(:disabled) {
+  background: #3182ce;
+}
+
+.btn-primary:disabled {
+  opacity: 0.5;
+  cursor: not-allowed;
+}
+
+.btn-secondary {
+  background: #f7fafc;
+  color: #4a5568;
+  border: 1px solid #e2e8f0;
+}
+
+.btn-secondary:hover {
+  background: #edf2f7;
+  border-color: #cbd5e0;
+}
+
+@media (max-width: 768px) {
+  .notes-toolbar {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 1rem;
+  }
+  
+  .toolbar-right {
+    justify-content: space-between;
+  }
+  
+  .modal-content {
+    width: 95%;
+    margin: 1rem;
+  }
+  
+  .modal-actions {
+    flex-direction: column;
+  }
+  
+  .flashcards-list {
+    max-height: 300px;
   }
 }
 </style>

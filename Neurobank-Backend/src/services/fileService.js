@@ -7,6 +7,7 @@ class FileService {
         this.dataDir = path.join(__dirname, '../../', config.dataDir)
         this.usersFile = path.join(this.dataDir, config.usersFile)
         this.notesFile = path.join(this.dataDir, config.notesFile)
+        this.flashcardsFile = path.join(this.dataDir, 'flashcards.json')
     }
 
     async ensureDataDir() {
@@ -46,6 +47,14 @@ class FileService {
 
     async writeNotes(notes) {
         return this.writeFile(this.notesFile, notes)
+    }
+
+    async readFlashcards() {
+        return this.readFile(this.flashcardsFile, [])
+    }
+
+    async writeFlashcards(flashcards) {
+        return this.writeFile(this.flashcardsFile, flashcards)
     }
 }
 

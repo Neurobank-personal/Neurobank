@@ -1,5 +1,6 @@
 const fileService = require('./fileService')
 const aiService = require('./aiService')
+const flashcardService = require('./flashcardService')
 const { validateNote, validateProcessType } = require('../utils/validation')
 
 class NoteService {
@@ -84,6 +85,34 @@ class NoteService {
 
         await fileService.writeNotes(filteredNotes)
         return true
+    }
+
+    async generateFlashcardsFromNotes(noteIds, userId) {
+        // Hämta alla specificerade anteckningar
+        const notes = await fileService.readNotes()
+        const selectedNotes = notes.filter(note =>
+            noteIds.includes(note.id) && note.userId === userId
+        )
+
+        if (selectedNotes.length === 0) {
+            throw new Error('Inga anteckningar hittades för de angivna ID:na')
+        }
+
+        // Generera flashcards med AI
+        const generatedCards = await aiService.generateFlashcards(selectedNotes)
+
+        // Konvertera och spara flashcards
+        const flashcardsToSave = generatedCards.map(card => ({
+            question: card.question,
+            answer: card.answer,
+            categories: Array.isArray(card.category) ? card.category : [card.category],
+            sourceNoteId: selectedNotes.length === 1 ? selectedNotes[0].id : null
+        }))
+
+        // Spara flashcards i databasen
+        const savedFlashcards = await flashcardService.saveFlashcards(flashcardsToSave, userId)
+
+        return savedFlashcards
     }
 }
 
