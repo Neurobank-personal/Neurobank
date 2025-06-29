@@ -2,7 +2,13 @@ import type { Flashcard } from '../types/Flashcard'
 import { getApiUrl } from '../config/api'
 
 class FlashcardService {
-    async createFlashcard(flashcardData: { question: string; answer: string; categories: string[]; userId: string }): Promise<Flashcard> {
+    async createFlashcard(flashcardData: {
+        question: string;
+        answer: string;
+        categories: string[];
+        userId: string;
+        deckId?: string
+    }): Promise<Flashcard> {
         try {
             const response = await fetch(getApiUrl('/api/flashcards'), {
                 method: 'POST',
@@ -29,14 +35,14 @@ class FlashcardService {
         }
     }
 
-    async generateFromNotes(noteIds: string[], userId: string): Promise<Flashcard[]> {
+    async generateFromNotes(noteIds: string[], userId: string, deckId?: string): Promise<Flashcard[]> {
         try {
             const response = await fetch(getApiUrl('/api/notes/generate-flashcards'), {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
                 },
-                body: JSON.stringify({ noteIds, userId }),
+                body: JSON.stringify({ noteIds, userId, deckId }),
             })
 
             if (!response.ok) {

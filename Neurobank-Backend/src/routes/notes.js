@@ -86,7 +86,7 @@ router.post('/process', async (req, res, next) => {
 // Generera flashcards från anteckningar
 router.post('/generate-flashcards', async (req, res, next) => {
     try {
-        const { noteIds, userId } = req.body
+        const { noteIds, userId, deckId } = req.body
 
         if (!noteIds || !Array.isArray(noteIds) || noteIds.length === 0) {
             return res.status(400).json({
@@ -100,7 +100,7 @@ router.post('/generate-flashcards', async (req, res, next) => {
             })
         }
 
-        const flashcards = await noteService.generateFlashcardsFromNotes(noteIds, userId)
+        const flashcards = await noteService.generateFlashcardsFromNotes(noteIds, userId, deckId)
         res.json(flashcards)
     } catch (error) {
         next(error)

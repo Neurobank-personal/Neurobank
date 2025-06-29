@@ -8,11 +8,13 @@ export interface Flashcard {
     createdAt: Date
     sourceNoteId?: string
     userId?: string
+    deckId?: string // Added deckId to support deck organization
 }
 
 export interface GenerateFlashcardsRequest {
     noteIds: string[]
     userId: string
+    deckId?: string // Added optional deckId for generating cards to specific deck
 }
 
 export interface GeneratedFlashcardData {

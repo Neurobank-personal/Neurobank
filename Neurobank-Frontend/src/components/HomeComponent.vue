@@ -223,18 +223,18 @@ const editTask = (task: Task) => {
 }
 
 const calculateNotesActivity = (notes: any[]) => {
-  const weekStart = new Date()
-  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1) // Start from Monday
-  weekStart.setHours(0, 0, 0, 0)
-  
   const activity = [0, 0, 0, 0, 0, 0, 0]
+  const today = new Date()
+  today.setHours(23, 59, 59, 999) // Set to end of today for accurate comparison
   
   notes.forEach(note => {
     const noteDate = new Date(note.createdAt)
-    const daysDiff = Math.floor((noteDate.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24))
+    const daysDiff = Math.floor((today.getTime() - noteDate.getTime()) / (1000 * 60 * 60 * 24))
     
+    // If note was created within the last 7 days
     if (daysDiff >= 0 && daysDiff < 7) {
-      activity[daysDiff]++
+      const dayIndex = 6 - daysDiff // Latest day (today) becomes index 6, 6 days ago becomes index 0
+      activity[dayIndex]++
     }
   })
   
@@ -242,19 +242,29 @@ const calculateNotesActivity = (notes: any[]) => {
 }
 
 const calculateFlashcardsActivity = (flashcards: any[]) => {
-  const weekStart = new Date()
-  weekStart.setDate(weekStart.getDate() - weekStart.getDay() + 1) // Start from Monday
-  weekStart.setHours(0, 0, 0, 0)
-  
   const activity = [0, 0, 0, 0, 0, 0, 0]
+  const today = new Date()
+  today.setHours(23, 59, 59, 999) // Set to end of today for accurate comparison
   
   flashcards.forEach(card => {
+    // Count when card was created
+    const createdDate = new Date(card.createdAt)
+    const createdDaysDiff = Math.floor((today.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24))
+    
+    if (createdDaysDiff >= 0 && createdDaysDiff < 7) {
+      const dayIndex = 6 - createdDaysDiff
+      activity[dayIndex]++
+    }
+    
+    // Count when card was last reviewed (if different day than created)
     if (card.lastReviewed) {
       const reviewDate = new Date(card.lastReviewed)
-      const daysDiff = Math.floor((reviewDate.getTime() - weekStart.getTime()) / (1000 * 60 * 60 * 24))
+      const reviewDaysDiff = Math.floor((today.getTime() - reviewDate.getTime()) / (1000 * 60 * 60 * 24))
       
-      if (daysDiff >= 0 && daysDiff < 7) {
-        activity[daysDiff]++
+      // Only count review if it's a different day than creation and within last 7 days
+      if (reviewDaysDiff >= 0 && reviewDaysDiff < 7 && reviewDaysDiff !== createdDaysDiff) {
+        const dayIndex = 6 - reviewDaysDiff
+        activity[dayIndex]++
       }
     }
   })

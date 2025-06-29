@@ -31,12 +31,12 @@
     "question": "What are some common tools used for network troubleshooting?",
     "answer": "Tools include Ping, Traceroute/Tracert, Netstat, Wireshark, Nslookup/Dig, Ipconfig/Ifconfig/ip a, TCPDump, and Cable testers.",
     "category": "Tools of the Trade",
-    "difficulty": "medium",
+    "difficulty": "hard",
     "userId": "1751033764233vfurc86wp",
     "sourceNoteId": "17511111883802iybjizqu",
-    "lastReviewed": "2025-06-28T12:59:54.756Z",
+    "lastReviewed": "2025-06-29T09:26:16.351Z",
     "createdAt": "2025-06-28T12:58:53.863Z",
-    "updatedAt": "2025-06-28T12:59:54.757Z"
+    "updatedAt": "2025-06-29T09:26:16.363Z"
   },
   {
     "id": "1751115533863fbeye7u13",

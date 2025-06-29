@@ -9,6 +9,7 @@ const userRoutes = require('./src/routes/users')
 const noteRoutes = require('./src/routes/notes')
 const flashcardRoutes = require('./src/routes/flashcards')
 const taskRoutes = require('./src/routes/tasks')
+const deckRoutes = require('./src/routes/decks')
 
 const app = express()
 
@@ -26,6 +27,7 @@ app.use('/api/users', userRoutes)
 app.use('/api/notes', noteRoutes)
 app.use('/api/flashcards', flashcardRoutes)
 app.use('/api/tasks', taskRoutes)
+app.use('/api/decks', deckRoutes)
 
 // Error handling middleware
 app.use(notFoundHandler)

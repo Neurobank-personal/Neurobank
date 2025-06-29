@@ -6,7 +6,7 @@ import AppSidebar from '../components/AppSidebar.vue'
 import AppNavbar from '../components/AppNavbar.vue'
 import HomeComponent from '../components/HomeComponent.vue'
 import NotesComponent from '../components/NotesComponent.vue'
-import FlashcardsComponent from '../components/FlashcardsComponent.vue'
+import FlashcardsHub from '../components/FlashcardsHub.vue'
 import TasksComponent from '../components/TasksComponent.vue'
 
 const router = useRouter()
@@ -63,7 +63,7 @@ const navigateToSection = (section: string) => {
         <NotesComponent 
           v-else-if="currentSection === 'notes'"
         />
-        <FlashcardsComponent 
+        <FlashcardsHub 
           v-else-if="currentSection === 'flashcards'"
         />
         <TasksComponent 

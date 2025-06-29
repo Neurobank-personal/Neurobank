@@ -56,6 +56,16 @@ class FileService {
     async writeFlashcards(flashcards) {
         return this.writeFile(this.flashcardsFile, flashcards)
     }
+
+    async readDecks() {
+        const decksFile = path.join(this.dataDir, 'decks.json')
+        return this.readFile(decksFile, [])
+    }
+
+    async writeDecks(decks) {
+        const decksFile = path.join(this.dataDir, 'decks.json')
+        return this.writeFile(decksFile, decks)
+    }
 }
 
 module.exports = new FileService()

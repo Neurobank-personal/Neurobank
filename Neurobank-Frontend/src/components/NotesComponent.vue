@@ -418,6 +418,26 @@
               AI will create questions and answers based on the most important content and categorize them.
             </p>
             
+            <!-- Deck Selection -->
+            <div class="form-group">
+              <label for="deck-select">Add to Deck (Optional)</label>
+              <select 
+                id="deck-select" 
+                v-model="selectedDeckId" 
+                class="deck-select"
+              >
+                <option :value="null">General Collection (No deck)</option>
+                <option 
+                  v-for="deck in decks" 
+                  :key="deck.id" 
+                  :value="deck.id"
+                >
+                  {{ deck.name }}
+                </option>
+              </select>
+              <p class="form-hint">Choose a deck to organize your flashcards, or leave unselected for general collection.</p>
+            </div>
+            
             <div v-if="flashcardError" class="error-message">
               {{ flashcardError }}
             </div>
@@ -482,8 +502,10 @@ import { handleCreateNote, handleProcessNote, handleGetNotes } from '../services
 import { useAuth } from '../stores/auth'
 import NoteViewer from './NoteViewer.vue'
 import FlashcardService from '../services/FlashcardService'
+import DeckService from '../services/DeckService'
 import type { Note } from '../types/Note'
 import type { Flashcard } from '../types/Flashcard'
+import type { Deck } from '../types/Deck'
 
 const { getCurrentUserId } = useAuth()
 
@@ -508,13 +530,15 @@ const showFlashcardModal = ref(false)
 const generatingFlashcards = ref(false)
 const generatedFlashcards = ref<Flashcard[]>([])
 const flashcardError = ref('')
+const selectedDeckId = ref<string | null>(null)
+const decks = ref<Deck[]>([])
 
 // Hämta användar-ID från auth store
 const userId = computed(() => getCurrentUserId())
 
-// Load notes when component mounts
+// Load notes and decks when component mounts
 onMounted(async () => {
-  await loadNotes()
+  await Promise.all([loadNotes(), loadDecks()])
 })
 
 const loadNotes = async () => {
@@ -532,6 +556,16 @@ const loadNotes = async () => {
     console.error('Fel vid laddning av anteckningar:', error)
   } finally {
     loadingNotes.value = false
+  }
+}
+
+const loadDecks = async () => {
+  if (!userId.value) return
+  
+  try {
+    decks.value = await DeckService.getUserDecks(userId.value)
+  } catch (error) {
+    console.error('Error loading decks:', error)
   }
 }
 
@@ -698,7 +732,11 @@ const generateFlashcards = async () => {
   flashcardError.value = ''
   
   try {
-    const flashcards = await FlashcardService.generateFromNotes(selectedNoteIds.value, userId.value)
+    const flashcards = await FlashcardService.generateFromNotes(
+      selectedNoteIds.value, 
+      userId.value,
+      selectedDeckId.value || undefined
+    )
     generatedFlashcards.value = flashcards
     
     // Clear selection after successful generation
@@ -715,6 +753,7 @@ const closeFlashcardModal = () => {
   showFlashcardModal.value = false
   generatedFlashcards.value = []
   flashcardError.value = ''
+  selectedDeckId.value = null
 }
 
 const isNoteSelected = (noteId: string) => {
@@ -1770,6 +1809,41 @@ const canGenerateFlashcards = computed(() => {
   color: #4a5568;
   margin: 0 0 1.5rem 0;
   line-height: 1.6;
+}
+
+.form-group {
+  margin-bottom: 1.5rem;
+}
+
+.form-group label {
+  display: block;
+  margin-bottom: 0.5rem;
+  font-weight: 500;
+  color: #374151;
+}
+
+.deck-select {
+  width: 100%;
+  padding: 0.75rem;
+  border: 1px solid #d1d5db;
+  border-radius: 0.5rem;
+  font-size: 1rem;
+  background: white;
+  color: #374151;
+  transition: border-color 0.2s ease;
+}
+
+.deck-select:focus {
+  outline: none;
+  border-color: #667eea;
+  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+}
+
+.form-hint {
+  font-size: 0.875rem;
+  color: #64748b;
+  margin: 0.5rem 0 0 0;
+  line-height: 1.4;
 }
 
 .modal-actions {

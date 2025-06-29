@@ -87,7 +87,7 @@ class NoteService {
         return true
     }
 
-    async generateFlashcardsFromNotes(noteIds, userId) {
+    async generateFlashcardsFromNotes(noteIds, userId, deckId = null) {
         // Hämta alla specificerade anteckningar
         const notes = await fileService.readNotes()
         const selectedNotes = notes.filter(note =>
@@ -106,7 +106,8 @@ class NoteService {
             question: card.question,
             answer: card.answer,
             categories: Array.isArray(card.category) ? card.category : [card.category],
-            sourceNoteId: selectedNotes.length === 1 ? selectedNotes[0].id : null
+            sourceNoteId: selectedNotes.length === 1 ? selectedNotes[0].id : null,
+            deckId: deckId // Add deckId to flashcards
         }))
 
         // Spara flashcards i databasen

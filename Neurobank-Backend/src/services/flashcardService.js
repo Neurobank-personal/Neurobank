@@ -16,6 +16,7 @@ class FlashcardService {
             difficulty: null,
             userId,
             sourceNoteId: null,
+            deckId: flashcardData.deckId || null, // Added deckId support
             lastReviewed: null,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
@@ -38,6 +39,7 @@ class FlashcardService {
             difficulty: card.difficulty || null,
             userId,
             sourceNoteId: card.sourceNoteId || null,
+            deckId: card.deckId || null, // Added deckId support
             lastReviewed: null,
             createdAt: new Date().toISOString(),
             updatedAt: new Date().toISOString()
