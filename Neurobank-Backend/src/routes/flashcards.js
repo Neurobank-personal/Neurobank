@@ -5,7 +5,7 @@ const flashcardService = require('../services/flashcardService')
 // Skapa ny flashcard
 router.post('/', async (req, res, next) => {
     try {
-        const { question, answer, categories, userId } = req.body
+        const { question, answer, categories, userId, deckId } = req.body
 
         if (!question || !answer || !userId) {
             return res.status(400).json({
@@ -16,7 +16,8 @@ router.post('/', async (req, res, next) => {
         const newFlashcard = await flashcardService.createFlashcard({
             question,
             answer,
-            categories: categories || []
+            categories: categories || [],
+            deckId
         }, userId)
 
         res.status(201).json(newFlashcard)

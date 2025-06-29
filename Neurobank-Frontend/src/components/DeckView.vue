@@ -17,7 +17,7 @@
           <div>
             <h2>{{ deck?.name || 'General Collection' }}</h2>
             <p class="deck-description">
-              {{ deck?.description || 'All unorganized flashcards' }}
+              {{ deck?.description || 'All your flashcards in one place' }}
             </p>
           </div>
         </div>
@@ -320,9 +320,8 @@ const loadFlashcards = async () => {
     if (props.deckId) {
       flashcards.value = await DeckService.getDeckFlashcards(props.deckId)
     } else {
-      // Load general collection (flashcards without deckId)
-      const allFlashcards = await FlashcardService.getUserFlashcards(userId.value)
-      flashcards.value = allFlashcards.filter(card => !card.deckId)
+      // Load general collection (ALL flashcards for the user)
+      flashcards.value = await FlashcardService.getUserFlashcards(userId.value)
     }
     
     error.value = ''
@@ -352,7 +351,15 @@ const handleMarkCard = async (difficulty: 'easy' | 'medium' | 'hard', cardId: st
       lastReviewed: new Date()
     })
     
-    await loadFlashcards()
+    // Update the specific card in the local array instead of reloading all
+    const cardIndex = flashcards.value.findIndex(card => card.id.toString() === cardId)
+    if (cardIndex !== -1) {
+      flashcards.value[cardIndex] = {
+        ...flashcards.value[cardIndex],
+        difficulty,
+        lastReviewed: new Date()
+      }
+    }
   } catch (err) {
     console.error('Error marking card:', err)
   }

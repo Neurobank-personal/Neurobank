@@ -119,23 +119,39 @@ const previousCard = () => {
 const markCard = (difficulty: 'easy' | 'medium' | 'hard') => {
   if (!currentCard.value) return
   
+  console.log('Marking card:', difficulty, currentCard.value.id)
+  console.log('Current index before:', currentIndex.value)
+  console.log('Total flashcards:', props.flashcards.length)
+  
   emit('markCard', difficulty, currentCard.value.id)
   
-  // Move to next card or stay at current if last card
-  if (currentIndex.value >= props.flashcards.length - 1) {
-    if (props.flashcards.length === 0) {
-      emit('exit')
+  // Use setTimeout to ensure the emit completes first
+  setTimeout(() => {
+    // Auto-advance to next card
+    if (currentIndex.value < props.flashcards.length - 1) {
+      // Go to next card
+      console.log('Moving to next card')
+      currentIndex.value++
+      isFlipped.value = false
     } else {
-      currentIndex.value = 0
+      // Reached the end - show completion message or exit
+      console.log('Reached end of deck')
+      alert('🎉 Grattis! Du har gått igenom alla kort i detta deck!')
+      emit('exit')
     }
-  }
-  isFlipped.value = false
+    console.log('Current index after:', currentIndex.value)
+  }, 100)
 }
 
-// Reset when flashcards change
-watch(() => props.flashcards, () => {
-  currentIndex.value = 0
-  isFlipped.value = false
+// Reset when flashcards change (but preserve current index if possible)
+watch(() => props.flashcards, (newFlashcards, oldFlashcards) => {
+  console.log('Flashcards changed:', newFlashcards.length, 'cards')
+  // Only reset if the number of cards changed significantly
+  if (!oldFlashcards || newFlashcards.length !== oldFlashcards.length) {
+    console.log('Resetting to first card due to length change')
+    currentIndex.value = 0
+    isFlipped.value = false
+  }
 }, { deep: true })
 </script>
 

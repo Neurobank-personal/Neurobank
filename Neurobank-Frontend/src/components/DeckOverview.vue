@@ -30,14 +30,21 @@
       <!-- General Collection Card -->
       <div class="deck-card general-collection" @click="$emit('viewDeck', null)">
         <div class="deck-header">
-          <div class="deck-icon">🎯</div>
+          <div class="deck-icon general-icon">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+              <line x1="12" y1="17" x2="12" y2="21"/>
+              <path d="M7 7h10M7 11h6"/>
+            </svg>
+          </div>
           <div class="deck-actions">
             <span class="card-count">{{ generalFlashcardsCount }}</span>
           </div>
         </div>
         <div class="deck-content">
           <h3>General Collection</h3>
-          <p>All unorganized flashcards</p>
+          <p>All your flashcards in one place</p>
         </div>
         <div class="deck-footer">
           <div class="deck-meta">
@@ -48,7 +55,13 @@
 
       <!-- Empty State Message (when no custom decks) -->
       <div v-if="decks.length === 0" class="empty-deck-message">
-        <div class="empty-icon">📚</div>
+        <div class="empty-icon">
+          <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+            <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z"/>
+            <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z"/>
+            <path d="M12 7v10"/>
+          </svg>
+        </div>
         <h3>No custom decks yet</h3>
         <p>Create your first deck to organize your flashcards by topic or subject.</p>
         <button class="create-btn" @click="showCreateDeckForm = true">Create Your First Deck</button>
@@ -214,8 +227,8 @@ const loadGeneralFlashcardsCount = async () => {
 
   try {
     const flashcards = await FlashcardService.getUserFlashcards(userId.value)
-    // Count flashcards that don't belong to any deck
-    generalFlashcardsCount.value = flashcards.filter(card => !card.deckId).length
+    // Count ALL flashcards for the user (General Collection contains all cards)
+    generalFlashcardsCount.value = flashcards.length
   } catch (err) {
     console.error('Error loading general flashcards count:', err)
   }
@@ -258,7 +271,7 @@ const editDeck = (deck: Deck) => {
 }
 
 const deleteDeck = async (deckId: string) => {
-  if (!confirm('Are you sure you want to delete this deck? All flashcards in this deck will be moved to the general collection.')) {
+  if (!confirm('Are you sure you want to delete this deck? All flashcards in this deck will still be available in the general collection.')) {
     return
   }
 
@@ -375,6 +388,14 @@ const formatDate = (date: Date) => {
 .error-icon, .empty-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
+  color: #94a3b8;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.empty-icon svg {
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
 }
 
 .retry-btn, .create-btn {
@@ -433,6 +454,15 @@ const formatDate = (date: Date) => {
   justify-content: center;
   font-size: 1.5rem;
   background: #f1f5f9;
+}
+
+.deck-icon.general-icon {
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  color: white;
+}
+
+.deck-icon.general-icon svg {
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
 }
 
 .deck-actions {

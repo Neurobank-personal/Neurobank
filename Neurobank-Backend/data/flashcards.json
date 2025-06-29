@@ -4,12 +4,12 @@
     "question": "What is the first goal in resolving any network problem?",
     "answer": "To narrow down the scope of the investigation.",
     "category": "Network Troubleshooting Methodology",
-    "difficulty": null,
+    "difficulty": "medium",
     "userId": "1751033764233vfurc86wp",
     "sourceNoteId": "17511111883802iybjizqu",
-    "lastReviewed": null,
+    "lastReviewed": "2025-06-29T09:40:55.120Z",
     "createdAt": "2025-06-28T12:58:53.863Z",
-    "updatedAt": "2025-06-28T13:18:52.258Z",
+    "updatedAt": "2025-06-29T09:40:55.129Z",
     "categories": [
       null
     ]
@@ -19,35 +19,203 @@
     "question": "What are the steps in the simplified troubleshooting checklist?",
     "answer": "Define the Problem, Identify Affected Systems, Isolate the Problem, Check Physical Connectivity, Review Configuration, Ping and Trace Route, Check DNS and Name Resolution, Examine Network Traffic.",
     "category": "Network Troubleshooting Methodology",
-    "difficulty": null,
+    "difficulty": "medium",
     "userId": "1751033764233vfurc86wp",
     "sourceNoteId": "17511111883802iybjizqu",
-    "lastReviewed": null,
+    "lastReviewed": "2025-06-29T09:40:55.552Z",
     "createdAt": "2025-06-28T12:58:53.863Z",
-    "updatedAt": "2025-06-28T12:58:53.863Z"
+    "updatedAt": "2025-06-29T09:40:55.561Z"
   },
   {
     "id": "17511155338634g3ohen10",
     "question": "What are some common tools used for network troubleshooting?",
     "answer": "Tools include Ping, Traceroute/Tracert, Netstat, Wireshark, Nslookup/Dig, Ipconfig/Ifconfig/ip a, TCPDump, and Cable testers.",
     "category": "Tools of the Trade",
-    "difficulty": "hard",
+    "difficulty": "medium",
     "userId": "1751033764233vfurc86wp",
     "sourceNoteId": "17511111883802iybjizqu",
-    "lastReviewed": "2025-06-29T09:26:16.351Z",
+    "lastReviewed": "2025-06-29T09:40:55.937Z",
     "createdAt": "2025-06-28T12:58:53.863Z",
-    "updatedAt": "2025-06-29T09:26:16.363Z"
+    "updatedAt": "2025-06-29T09:40:55.945Z"
   },
   {
     "id": "1751115533863fbeye7u13",
     "question": "What are some common issues to check for at Layer 3 troubleshooting?",
     "answer": "Issues to check include correct IP Address, subnet mask, default gateway, host's ability to reach the gateway, and vice versa.",
     "category": "Troubleshooting at Layer 3",
-    "difficulty": "hard",
+    "difficulty": "medium",
     "userId": "1751033764233vfurc86wp",
     "sourceNoteId": "17511111883802iybjizqu",
-    "lastReviewed": "2025-06-28T12:59:28.444Z",
+    "lastReviewed": "2025-06-29T09:40:56.320Z",
     "createdAt": "2025-06-28T12:58:53.863Z",
-    "updatedAt": "2025-06-28T12:59:28.446Z"
+    "updatedAt": "2025-06-29T09:40:56.328Z"
+  },
+  {
+    "id": "1751189996559evud16478",
+    "question": "What is a Monorepo?",
+    "answer": "A single Git repository where frontend, backend, and shared libraries are stored to facilitate code sharing, simplify CI, and centralize development.",
+    "categories": [
+      "Project Structure"
+    ],
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": "2025-06-29T09:40:16.805Z",
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:40:16.818Z"
+  },
+  {
+    "id": "1751189996559lvprh4exs",
+    "question": "What is the purpose of a Polyrepo?",
+    "answer": "To have each part of the system in its own repository, providing clearer responsibility distribution and suitable for teams working independently.",
+    "categories": [
+      "Project Structure"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559y5edncgsw",
+    "question": "What does a Feature-based structure focus on?",
+    "answer": "Grouping files based on function rather than technology in the frontend, making it scalable and easy to understand.",
+    "categories": [
+      "Project Structure"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559yw18p0i1a",
+    "question": "What is the role of Models in a project's code structure?",
+    "answer": "Models describe data models, representing the structure in the database and should be free from business logic.",
+    "categories": [
+      "Mappstruktur och koduppdelning"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559gze0697x3",
+    "question": "What is the purpose of Routes in a project?",
+    "answer": "Routes connect URLs and HTTP methods to controllers, focusing on being thin and not containing additional logic.",
+    "categories": [
+      "Mappstruktur och koduppdelning"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559l4ykxo78d",
+    "question": "What is the main function of Vite in a project?",
+    "answer": "Vite is a fast bundler and dev-server mainly used in frontend projects, ideal for modular structures.",
+    "categories": [
+      "Verktyg och ramverk"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559i7ubjsu0c",
+    "question": "What is Semantic versioning used for?",
+    "answer": "It describes version levels with major.minor.patch format, where major signifies breaking changes, minor is new features, and patch is bug fixes.",
+    "categories": [
+      "Beroenden och versionering"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751189996559c9n0t2s2e",
+    "question": "What is ESLint used for?",
+    "answer": "ESLint is an analysis tool to find errors and poor code in JavaScript and TypeScript, defining code style and detecting common mistakes.",
+    "categories": [
+      "Kodstandard och dokumentation"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:39:56.559Z",
+    "updatedAt": "2025-06-29T09:39:56.559Z"
+  },
+  {
+    "id": "1751190429918pjpn6o1w8",
+    "question": "What is the first goal in resolving any network problem according to the text?",
+    "answer": "The first goal is to narrow down the scope of the investigation by thoroughly understanding the reported problem and gathering information.",
+    "categories": [
+      "Network Troubleshooting Methodology"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:47:09.919Z",
+    "updatedAt": "2025-06-29T09:47:09.919Z"
+  },
+  {
+    "id": "1751190429919z8li3d2h5",
+    "question": "What are some common tools used for network troubleshooting?",
+    "answer": "Common tools include Ping, Traceroute/Tracert, Netstat, Wireshark, Nslookup/Dig, Ipconfig/Ifconfig/ip a, TCPDump, and Cable testers.",
+    "categories": [
+      "Tools of the Trade"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:47:09.919Z",
+    "updatedAt": "2025-06-29T09:47:09.919Z"
+  },
+  {
+    "id": "1751190429919tdzy8bysw",
+    "question": "How many layers is network connectivity broken into?",
+    "answer": "Network connectivity is broken into three primary layers: Layer 1 - Physical, Layer 2 - Data Link, Layer 3 - Network.",
+    "categories": [
+      "Troubleshooting Layer by Layer"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:47:09.919Z",
+    "updatedAt": "2025-06-29T09:47:09.919Z"
+  },
+  {
+    "id": "1751190429919v6xm7u8ir",
+    "question": "What are some common things to check at the network layer?",
+    "answer": "Common things to check include the correctness of IP address, subnet mask, default gateway, host's ability to reach the gateway, and vice versa.",
+    "categories": [
+      "Troubleshooting at Layer 3"
+    ],
+    "difficulty": null,
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "17511111883802iybjizqu",
+    "lastReviewed": null,
+    "createdAt": "2025-06-29T09:47:09.919Z",
+    "updatedAt": "2025-06-29T09:47:09.919Z"
   }
 ]
