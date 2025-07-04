@@ -4,42 +4,83 @@
     <div class="deck-header">
       <div class="deck-info">
         <button class="back-btn" @click="$emit('goBack')">
-          <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <polyline points="15,18 9,12 15,6"/>
+          <svg
+            width="20"
+            height="20"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <polyline points="15,18 9,12 15,6" />
           </svg>
           Back to Decks
         </button>
-        
+
         <div class="deck-title-section">
-          <div class="deck-icon" :style="{ backgroundColor: deck?.color || '#f1f5f9' }">
-            {{ deckId ? '📋' : '🎯' }}
+          <div
+            class="deck-icon"
+            :style="{ backgroundColor: deck?.color || '#f1f5f9' }"
+          >
+            {{ deckId ? "📋" : "🎯" }}
           </div>
           <div>
-            <h2>{{ deck?.name || 'General Collection' }}</h2>
+            <h2>{{ deck?.name || "General Collection" }}</h2>
             <p class="deck-description">
-              {{ deck?.description || 'All your flashcards in one place' }}
+              {{ deck?.description || "All your flashcards in one place" }}
             </p>
           </div>
         </div>
       </div>
 
       <div class="deck-actions">
-        <button 
-          v-if="filteredFlashcards.length > 0"
-          class="btn-primary study-btn" 
+        <button
+          v-if="remainingFlashcards.length > 0"
+          class="btn-primary study-btn"
           @click="startStudyMode"
         >
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-            <line x1="8" y1="21" x2="16" y2="21"/>
-            <line x1="12" y1="17" x2="12" y2="21"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+            <line x1="8" y1="21" x2="16" y2="21" />
+            <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
           Study Mode
         </button>
-        
+
+        <button class="btn-secondary" @click="refreshReviews">
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8" />
+            <path d="M21 3v5h-5" />
+            <path d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16" />
+            <path d="M3 21v-5h5" />
+          </svg>
+          Refresh Reviews
+        </button>
+
         <button class="btn-secondary" @click="showCreateForm = true">
-          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path d="M12 5v14M5 12h14"/>
+          <svg
+            width="16"
+            height="16"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+          >
+            <path d="M12 5v14M5 12h14" />
           </svg>
           Add Card
         </button>
@@ -77,9 +118,9 @@
     </div>
 
     <!-- Study Mode -->
-    <StudyMode 
-      v-else-if="studyMode && filteredFlashcards.length > 0"
-      :flashcards="filteredFlashcards"
+    <StudyMode
+      v-else-if="studyMode && remainingFlashcards.length > 0"
+      :flashcards="remainingFlashcards"
       :deckName="deck?.name || 'General Collection'"
       @exit="exitStudyMode"
       @markCard="handleMarkCard"
@@ -88,15 +129,19 @@
     <!-- Cards List View -->
     <div v-else-if="flashcards.length === 0" class="empty-state">
       <div class="empty-icon">📚</div>
-      <h3>No flashcards in this {{ deckId ? 'deck' : 'collection' }} yet</h3>
+      <h3>No flashcards in this {{ deckId ? "deck" : "collection" }} yet</h3>
       <p>Add some flashcards to get started with studying.</p>
-      <button class="create-btn" @click="showCreateForm = true">Add Your First Card</button>
+      <button class="create-btn" @click="showCreateForm = true">
+        Add Your First Card
+      </button>
     </div>
 
     <div v-else-if="filteredFlashcards.length === 0" class="empty-state">
       <div class="empty-icon">🔍</div>
       <h3>No cards match the current filter</h3>
-      <button class="btn-secondary" @click="setFilter('all')">Show All Cards</button>
+      <button class="btn-secondary" @click="setFilter('all')">
+        Show All Cards
+      </button>
     </div>
 
     <div v-else class="flashcards-list">
@@ -110,101 +155,188 @@
       </div>
 
       <div class="flashcards-grid">
-        <div v-for="card in filteredFlashcards" :key="card.id" class="flashcard-item">
+        <div
+          v-for="card in filteredFlashcards"
+          :key="card.id"
+          class="flashcard-item"
+        >
           <div class="flashcard-item-header">
             <div class="flashcard-categories">
-              <span v-for="category in card.categories" :key="category" class="category-tag-small">
+              <span
+                v-for="category in card.categories"
+                :key="category"
+                class="category-tag-small"
+              >
                 {{ category }}
               </span>
             </div>
             <div class="flashcard-actions">
-              <button class="action-btn edit" @click="editCard(card)" title="Edit">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-                  <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+              <button
+                v-if="card.status === 'completed'"
+                class="action-btn reset"
+                @click="resetCardToRemaining(card.id.toString())"
+                title="Reset to Remaining"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M3 12a9 9 0 0 1 9-9 9.75 9.75 0 0 1 6.74 2.74L21 8"
+                  />
+                  <path d="M21 3v5h-5" />
+                  <path
+                    d="M21 12a9 9 0 0 1-9 9 9.75 9.75 0 0 1-6.74-2.74L3 16"
+                  />
+                  <path d="M3 21v-5h5" />
                 </svg>
               </button>
-              <button class="action-btn delete" @click="deleteCard(card.id)" title="Delete">
-                <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="3,6 5,6 21,6"/>
-                  <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+              <button
+                class="action-btn edit"
+                @click="editCard(card)"
+                title="Edit"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+                  />
+                  <path
+                    d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"
+                  />
+                </svg>
+              </button>
+              <button
+                class="action-btn delete"
+                @click="deleteCard(card.id)"
+                title="Delete"
+              >
+                <svg
+                  width="14"
+                  height="14"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3,6 5,6 21,6" />
+                  <path
+                    d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"
+                  />
                 </svg>
               </button>
             </div>
           </div>
           <div class="flashcard-item-content">
-            <div class="question">
-              <strong>Q:</strong> {{ card.question }}
-            </div>
-            <div class="answer">
-              <strong>A:</strong> {{ card.answer }}
-            </div>
+            <div class="question"><strong>Q:</strong> {{ card.question }}</div>
+            <div class="answer"><strong>A:</strong> {{ card.answer }}</div>
           </div>
           <div class="flashcard-item-footer">
-            <span v-if="card.difficulty" class="difficulty-badge" :class="card.difficulty">
-              {{ card.difficulty }}
-            </span>
-            <span v-if="card.lastReviewed" class="reviewed-badge">
-              ✓ Completed
-            </span>
+            <div class="status-info">
+              <span
+                v-if="card.difficulty"
+                class="difficulty-badge"
+                :class="card.difficulty"
+              >
+                {{ card.difficulty }}
+              </span>
+              <span
+                v-if="card.status === 'completed'"
+                class="status-badge completed"
+              >
+                ✓ Completed
+              </span>
+              <span v-else class="status-badge remaining">
+                📚 Ready to study
+              </span>
+            </div>
+            <div v-if="card.nextReviewDate" class="review-info">
+              <span class="next-review">
+                Next: {{ formatDate(card.nextReviewDate) }}
+              </span>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Create/Edit Card Modal -->
-    <div v-if="showCreateForm || showEditForm" class="modal-overlay" @click="cancelForm">
+    <div
+      v-if="showCreateForm || showEditForm"
+      class="modal-overlay"
+      @click="cancelForm"
+    >
       <div class="modal-content" @click.stop>
         <div class="modal-header">
-          <h3>{{ showEditForm ? 'Edit Card' : 'Add New Card' }}</h3>
+          <h3>{{ showEditForm ? "Edit Card" : "Add New Card" }}</h3>
           <button class="close-btn" @click="cancelForm">&times;</button>
         </div>
-        
+
         <form @submit.prevent="saveCard" class="card-form">
           <div class="form-group">
             <label>Question</label>
-            <textarea 
-              v-model="cardForm.question" 
-              placeholder="Write your question here..." 
-              rows="3" 
+            <textarea
+              v-model="cardForm.question"
+              placeholder="Write your question here..."
+              rows="3"
               required
             ></textarea>
           </div>
-          
+
           <div class="form-group">
             <label>Answer</label>
-            <textarea 
-              v-model="cardForm.answer" 
-              placeholder="Write the answer here..." 
-              rows="3" 
+            <textarea
+              v-model="cardForm.answer"
+              placeholder="Write the answer here..."
+              rows="3"
               required
             ></textarea>
           </div>
-          
+
           <div class="form-group">
             <label>Categories</label>
             <div class="categories-input">
               <div class="selected-categories">
-                <span v-for="category in cardForm.categories" :key="category" class="category-tag">
+                <span
+                  v-for="category in cardForm.categories"
+                  :key="category"
+                  class="category-tag"
+                >
                   {{ category }}
-                  <button type="button" @click="removeCategory(category)" class="remove-category">×</button>
+                  <button
+                    type="button"
+                    @click="removeCategory(category)"
+                    class="remove-category"
+                  >
+                    ×
+                  </button>
                 </span>
               </div>
               <div class="add-category">
-                <input 
-                  v-model="newCategoryInput" 
-                  type="text" 
-                  placeholder="Add category..." 
+                <input
+                  v-model="newCategoryInput"
+                  type="text"
+                  placeholder="Add category..."
                   @keyup.enter="addCategory"
                 />
                 <button type="button" @click="addCategory">Add</button>
               </div>
             </div>
           </div>
-          
+
           <div class="form-actions">
             <button type="submit" class="save-btn" :disabled="!isFormValid">
-              {{ showEditForm ? 'Save Changes' : 'Add Card' }}
+              {{ showEditForm ? "Save Changes" : "Add Card" }}
             </button>
             <button type="button" class="cancel-btn" @click="cancelForm">
               Cancel
@@ -217,162 +349,220 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted, watch } from 'vue'
-import { useAuth } from '../stores/auth'
-import FlashcardService from '../services/FlashcardService'
-import DeckService from '../services/DeckService'
-import StudyMode from './StudyMode.vue'
-import type { Flashcard } from '../types/Flashcard'
-import type { Deck } from '../types/Deck'
+import { ref, computed, onMounted, watch } from "vue";
+import { useAuth } from "../stores/auth";
+import FlashcardService from "../services/FlashcardService";
+import DeckService from "../services/DeckService";
+import StudyMode from "./StudyMode.vue";
+import type { Flashcard } from "../types/Flashcard";
+import type { Deck } from "../types/Deck";
 
 // Props and Emits
 const props = defineProps<{
-  deckId: string | null
-}>()
+  deckId: string | null;
+}>();
 
 defineEmits<{
-  goBack: []
-}>()
+  goBack: [];
+}>();
 
-const { getCurrentUserId } = useAuth()
+const { getCurrentUserId } = useAuth();
 
 // Reactive data
-const deck = ref<Deck | null>(null)
-const flashcards = ref<Flashcard[]>([])
-const loading = ref(true)
-const error = ref('')
-const studyMode = ref(false)
-const cardFilter = ref<'all' | 'completed' | 'remaining'>('all')
-const showCreateForm = ref(false)
-const showEditForm = ref(false)
-const editingCard = ref<Flashcard | null>(null)
-const newCategoryInput = ref('')
+const deck = ref<Deck | null>(null);
+const flashcards = ref<Flashcard[]>([]);
+const loading = ref(true);
+const error = ref("");
+const studyMode = ref(false);
+const cardFilter = ref<"all" | "completed" | "remaining">("all");
+const showCreateForm = ref(false);
+const showEditForm = ref(false);
+const editingCard = ref<Flashcard | null>(null);
+const newCategoryInput = ref("");
 
 const cardForm = ref({
-  question: '',
-  answer: '',
-  categories: [] as string[]
-})
+  question: "",
+  answer: "",
+  categories: [] as string[],
+});
 
-const userId = computed(() => getCurrentUserId())
+const userId = computed(() => getCurrentUserId());
 
 // Computed values
-const totalCards = computed(() => flashcards.value.length)
-const completedCards = computed(() => 
-  flashcards.value.filter(card => card.lastReviewed).length
-)
-const remainingCards = computed(() => 
-  flashcards.value.filter(card => !card.lastReviewed).length
-)
+const totalCards = computed(() => flashcards.value.length);
+const completedCards = computed(
+  () => flashcards.value.filter((card) => card.status === "completed").length
+);
+const remainingCards = computed(
+  () =>
+    flashcards.value.filter(
+      (card) => card.status === "remaining" || !card.status
+    ).length
+);
+
+const remainingFlashcards = computed(() =>
+  flashcards.value.filter((card) => card.status === "remaining" || !card.status)
+);
 
 const filteredFlashcards = computed(() => {
   switch (cardFilter.value) {
-    case 'completed':
-      return flashcards.value.filter(card => card.lastReviewed)
-    case 'remaining':
-      return flashcards.value.filter(card => !card.lastReviewed)
+    case "completed":
+      return flashcards.value.filter((card) => card.status === "completed");
+    case "remaining":
+      return flashcards.value.filter(
+        (card) => card.status === "remaining" || !card.status
+      );
     default:
-      return flashcards.value
+      return flashcards.value;
   }
-})
+});
 
-const isFormValid = computed(() => 
-  cardForm.value.question.trim().length > 0 && 
-  cardForm.value.answer.trim().length > 0
-)
+const isFormValid = computed(
+  () =>
+    cardForm.value.question.trim().length > 0 &&
+    cardForm.value.answer.trim().length > 0
+);
 
 // Load data on mount and when deckId changes
 onMounted(() => {
-  loadData()
-})
+  loadData();
+});
 
-watch(() => props.deckId, () => {
-  loadData()
-})
+watch(
+  () => props.deckId,
+  () => {
+    loadData();
+  }
+);
 
 const loadData = async () => {
-  await Promise.all([loadDeck(), loadFlashcards()])
-}
+  await Promise.all([loadDeck(), loadFlashcards()]);
+};
 
 const loadDeck = async () => {
   if (!props.deckId) {
-    deck.value = null
-    return
+    deck.value = null;
+    return;
   }
 
   try {
-    deck.value = await DeckService.getDeck(props.deckId)
+    deck.value = await DeckService.getDeck(props.deckId);
   } catch (err) {
-    console.error('Error loading deck:', err)
+    console.error("Error loading deck:", err);
   }
-}
+};
 
 const loadFlashcards = async () => {
   if (!userId.value) {
-    error.value = 'You must be logged in to view flashcards'
-    loading.value = false
-    return
+    error.value = "You must be logged in to view flashcards";
+    loading.value = false;
+    return;
   }
 
   try {
-    loading.value = true
-    
+    loading.value = true;
+
     if (props.deckId) {
-      flashcards.value = await DeckService.getDeckFlashcards(props.deckId)
+      flashcards.value = await DeckService.getDeckFlashcards(props.deckId);
     } else {
       // Load general collection (ALL flashcards for the user)
-      flashcards.value = await FlashcardService.getUserFlashcards(userId.value)
+      flashcards.value = await FlashcardService.getUserFlashcards(userId.value);
     }
-    
-    error.value = ''
+
+    error.value = "";
   } catch (err) {
-    error.value = 'Failed to load flashcards'
-    console.error('Error loading flashcards:', err)
+    error.value = "Failed to load flashcards";
+    console.error("Error loading flashcards:", err);
   } finally {
-    loading.value = false
+    loading.value = false;
   }
-}
+};
 
 // Study Mode Functions
 const startStudyMode = () => {
-  studyMode.value = true
-}
+  studyMode.value = true;
+};
 
 const exitStudyMode = () => {
-  studyMode.value = false
-}
+  studyMode.value = false;
+};
 
-const handleMarkCard = async (difficulty: 'easy' | 'medium' | 'hard', cardId: string) => {
-  if (!userId.value) return
+const refreshReviews = async () => {
+  if (!userId.value) return;
 
   try {
-    await FlashcardService.updateFlashcard(cardId, {
-      difficulty,
-      lastReviewed: new Date()
-    })
-    
-    // Update the specific card in the local array instead of reloading all
-    const cardIndex = flashcards.value.findIndex(card => card.id.toString() === cardId)
-    if (cardIndex !== -1) {
-      flashcards.value[cardIndex] = {
-        ...flashcards.value[cardIndex],
-        difficulty,
-        lastReviewed: new Date()
-      }
+    loading.value = true;
+    const result = await FlashcardService.refreshReviews(userId.value);
+
+    // Reload flashcards to get updated status
+    await loadFlashcards();
+
+    if (result.movedCount > 0) {
+      // Show success message
+      alert(`🎉 ${result.movedCount} kort är redo för repetition igen!`);
+    } else {
+      alert("Inga kort är redo för repetition just nu.");
     }
   } catch (err) {
-    console.error('Error marking card:', err)
+    console.error("Error refreshing reviews:", err);
+    error.value = "Failed to refresh reviews";
+  } finally {
+    loading.value = false;
   }
-}
+};
+
+const handleMarkCard = async (
+  difficulty: "easy" | "medium" | "hard",
+  cardId: string
+) => {
+  if (!userId.value) return;
+
+  try {
+    const updatedCard = await FlashcardService.markCardReviewed(
+      cardId,
+      difficulty
+    );
+
+    // Update the specific card in the local array
+    const cardIndex = flashcards.value.findIndex(
+      (card) => card.id.toString() === cardId
+    );
+    if (cardIndex !== -1) {
+      flashcards.value[cardIndex] = updatedCard;
+    }
+  } catch (err) {
+    console.error("Error marking card:", err);
+    error.value = "Failed to mark card as reviewed";
+  }
+};
+
+const resetCardToRemaining = async (cardId: string) => {
+  if (!userId.value) return;
+
+  try {
+    const updatedCard = await FlashcardService.resetCardToRemaining(cardId);
+
+    // Update the specific card in the local array
+    const cardIndex = flashcards.value.findIndex(
+      (card) => card.id.toString() === cardId
+    );
+    if (cardIndex !== -1) {
+      flashcards.value[cardIndex] = updatedCard;
+    }
+  } catch (err) {
+    console.error("Error resetting card to remaining:", err);
+    error.value = "Failed to reset card to remaining";
+  }
+};
 
 // Filter Functions
-const setFilter = (filter: 'all' | 'completed' | 'remaining') => {
-  cardFilter.value = filter
-}
+const setFilter = (filter: "all" | "completed" | "remaining") => {
+  cardFilter.value = filter;
+};
 
 // Card CRUD Functions
 const saveCard = async () => {
-  if (!userId.value || !isFormValid.value) return
+  if (!userId.value || !isFormValid.value) return;
 
   try {
     const cardData = {
@@ -380,82 +570,105 @@ const saveCard = async () => {
       answer: cardForm.value.answer.trim(),
       categories: cardForm.value.categories,
       userId: userId.value,
-      deckId: props.deckId || undefined
-    }
+      deckId: props.deckId || undefined,
+    };
 
     if (showEditForm.value && editingCard.value) {
-      await FlashcardService.updateFlashcard(editingCard.value.id.toString(), cardData)
+      await FlashcardService.updateFlashcard(
+        editingCard.value.id.toString(),
+        cardData
+      );
     } else {
-      await FlashcardService.createFlashcard(cardData)
+      await FlashcardService.createFlashcard(cardData);
     }
-    
-    await loadFlashcards()
-    cancelForm()
+
+    await loadFlashcards();
+    cancelForm();
   } catch (err) {
-    console.error('Error saving card:', err)
-    error.value = 'Failed to save card'
+    console.error("Error saving card:", err);
+    error.value = "Failed to save card";
   }
-}
+};
 
 const editCard = (card: Flashcard) => {
-  editingCard.value = card
+  editingCard.value = card;
   cardForm.value = {
     question: card.question,
     answer: card.answer,
-    categories: Array.isArray(card.categories) ? [...card.categories] : [card.categories]
-  }
-  showEditForm.value = true
-}
+    categories: Array.isArray(card.categories)
+      ? [...card.categories]
+      : [card.categories],
+  };
+  showEditForm.value = true;
+};
 
 const deleteCard = async (cardId: number) => {
-  if (!confirm('Are you sure you want to delete this card?')) return
+  if (!confirm("Are you sure you want to delete this card?")) return;
 
   try {
-    await FlashcardService.deleteFlashcard(cardId.toString())
-    await loadFlashcards()
+    await FlashcardService.deleteFlashcard(cardId.toString());
+    await loadFlashcards();
   } catch (err) {
-    console.error('Error deleting card:', err)
-    error.value = 'Failed to delete card'
+    console.error("Error deleting card:", err);
+    error.value = "Failed to delete card";
   }
-}
+};
 
 const cancelForm = () => {
-  showCreateForm.value = false
-  showEditForm.value = false
-  editingCard.value = null
+  showCreateForm.value = false;
+  showEditForm.value = false;
+  editingCard.value = null;
   cardForm.value = {
-    question: '',
-    answer: '',
-    categories: []
-  }
-  newCategoryInput.value = ''
-}
+    question: "",
+    answer: "",
+    categories: [],
+  };
+  newCategoryInput.value = "";
+};
 
 // Category Functions
 const addCategory = () => {
-  const category = newCategoryInput.value.trim()
+  const category = newCategoryInput.value.trim();
   if (category && !cardForm.value.categories.includes(category)) {
-    cardForm.value.categories.push(category)
-    newCategoryInput.value = ''
+    cardForm.value.categories.push(category);
+    newCategoryInput.value = "";
   }
-}
+};
 
 const removeCategory = (category: string) => {
-  const index = cardForm.value.categories.indexOf(category)
+  const index = cardForm.value.categories.indexOf(category);
   if (index > -1) {
-    cardForm.value.categories.splice(index, 1)
+    cardForm.value.categories.splice(index, 1);
   }
-}
+};
+
+const formatDate = (date: Date) => {
+  const today = new Date();
+  const tomorrow = new Date(today);
+  tomorrow.setDate(tomorrow.getDate() + 1);
+
+  if (date.toDateString() === today.toDateString()) {
+    return "Today";
+  } else if (date.toDateString() === tomorrow.toDateString()) {
+    return "Tomorrow";
+  } else if (date < today) {
+    return "Overdue";
+  } else {
+    const diffTime = date.getTime() - today.getTime();
+    const diffDays = Math.ceil(diffTime / (1000 * 60 * 60 * 24));
+    return `${diffDays} days`;
+  }
+};
 </script>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 .deck-view-container {
   padding: 2rem;
   max-width: 1200px;
   margin: 0 auto;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* Header Styles */
@@ -524,7 +737,8 @@ const removeCategory = (category: string) => {
   align-items: center;
 }
 
-.btn-primary, .btn-secondary {
+.btn-primary,
+.btn-secondary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
@@ -677,23 +891,46 @@ const removeCategory = (category: string) => {
   background: #fef2f2;
 }
 
+.action-btn.reset:hover {
+  color: #667eea;
+  background: #eef2ff;
+}
+
 .flashcard-item-content {
   margin-bottom: 1rem;
 }
 
-.question, .answer {
+.question,
+.answer {
   margin-bottom: 0.75rem;
   line-height: 1.5;
 }
 
-.question strong, .answer strong {
+.question strong,
+.answer strong {
   color: #667eea;
 }
 
 .flashcard-item-footer {
   display: flex;
+  justify-content: space-between;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.status-info {
+  display: flex;
   gap: 0.5rem;
   align-items: center;
+}
+
+.review-info {
+  font-size: 0.75rem;
+  color: #64748b;
+}
+
+.next-review {
+  font-weight: 500;
 }
 
 .difficulty-badge {
@@ -704,21 +941,37 @@ const removeCategory = (category: string) => {
   color: white;
 }
 
-.difficulty-badge.easy { background: #22c55e; }
-.difficulty-badge.medium { background: #eab308; }
-.difficulty-badge.hard { background: #ef4444; }
-
-.reviewed-badge {
+.difficulty-badge.easy {
   background: #22c55e;
-  color: white;
+}
+.difficulty-badge.medium {
+  background: #eab308;
+}
+.difficulty-badge.hard {
+  background: #ef4444;
+}
+
+.status-badge {
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
   font-weight: 500;
 }
 
+.status-badge.completed {
+  background: #22c55e;
+  color: white;
+}
+
+.status-badge.remaining {
+  background: #667eea;
+  color: white;
+}
+
 /* States */
-.loading-state, .error-state, .empty-state {
+.loading-state,
+.error-state,
+.empty-state {
   text-align: center;
   padding: 4rem 2rem;
 }
@@ -734,16 +987,22 @@ const removeCategory = (category: string) => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
-.error-icon, .empty-icon {
+.error-icon,
+.empty-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
 }
 
-.retry-btn, .create-btn {
+.retry-btn,
+.create-btn {
   background: #667eea;
   color: white;
   border: none;
@@ -932,30 +1191,30 @@ const removeCategory = (category: string) => {
   .deck-view-container {
     padding: 1rem;
   }
-  
+
   .deck-header {
     flex-direction: column;
     align-items: flex-start;
   }
-  
+
   .deck-actions {
     width: 100%;
     justify-content: space-between;
   }
-  
+
   .deck-stats {
     grid-template-columns: repeat(3, 1fr);
   }
-  
+
   .study-controls {
     flex-direction: column;
     gap: 1rem;
   }
-  
+
   .difficulty-buttons {
     flex-direction: column;
   }
-  
+
   .modal-overlay {
     padding: 0.5rem;
   }
