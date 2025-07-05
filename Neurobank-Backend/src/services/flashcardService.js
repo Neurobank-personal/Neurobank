@@ -1,4 +1,5 @@
 const fileService = require("./fileService");
+const statisticsService = require("./statisticsService");
 
 class FlashcardService {
   generateId() {
@@ -31,6 +32,16 @@ class FlashcardService {
     allFlashcards.push(newFlashcard);
     await fileService.writeFlashcards(allFlashcards);
 
+    // Registrera statistik för skapad flashcard
+    try {
+      await statisticsService.recordFlashcardsCreated(userId, 1);
+    } catch (error) {
+      console.error(
+        "Failed to record flashcard creation in statistics:",
+        error
+      );
+    }
+
     return newFlashcard;
   }
 
@@ -59,6 +70,19 @@ class FlashcardService {
 
     allFlashcards.push(...flashcardsToSave);
     await fileService.writeFlashcards(allFlashcards);
+
+    // Registrera statistik för skapade flashcards
+    try {
+      await statisticsService.recordFlashcardsCreated(
+        userId,
+        flashcardsToSave.length
+      );
+    } catch (error) {
+      console.error(
+        "Failed to record flashcard creation in statistics:",
+        error
+      );
+    }
 
     return flashcardsToSave;
   }
@@ -134,19 +158,31 @@ class FlashcardService {
     const reviewCount = (card.reviewCount || 0) + 1;
 
     if (difficulty === "easy") {
-      // Progressive intervals: 7, 21, 60, 150 days max
-      const easyIntervals = [7, 21, 60, 150];
+      // Progressive intervals: 1, 2, 3, 5, 8, 13, 20, 30, 45, 70, 100, 150, 210, 270, 300 days max
+      const easyIntervals = [
+        1, 2, 3, 5, 8, 13, 20, 30, 45, 70, 100, 150, 210, 270, 300,
+      ];
       const newEasyCount = easyCount + 1;
       nextReviewDays =
         easyIntervals[Math.min(newEasyCount - 1, easyIntervals.length - 1)] ||
-        150;
+        300;
       updates.easyCount = newEasyCount;
     } else if (difficulty === "medium") {
       // Same interval as last time, minimum 5 days
       nextReviewDays = Math.max(5, daysSinceLastReview);
+
+      // If card had an easy streak, reduce easy count slightly
+      if (easyCount > 0) {
+        updates.easyCount = Math.max(0, easyCount - 1);
+      }
     } else if (difficulty === "hard") {
       // 60% of last interval, minimum 1 day
       nextReviewDays = Math.max(1, Math.floor(daysSinceLastReview * 0.6));
+
+      // If card had an easy streak, reduce easy count more significantly
+      if (easyCount > 0) {
+        updates.easyCount = Math.max(0, easyCount - 2);
+      }
     }
 
     const nextReviewDate = new Date(now);
@@ -154,6 +190,42 @@ class FlashcardService {
 
     updates.nextReviewDate = nextReviewDate.toISOString();
     updates.reviewCount = reviewCount;
+
+    const updatedCard = await this.updateFlashcard(flashcardId, updates);
+
+    // Registrera statistik för studerad flashcard
+    try {
+      await statisticsService.recordFlashcardStudied(card.userId, 1);
+    } catch (error) {
+      console.error("Failed to record flashcard study in statistics:", error);
+    }
+
+    return updatedCard;
+  }
+
+  async markCardCustomReview(flashcardId, days, timeUnit) {
+    const card = await this.getFlashcardById(flashcardId);
+    if (!card) {
+      throw new Error("Flashcard not found");
+    }
+
+    const now = new Date();
+    const reviewCount = (card.reviewCount || 0) + 1;
+
+    // Calculate the next review date based on custom input
+    // If timeUnit is "months", multiply days by 30 (assuming 30 days per month)
+    const actualDays = timeUnit === "months" ? days * 30 : days;
+
+    const nextReviewDate = new Date(now);
+    nextReviewDate.setDate(nextReviewDate.getDate() + actualDays);
+
+    const updates = {
+      difficulty: "custom",
+      lastReviewed: now.toISOString(),
+      status: "completed",
+      nextReviewDate: nextReviewDate.toISOString(),
+      reviewCount: reviewCount,
+    };
 
     return this.updateFlashcard(flashcardId, updates);
   }

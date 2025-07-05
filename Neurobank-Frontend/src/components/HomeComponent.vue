@@ -10,80 +10,45 @@
       <!-- Left Column -->
       <div class="left-column">
         <!-- Notes Card -->
-        <div class="content-card notes-card" @click="$emit('navigate', 'notes')">
+        <div
+          class="content-card notes-card"
+          @click="$emit('navigate', 'notes')"
+        >
           <div class="card-header">
             <h3>Notes</h3>
           </div>
           <div class="card-number">{{ notesCount }}</div>
         </div>
 
-        <!-- Activity Charts -->
-        <div class="content-card activity-card">
-          <div class="card-header">
-            <h3>Notes Created This Week</h3>
-          </div>
-          <div class="activity-chart">
-            <div class="chart-bars">
-              <div 
-                v-for="(day, index) in weekDays" 
-                :key="index"
-                class="bar-container"
-              >
-                <div class="activity-count">{{ notesActivity[index] }}</div>
-                <div 
-                  class="bar" 
-                  :style="{ height: `${getNotesActivityHeight(index)}%` }"
-                >
-                  <span>{{ day }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-
-        <!-- Flashcard Activity Chart -->
-        <div class="content-card activity-card">
-          <div class="card-header">
-            <h3>Flashcards Reviewed This Week</h3>
-          </div>
-          <div class="activity-chart">
-            <div class="chart-bars">
-              <div 
-                v-for="(day, index) in weekDays" 
-                :key="index"
-                class="bar-container"
-              >
-                <div class="activity-count">{{ flashcardsActivity[index] }}</div>
-                <div 
-                  class="bar flashcard-bar" 
-                  :style="{ height: `${getFlashcardsActivityHeight(index)}%` }"
-                >
-                  <span>{{ day }}</span>
-                </div>
-              </div>
-            </div>
-          </div>
-        </div>
-      </div>
-
-      <!-- Right Column -->
-      <div class="right-column">
         <!-- Flashcards Card -->
-        <div class="content-card flashcards-card" @click="$emit('navigate', 'flashcards')">
+        <div
+          class="content-card flashcards-card"
+          @click="$emit('navigate', 'flashcards')"
+        >
           <div class="card-header">
             <h3>Flashcards</h3>
           </div>
           <div class="card-number">{{ flashcardsCount }}</div>
         </div>
+      </div>
 
+      <!-- Right Column -->
+      <div class="right-column">
         <!-- Tasks Card -->
         <div class="content-card tasks-card">
           <div class="card-header">
             <h3>Pending Tasks</h3>
             <button class="add-task-btn" @click="$emit('navigate', 'tasks')">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <line x1="12" y1="5" x2="12" y2="19"/>
-                <line x1="5" y1="12" x2="19" y2="12"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <line x1="12" y1="5" x2="12" y2="19" />
+                <line x1="5" y1="12" x2="19" y2="12" />
               </svg>
             </button>
           </div>
@@ -92,22 +57,21 @@
               <p>No pending tasks! 🎉</p>
             </div>
             <div v-else class="tasks-list">
-              <div 
-                v-for="task in pendingTasks.slice(0, 15)" 
+              <div
+                v-for="task in pendingTasks.slice(0, 15)"
                 :key="task.id"
                 class="task-item"
                 :class="{ overdue: isTaskOverdue(task) }"
               >
                 <div class="task-checkbox">
-                  <input 
-                    type="checkbox" 
-                    @change="completeTask(task)"
-                  />
+                  <input type="checkbox" @change="completeTask(task)" />
                 </div>
                 <div class="task-content" @click="editTask(task)">
                   <div class="task-title">{{ task.title }}</div>
                   <div class="task-meta">
-                    <span class="task-priority" :class="task.priority">{{ task.priority }}</span>
+                    <span class="task-priority" :class="task.priority">{{
+                      task.priority
+                    }}</span>
                     <span v-if="task.dueDate" class="task-due-date">
                       Due: {{ formatTaskDate(task.dueDate) }}
                     </span>
@@ -115,7 +79,10 @@
                 </div>
               </div>
               <div v-if="pendingTasks.length > 15" class="more-tasks">
-                <button @click="$emit('navigate', 'tasks')" class="view-all-btn">
+                <button
+                  @click="$emit('navigate', 'tasks')"
+                  class="view-all-btn"
+                >
                   View all {{ pendingTasks.length }} pending tasks
                 </button>
               </div>
@@ -124,171 +91,110 @@
         </div>
       </div>
     </div>
+
+    <!-- Statistics Section -->
+    <StatisticsComponent v-if="currentUser?.id" :userId="currentUser.id" />
   </div>
 </template>
 
 <script setup lang="ts">
-import { ref, onMounted, computed } from 'vue'
-import { useAuth } from '../stores/auth'
-import { NoteService } from '../services/NoteService'
-import FlashcardService from '../services/FlashcardService'
-import { TaskService } from '../services/TaskService'
-import type { Task } from '../types/Task'
+import { ref, onMounted, computed } from "vue";
+import { useAuth } from "../stores/auth";
+import { NoteService } from "../services/NoteService";
+import FlashcardService from "../services/FlashcardService";
+import { TaskService } from "../services/TaskService";
+import StatisticsComponent from "./StatisticsComponent.vue";
+import type { Task } from "../types/Task";
 
-const { currentUser } = useAuth()
-const noteService = new NoteService()
-const taskService = new TaskService()
+const { currentUser } = useAuth();
+const noteService = new NoteService();
+const taskService = new TaskService();
 
-const notesCount = ref(0)
-const flashcardsCount = ref(0)
-const allTasks = ref<Task[]>([])
-const tasksCount = ref(0)
-const weekDays = ['M', 'T', 'W', 'T', 'F', 'S', 'S']
-const notesActivity = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
-const flashcardsActivity = ref<number[]>([0, 0, 0, 0, 0, 0, 0])
+const notesCount = ref(0);
+const flashcardsCount = ref(0);
+const allTasks = ref<Task[]>([]);
+const tasksCount = ref(0);
 
 const emit = defineEmits<{
-  navigate: [section: string]
-}>()
+  navigate: [section: string];
+}>();
 
 const loadNotesCount = async () => {
   if (currentUser?.value?.id) {
     try {
-      const notes = await noteService.getUserNotes(currentUser.value.id)
-      notesCount.value = notes.length
-      calculateNotesActivity(notes)
+      const notes = await noteService.getUserNotes(currentUser.value.id);
+      notesCount.value = notes.length;
     } catch (error) {
-      console.error('Could not fetch notes:', error)
-      notesCount.value = 0
+      console.error("Could not fetch notes:", error);
+      notesCount.value = 0;
     }
   }
-}
+};
 
 const loadFlashcardsCount = async () => {
   if (currentUser?.value?.id) {
     try {
-      const flashcards = await FlashcardService.getUserFlashcards(currentUser.value.id)
-      flashcardsCount.value = flashcards.length
-      calculateFlashcardsActivity(flashcards)
+      const flashcards = await FlashcardService.getUserFlashcards(
+        currentUser.value.id
+      );
+      flashcardsCount.value = flashcards.length;
     } catch (error) {
-      console.error('Could not fetch flashcards:', error)
-      flashcardsCount.value = 0
+      console.error("Could not fetch flashcards:", error);
+      flashcardsCount.value = 0;
     }
   }
-}
+};
 
 const loadTasksCount = async () => {
   if (currentUser?.value?.id) {
     try {
-      const tasks = await taskService.getUserTasks(currentUser.value.id)
-      allTasks.value = tasks
-      tasksCount.value = tasks.length
+      const tasks = await taskService.getUserTasks(currentUser.value.id);
+      allTasks.value = tasks;
+      tasksCount.value = tasks.length;
     } catch (error) {
-      console.error('Could not fetch tasks:', error)
-      tasksCount.value = 0
-      allTasks.value = []
+      console.error("Could not fetch tasks:", error);
+      tasksCount.value = 0;
+      allTasks.value = [];
     }
   }
-}
+};
 
 // Computed property for pending tasks
-const pendingTasks = computed(() => 
-  allTasks.value.filter(task => task.status === 'pending')
-)
+const pendingTasks = computed(() =>
+  allTasks.value.filter((task) => task.status === "pending")
+);
 
 // Task-related functions
 const isTaskOverdue = (task: Task) => {
-  if (!task.dueDate || task.status === 'completed') return false
-  return new Date(task.dueDate) < new Date()
-}
+  if (!task.dueDate || task.status === "completed") return false;
+  return new Date(task.dueDate) < new Date();
+};
 
 const formatTaskDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('sv-SE')
-}
+  return new Date(dateString).toLocaleDateString("sv-SE");
+};
 
 const completeTask = async (task: Task) => {
   try {
-    await taskService.toggleTaskStatus(task.id, 'completed')
-    await loadTasksCount() // Reload tasks to update the list
+    await taskService.toggleTaskStatus(task.id, "completed");
+    await loadTasksCount(); // Reload tasks to update the list
   } catch (error) {
-    console.error('Error completing task:', error)
+    console.error("Error completing task:", error);
   }
-}
+};
 
 const editTask = (task: Task) => {
   // Store the task to edit in localStorage temporarily
-  localStorage.setItem('editTask', JSON.stringify(task))
+  localStorage.setItem("editTask", JSON.stringify(task));
   // Navigate to tasks page
-  emit('navigate', 'tasks')
-}
-
-const calculateNotesActivity = (notes: any[]) => {
-  const activity = [0, 0, 0, 0, 0, 0, 0]
-  const today = new Date()
-  today.setHours(23, 59, 59, 999) // Set to end of today for accurate comparison
-  
-  notes.forEach(note => {
-    const noteDate = new Date(note.createdAt)
-    const daysDiff = Math.floor((today.getTime() - noteDate.getTime()) / (1000 * 60 * 60 * 24))
-    
-    // If note was created within the last 7 days
-    if (daysDiff >= 0 && daysDiff < 7) {
-      const dayIndex = 6 - daysDiff // Latest day (today) becomes index 6, 6 days ago becomes index 0
-      activity[dayIndex]++
-    }
-  })
-  
-  notesActivity.value = activity
-}
-
-const calculateFlashcardsActivity = (flashcards: any[]) => {
-  const activity = [0, 0, 0, 0, 0, 0, 0]
-  const today = new Date()
-  today.setHours(23, 59, 59, 999) // Set to end of today for accurate comparison
-  
-  flashcards.forEach(card => {
-    // Count when card was created
-    const createdDate = new Date(card.createdAt)
-    const createdDaysDiff = Math.floor((today.getTime() - createdDate.getTime()) / (1000 * 60 * 60 * 24))
-    
-    if (createdDaysDiff >= 0 && createdDaysDiff < 7) {
-      const dayIndex = 6 - createdDaysDiff
-      activity[dayIndex]++
-    }
-    
-    // Count when card was last reviewed (if different day than created)
-    if (card.lastReviewed) {
-      const reviewDate = new Date(card.lastReviewed)
-      const reviewDaysDiff = Math.floor((today.getTime() - reviewDate.getTime()) / (1000 * 60 * 60 * 24))
-      
-      // Only count review if it's a different day than creation and within last 7 days
-      if (reviewDaysDiff >= 0 && reviewDaysDiff < 7 && reviewDaysDiff !== createdDaysDiff) {
-        const dayIndex = 6 - reviewDaysDiff
-        activity[dayIndex]++
-      }
-    }
-  })
-  
-  flashcardsActivity.value = activity
-}
-
-const getNotesActivityHeight = (dayIndex: number) => {
-  const maxActivity = Math.max(...notesActivity.value, 1)
-  const height = (notesActivity.value[dayIndex] / maxActivity) * 80 + 20 // Min 20%, max 100%
-  return Math.min(height, 100)
-}
-
-const getFlashcardsActivityHeight = (dayIndex: number) => {
-  const maxActivity = Math.max(...flashcardsActivity.value, 1)
-  const height = (flashcardsActivity.value[dayIndex] / maxActivity) * 80 + 20 // Min 20%, max 100%
-  return Math.min(height, 100)
-}
+  emit("navigate", "tasks");
+};
 
 onMounted(() => {
-  loadNotesCount()
-  loadFlashcardsCount()
-  loadTasksCount()
-})
+  loadNotesCount();
+  loadFlashcardsCount();
+  loadTasksCount();
+});
 </script>
 
 <style scoped>
@@ -316,9 +222,22 @@ onMounted(() => {
 }
 
 .content-grid {
-  display: grid;
-  grid-template-columns: 1fr 1fr;
+  display: flex;
   gap: 2rem;
+  align-items: flex-start;
+}
+
+.left-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.right-column {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
 }
 
 .content-card {
@@ -327,7 +246,6 @@ onMounted(() => {
   padding: 1.5rem;
   box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
-  margin-bottom: 1.5rem;
 }
 
 .content-card:hover {
@@ -356,7 +274,8 @@ onMounted(() => {
   text-align: center;
 }
 
-.notes-card, .flashcards-card {
+.notes-card,
+.flashcards-card {
   cursor: pointer;
 }
 
@@ -427,16 +346,17 @@ onMounted(() => {
 
 /* Task-related styles */
 .tasks-card {
-  min-height: 300px; /* Same as activity cards */
+  min-height: 220px; /* Match the combined height of notes + flashcards + gap */
   display: flex;
   flex-direction: column;
+  height: fit-content;
 }
 
 .tasks-container-home {
   flex: 1;
   display: flex;
   flex-direction: column;
-  min-height: 200px; /* Ensure minimum height even when empty */
+  min-height: 220px;
 }
 
 .add-task-btn {
@@ -464,7 +384,7 @@ onMounted(() => {
   justify-content: center;
   text-align: center;
   color: #718096;
-  min-height: 200px;
+  min-height: 220px;
 }
 
 .no-tasks p {
@@ -477,7 +397,7 @@ onMounted(() => {
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
-  max-height: 400px;
+  max-height: 350px;
   overflow-y: auto;
   padding-right: 4px;
 }
@@ -613,7 +533,7 @@ onMounted(() => {
   .content-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .dashboard {
     padding: 1rem;
   }

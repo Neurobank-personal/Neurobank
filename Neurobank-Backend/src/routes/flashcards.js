@@ -90,6 +90,35 @@ router.patch("/:flashcardId/review", async (req, res, next) => {
   }
 });
 
+// Markera flashcard med custom review datum
+router.patch("/:flashcardId/custom-review", async (req, res, next) => {
+  try {
+    const { days, timeUnit } = req.body;
+
+    if (!days || !timeUnit || days < 1 || days > 30) {
+      return res.status(400).json({
+        error:
+          "Days must be between 1-30 and timeUnit (days/months) are required",
+      });
+    }
+
+    if (!["days", "months"].includes(timeUnit)) {
+      return res.status(400).json({
+        error: "TimeUnit must be 'days' or 'months'",
+      });
+    }
+
+    const updatedFlashcard = await flashcardService.markCardCustomReview(
+      req.params.flashcardId,
+      days,
+      timeUnit
+    );
+    res.json(updatedFlashcard);
+  } catch (error) {
+    next(error);
+  }
+});
+
 // Flytta expired cards tillbaka till remaining
 router.post("/user/:userId/refresh-reviews", async (req, res, next) => {
   try {

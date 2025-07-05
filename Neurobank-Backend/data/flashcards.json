@@ -1,1 +1,116 @@
-[]
+[
+  {
+    "id": "1751723716561jx7zg7r00",
+    "question": "What is a Monorepo?",
+    "answer": "A single Git repository where frontend, backend, and shared libraries coexist to facilitate code sharing and streamline development processes.",
+    "categories": [
+      "Project Structure"
+    ],
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "deckId": null,
+    "lastReviewed": "2025-07-05T16:02:10.933Z",
+    "nextReviewDate": "2025-07-10T16:02:10.934Z",
+    "reviewCount": 15,
+    "easyCount": 0,
+    "status": "completed",
+    "createdAt": "2025-07-05T13:55:16.561Z",
+    "updatedAt": "2025-07-05T16:02:10.934Z"
+  },
+  {
+    "id": "1751723716561vg581ol9n",
+    "question": "What is the purpose of Feature-based structure in frontend development?",
+    "answer": "It groups files based on functionality rather than technology, making it scalable and easy to understand.",
+    "categories": [
+      "Project Structure"
+    ],
+    "difficulty": "custom",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "deckId": null,
+    "lastReviewed": "2025-07-05T14:41:02.313Z",
+    "nextReviewDate": "2025-07-06T14:41:02.313Z",
+    "reviewCount": 6,
+    "easyCount": 0,
+    "status": "completed",
+    "createdAt": "2025-07-05T13:55:16.561Z",
+    "updatedAt": "2025-07-05T14:41:02.314Z"
+  },
+  {
+    "id": "1751723716561w5x3i89ei",
+    "question": "What is the role of Controllers in a project's code structure?",
+    "answer": "Controllers handle incoming HTTP requests, coordinate requests to the appropriate services, and return responses, without containing business logic.",
+    "categories": [
+      "Mappstruktur och koduppdelning"
+    ],
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "deckId": null,
+    "lastReviewed": "2025-07-05T14:10:23.557Z",
+    "nextReviewDate": "2025-07-10T14:10:23.558Z",
+    "reviewCount": 3,
+    "easyCount": 1,
+    "status": "completed",
+    "createdAt": "2025-07-05T13:55:16.561Z",
+    "updatedAt": "2025-07-05T14:10:23.558Z"
+  },
+  {
+    "id": "1751723716561vg2zdjj2b",
+    "question": "What is the significance of Semantic versioning?",
+    "answer": "It describes version levels using major.minor.patch format, where major signifies breaking changes, minor indicates new features, and patch represents bug fixes.",
+    "categories": [
+      "Beroenden och versionering"
+    ],
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "deckId": null,
+    "lastReviewed": "2025-07-05T14:05:59.008Z",
+    "nextReviewDate": "2025-07-10T14:05:59.008Z",
+    "reviewCount": 2,
+    "easyCount": 0,
+    "status": "completed",
+    "createdAt": "2025-07-05T13:55:16.561Z",
+    "updatedAt": "2025-07-05T14:05:59.008Z"
+  },
+  {
+    "id": "1751723716561ju0gu2nsa",
+    "question": "What is ESLint used for?",
+    "answer": "ESLint is an analysis tool for identifying errors and poor code quality in JavaScript and TypeScript, defining code style guidelines, and detecting common mistakes.",
+    "categories": [
+      "Kodstandard och dokumentation"
+    ],
+    "difficulty": "medium",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": "1751189802090rcklajne8",
+    "deckId": null,
+    "lastReviewed": "2025-07-05T14:05:59.419Z",
+    "nextReviewDate": "2025-07-10T14:05:59.423Z",
+    "reviewCount": 2,
+    "easyCount": 0,
+    "status": "completed",
+    "createdAt": "2025-07-05T13:55:16.561Z",
+    "updatedAt": "2025-07-05T14:05:59.424Z"
+  },
+  {
+    "id": "1751728352607q0dfvzpl3",
+    "question": "What is Vue.js?",
+    "answer": "A progressive JavaScript framework for building user interfaces",
+    "categories": [
+      "programming"
+    ],
+    "difficulty": "easy",
+    "userId": "1751033764233vfurc86wp",
+    "sourceNoteId": null,
+    "deckId": null,
+    "lastReviewed": "2025-07-05T15:12:47.977Z",
+    "nextReviewDate": "2025-07-06T15:12:47.978Z",
+    "reviewCount": 1,
+    "easyCount": 1,
+    "status": "completed",
+    "createdAt": "2025-07-05T15:12:32.607Z",
+    "updatedAt": "2025-07-05T15:12:47.978Z"
+  }
+]

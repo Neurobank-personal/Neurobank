@@ -187,6 +187,47 @@ class FlashcardService {
     }
   }
 
+  async markCardCustomReview(
+    id: string,
+    days: number,
+    timeUnit: "days" | "months"
+  ): Promise<Flashcard> {
+    try {
+      const response = await fetch(
+        getApiUrl(`/api/flashcards/${id}/custom-review`),
+        {
+          method: "PATCH",
+          headers: {
+            "Content-Type": "application/json",
+          },
+          body: JSON.stringify({ days, timeUnit }),
+        }
+      );
+
+      if (!response.ok) {
+        const errorData = await response.json();
+        throw new Error(
+          errorData.error || "Failed to mark card with custom review"
+        );
+      }
+
+      const flashcard = await response.json();
+      return {
+        ...flashcard,
+        createdAt: new Date(flashcard.createdAt),
+        lastReviewed: flashcard.lastReviewed
+          ? new Date(flashcard.lastReviewed)
+          : undefined,
+        nextReviewDate: flashcard.nextReviewDate
+          ? new Date(flashcard.nextReviewDate)
+          : undefined,
+      };
+    } catch (error) {
+      console.error("Error marking card with custom review:", error);
+      throw error;
+    }
+  }
+
   async resetCardToRemaining(id: string): Promise<Flashcard> {
     try {
       const response = await fetch(

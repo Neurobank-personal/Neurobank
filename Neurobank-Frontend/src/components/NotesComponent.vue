@@ -7,24 +7,38 @@
 
     <!-- Tabs for switching between views -->
     <div class="tabs">
-      <button 
-        class="tab-btn" 
+      <button
+        class="tab-btn"
         :class="{ active: activeTab === 'create' }"
         @click="activeTab = 'create'"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M12 5v14M5 12h14"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M12 5v14M5 12h14" />
         </svg>
         Create new
       </button>
-      <button 
-        class="tab-btn" 
+      <button
+        class="tab-btn"
         :class="{ active: activeTab === 'list' }"
         @click="activeTab = 'list'"
       >
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <path d="M3 12h18m-9-6v12"/>
-          <path d="M8 6h13M8 12h13M8 18h13"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path d="M3 12h18m-9-6v12" />
+          <path d="M8 6h13M8 12h13M8 18h13" />
         </svg>
         My notes ({{ notes.length }})
       </button>
@@ -37,12 +51,21 @@
         <div class="create-note-main">
           <div class="create-note-header">
             <div class="header-icon">
-              <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                <polyline points="14,2 14,8 20,8"/>
-                <line x1="16" y1="13" x2="8" y2="13"/>
-                <line x1="16" y1="17" x2="8" y2="17"/>
-                <line x1="10" y1="9" x2="8" y2="9"/>
+              <svg
+                width="24"
+                height="24"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                />
+                <polyline points="14,2 14,8 20,8" />
+                <line x1="16" y1="13" x2="8" y2="13" />
+                <line x1="16" y1="17" x2="8" y2="17" />
+                <line x1="10" y1="9" x2="8" y2="9" />
               </svg>
             </div>
             <div class="header-text">
@@ -52,35 +75,56 @@
           </div>
 
           <div v-if="errorMessage" class="error-message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <circle cx="12" cy="12" r="10"/>
-              <line x1="15" y1="9" x2="9" y2="15"/>
-              <line x1="9" y1="9" x2="15" y2="15"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <circle cx="12" cy="12" r="10" />
+              <line x1="15" y1="9" x2="9" y2="15" />
+              <line x1="9" y1="9" x2="15" y2="15" />
             </svg>
             {{ errorMessage }}
           </div>
-          
+
           <div v-if="successMessage" class="success-message">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/>
-              <polyline points="22,4 12,14.01 9,11.01"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path d="M22 11.08V12a10 10 0 1 1-5.93-9.14" />
+              <polyline points="22,4 12,14.01 9,11.01" />
             </svg>
             {{ successMessage }}
           </div>
-          
+
           <form @submit.prevent="handleSubmit" class="modern-form">
             <div class="form-row">
               <div class="input-wrapper">
                 <label for="title" class="input-label">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M4 6h16M4 12h16M4 18h7"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path d="M4 6h16M4 12h16M4 18h7" />
                   </svg>
                   Title
                 </label>
-                <input 
+                <input
                   id="title"
-                  type="text" 
-                  v-model="title" 
+                  type="text"
+                  v-model="title"
                   placeholder="Enter a descriptive title for your note"
                   required
                   :disabled="isLoading"
@@ -88,23 +132,32 @@
                 />
               </div>
             </div>
-            
+
             <div class="form-row">
               <div class="input-wrapper">
                 <label for="content" class="input-label">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-                    <polyline points="14,2 14,8 20,8"/>
-                    <line x1="16" y1="13" x2="8" y2="13"/>
-                    <line x1="16" y1="17" x2="8" y2="17"/>
-                    <line x1="10" y1="9" x2="8" y2="9"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+                    />
+                    <polyline points="14,2 14,8 20,8" />
+                    <line x1="16" y1="13" x2="8" y2="13" />
+                    <line x1="16" y1="17" x2="8" y2="17" />
+                    <line x1="10" y1="9" x2="8" y2="9" />
                   </svg>
                   Content
                 </label>
                 <div class="textarea-container">
-                  <textarea 
+                  <textarea
                     id="content"
-                    v-model="content" 
+                    v-model="content"
                     placeholder="Write your note here... You can use markdown format to structure the text."
                     rows="12"
                     maxlength="20000"
@@ -120,17 +173,26 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="form-row">
               <div class="input-wrapper">
                 <label class="input-label">
-                  <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+                  <svg
+                    width="16"
+                    height="16"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                    />
                   </svg>
                   AI Processing
                 </label>
                 <div class="ai-process-selector">
-                  <button 
+                  <button
                     type="button"
                     class="process-option"
                     :class="{ active: processType === 'none' }"
@@ -138,10 +200,17 @@
                     :disabled="isLoading"
                   >
                     <div class="option-icon">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <circle cx="12" cy="12" r="10"/>
-                        <line x1="15" y1="9" x2="9" y2="15"/>
-                        <line x1="9" y1="9" x2="15" y2="15"/>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <circle cx="12" cy="12" r="10" />
+                        <line x1="15" y1="9" x2="9" y2="15" />
+                        <line x1="9" y1="9" x2="15" y2="15" />
                       </svg>
                     </div>
                     <div class="option-content">
@@ -149,8 +218,8 @@
                       <div class="option-desc">Save the note as it is</div>
                     </div>
                   </button>
-                  
-                  <button 
+
+                  <button
                     type="button"
                     class="process-option"
                     :class="{ active: processType === 'summarize' }"
@@ -158,17 +227,26 @@
                     :disabled="isLoading"
                   >
                     <div class="option-icon summarize">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M4 6h16M4 12h12M4 18h8"/>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M4 6h16M4 12h12M4 18h8" />
                       </svg>
                     </div>
                     <div class="option-content">
                       <div class="option-title">Summarize</div>
-                      <div class="option-desc">AI creates a shorter version</div>
+                      <div class="option-desc">
+                        AI creates a shorter version
+                      </div>
                     </div>
                   </button>
-                  
-                  <button 
+
+                  <button
                     type="button"
                     class="process-option"
                     :class="{ active: processType === 'expand' }"
@@ -176,36 +254,76 @@
                     :disabled="isLoading"
                   >
                     <div class="option-icon expand">
-                      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                        <path d="M3 12h18m-9-6v12"/>
-                        <path d="M8 6h13M8 12h13M8 18h13"/>
+                      <svg
+                        width="18"
+                        height="18"
+                        viewBox="0 0 24 24"
+                        fill="none"
+                        stroke="currentColor"
+                        stroke-width="2"
+                      >
+                        <path d="M3 12h18m-9-6v12" />
+                        <path d="M8 6h13M8 12h13M8 18h13" />
                       </svg>
                     </div>
                     <div class="option-content">
                       <div class="option-title">Expand</div>
-                      <div class="option-desc">AI expands and improves the text</div>
+                      <div class="option-desc">
+                        AI expands and improves the text
+                      </div>
                     </div>
                   </button>
                 </div>
-                <p class="help-text">AI can help you improve your note by summarizing or expanding the content.</p>
+                <p class="help-text">
+                  AI can help you improve your note by summarizing or expanding
+                  the content.
+                </p>
               </div>
             </div>
-            
+
             <div class="form-actions">
-              <button type="submit" class="primary-btn" :disabled="isLoading || !title.trim() || !content.trim()">
-                <svg v-if="!isLoading" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/>
-                  <polyline points="17,21 17,13 7,13 7,21"/>
-                  <polyline points="7,3 7,8 15,8"/>
+              <button
+                type="submit"
+                class="primary-btn"
+                :disabled="isLoading || !title.trim() || !content.trim()"
+              >
+                <svg
+                  v-if="!isLoading"
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <path
+                    d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"
+                  />
+                  <polyline points="17,21 17,13 7,13 7,21" />
+                  <polyline points="7,3 7,8 15,8" />
                 </svg>
                 <div v-else class="loading-spinner-small"></div>
-                {{ isLoading ? 'Processing...' : 'Save note' }}
+                {{ isLoading ? "Processing..." : "Save note" }}
               </button>
-              
-              <button type="button" class="secondary-btn" @click="clearForm" :disabled="isLoading">
-                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                  <polyline points="3,6 5,6 21,6"/>
-                  <path d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"/>
+
+              <button
+                type="button"
+                class="secondary-btn"
+                @click="clearForm"
+                :disabled="isLoading"
+              >
+                <svg
+                  width="20"
+                  height="20"
+                  viewBox="0 0 24 24"
+                  fill="none"
+                  stroke="currentColor"
+                  stroke-width="2"
+                >
+                  <polyline points="3,6 5,6 21,6" />
+                  <path
+                    d="M19,6v14a2,2,0,0,1-2,2H7a2,2,0,0,1-2-2V6m3,0V4a2,2,0,0,1,2-2h4a2,2,0,0,1,2,2V6"
+                  />
                 </svg>
                 Clear
               </button>
@@ -217,8 +335,17 @@
         <div class="create-note-sidebar">
           <div class="tips-card">
             <div class="tips-header">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path
+                  d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+                />
               </svg>
               <h4>Tips for good notes</h4>
             </div>
@@ -232,22 +359,36 @@
 
           <div v-if="content.length > 10" class="preview-card">
             <div class="preview-header">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/>
-                <circle cx="12" cy="12" r="3"/>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+                <circle cx="12" cy="12" r="3" />
               </svg>
               <h4>Preview</h4>
             </div>
             <div class="preview-content">
-              <h5>{{ title || 'Untitled' }}</h5>
+              <h5>{{ title || "Untitled" }}</h5>
               <p>{{ getPreviewText(content) }}</p>
             </div>
           </div>
 
           <div class="stats-card">
             <div class="stats-header">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12"/>
+              <svg
+                width="20"
+                height="20"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="22,12 18,12 15,21 9,3 6,12 2,12" />
               </svg>
               <h4>Statistics</h4>
             </div>
@@ -268,18 +409,29 @@
           </div>
         </div>
       </div>
-      
+
       <!-- AI Processed Content -->
       <div v-if="processedContent" class="processed-result">
         <div class="processed-header">
           <div class="processed-icon">
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <path d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"/>
+            <svg
+              width="24"
+              height="24"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <path
+                d="M9.663 17h4.673M12 3v1m6.364 1.636l-.707.707M21 12h-1M4 12H3m3.343-5.657l-.707-.707m2.828 9.9a5 5 0 117.072 0l-.548.547A3.374 3.374 0 0014 18.469V19a2 2 0 11-4 0v-.531c0-.895-.356-1.754-.988-2.386l-.548-.547z"
+              />
             </svg>
           </div>
           <div class="processed-text">
             <h3>AI-processed text</h3>
-            <p>Your note has been processed by AI according to your preferences</p>
+            <p>
+              Your note has been processed by AI according to your preferences
+            </p>
           </div>
         </div>
         <div class="processed-content-box">
@@ -291,13 +443,14 @@
     <!-- Notes List Tab -->
     <div v-if="activeTab === 'list'" class="tab-content">
       <!-- Note Viewer Component -->
-      <NoteViewer 
-        v-if="selectedNote" 
-        :note="selectedNote" 
+      <NoteViewer
+        v-if="selectedNote"
+        :note="selectedNote"
         @close="closeNoteViewer"
         @noteUpdated="handleNoteUpdated"
+        @noteDeleted="handleNoteDeleted"
       />
-      
+
       <!-- Notes List -->
       <div v-else>
         <!-- Flashcard Generation Toolbar -->
@@ -309,24 +462,37 @@
           <div class="toolbar-right">
             <div class="selection-info" v-if="selectedNoteIds.length > 0">
               <span>{{ selectedNoteIds.length }} selected</span>
-              <button class="btn-secondary" @click="selectedNoteIds = []">Clear</button>
+              <button class="btn-secondary" @click="selectedNoteIds = []">
+                Clear
+              </button>
             </div>
-            <button 
-              class="btn-secondary" 
+            <button
+              class="btn-secondary"
               @click="selectAllNotes"
               :disabled="notes.length === 0"
             >
-              {{ selectedNoteIds.length === notes.length ? 'Deselect All' : 'Select All' }}
+              {{
+                selectedNoteIds.length === notes.length
+                  ? "Deselect All"
+                  : "Select All"
+              }}
             </button>
-            <button 
-              class="btn-primary flashcard-btn" 
+            <button
+              class="btn-primary flashcard-btn"
               @click="startFlashcardGeneration"
               :disabled="!canGenerateFlashcards"
             >
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <rect x="2" y="3" width="20" height="14" rx="2" ry="2"/>
-                <line x1="8" y1="21" x2="16" y2="21"/>
-                <line x1="12" y1="17" x2="12" y2="21"/>
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <rect x="2" y="3" width="20" height="14" rx="2" ry="2" />
+                <line x1="8" y1="21" x2="16" y2="21" />
+                <line x1="12" y1="17" x2="12" y2="21" />
               </svg>
               Generate Flashcards ({{ selectedNoteIds.length }})
             </button>
@@ -338,31 +504,42 @@
         </div>
 
         <div v-else-if="notes.length === 0" class="empty-state">
-          <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-            <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
-            <polyline points="14,2 14,8 20,8"/>
-            <line x1="16" y1="13" x2="8" y2="13"/>
-            <line x1="16" y1="17" x2="8" y2="17"/>
-            <line x1="10" y1="9" x2="8" y2="9"/>
+          <svg
+            width="80"
+            height="80"
+            viewBox="0 0 24 24"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="1"
+          >
+            <path
+              d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"
+            />
+            <polyline points="14,2 14,8 20,8" />
+            <line x1="16" y1="13" x2="8" y2="13" />
+            <line x1="16" y1="17" x2="8" y2="17" />
+            <line x1="10" y1="9" x2="8" y2="9" />
           </svg>
           <h3>Inga anteckningar än</h3>
-          <p>Skapa din första anteckning genom att klicka på "Skapa ny" fliken.</p>
+          <p>
+            Skapa din första anteckning genom att klicka på "Skapa ny" fliken.
+          </p>
           <button class="create-first-btn" @click="activeTab = 'create'">
             Skapa din första anteckning
           </button>
         </div>
 
         <div v-else class="notes-grid">
-          <div 
-            v-for="note in notes" 
-            :key="note.id" 
+          <div
+            v-for="note in notes"
+            :key="note.id"
             class="note-card"
             :class="{ selected: isNoteSelected(note.id) }"
           >
             <div class="note-selection">
               <label class="checkbox-container" @click.stop>
-                <input 
-                  type="checkbox" 
+                <input
+                  type="checkbox"
                   :checked="isNoteSelected(note.id)"
                   @change="toggleNoteSelection(note.id)"
                 />
@@ -381,7 +558,10 @@
               </div>
               <div class="note-card-footer">
                 <div class="note-tags">
-                  <span v-if="note.processType && note.processType !== 'none'" class="tag ai-tag">
+                  <span
+                    v-if="note.processType && note.processType !== 'none'"
+                    class="tag ai-tag"
+                  >
                     AI: {{ getProcessTypeLabel(note.processType) }}
                   </span>
                   <span v-if="note.processedContent" class="tag processed-tag">
@@ -399,75 +579,100 @@
     </div>
 
     <!-- Flashcard Generation Modal -->
-    <div v-if="showFlashcardModal" class="modal-overlay" @click="closeFlashcardModal">
+    <div
+      v-if="showFlashcardModal"
+      class="modal-overlay"
+      @click="closeFlashcardModal"
+    >
       <div class="modal-content" @click.stop>
         <div class="modal-header">
           <h3>Generate Flashcards</h3>
           <button class="close-btn" @click="closeFlashcardModal">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
-        
+
         <div class="modal-body">
           <div v-if="!generatingFlashcards && generatedFlashcards.length === 0">
             <p class="generation-info">
-              Generate flashcards from {{ selectedNoteIds.length }} selected note{{ selectedNoteIds.length > 1 ? 's' : '' }}.
-              AI will create questions and answers based on the most important content and categorize them.
+              Generate flashcards from {{ selectedNoteIds.length }} selected
+              note{{ selectedNoteIds.length > 1 ? "s" : "" }}. AI will create
+              questions and answers based on the most important content and
+              categorize them.
             </p>
-            
+
             <!-- Deck Selection -->
             <div class="form-group">
               <label for="deck-select">Add to Deck (Optional)</label>
-              <select 
-                id="deck-select" 
-                v-model="selectedDeckId" 
+              <select
+                id="deck-select"
+                v-model="selectedDeckId"
                 class="deck-select"
               >
                 <option :value="null">General Collection (No deck)</option>
-                <option 
-                  v-for="deck in decks" 
-                  :key="deck.id" 
-                  :value="deck.id"
-                >
+                <option v-for="deck in decks" :key="deck.id" :value="deck.id">
                   {{ deck.name }}
                 </option>
               </select>
-              <p class="form-hint">Choose a deck to organize your flashcards, or leave unselected for general collection.</p>
+              <p class="form-hint">
+                Choose a deck to organize your flashcards, or leave unselected
+                for general collection.
+              </p>
             </div>
-            
+
             <div v-if="flashcardError" class="error-message">
               {{ flashcardError }}
             </div>
-            
+
             <div class="modal-actions">
-              <button class="btn-secondary" @click="closeFlashcardModal">Cancel</button>
-              <button class="btn-primary" @click="generateFlashcards" :disabled="generatingFlashcards">
+              <button class="btn-secondary" @click="closeFlashcardModal">
+                Cancel
+              </button>
+              <button
+                class="btn-primary"
+                @click="generateFlashcards"
+                :disabled="generatingFlashcards"
+              >
                 Generate Flashcards
               </button>
             </div>
           </div>
-          
+
           <div v-else-if="generatingFlashcards" class="loading-state">
             <div class="loading-spinner"></div>
             <p>Generating flashcards with AI...</p>
             <p class="loading-subtitle">This may take a few moments</p>
           </div>
-          
-          <div v-else-if="generatedFlashcards.length > 0" class="flashcards-result">
+
+          <div
+            v-else-if="generatedFlashcards.length > 0"
+            class="flashcards-result"
+          >
             <div class="result-header">
               <h4>Generated {{ generatedFlashcards.length }} Flashcards</h4>
               <p class="result-subtitle">Review your new flashcards below</p>
             </div>
-            
+
             <div class="flashcards-list">
-              <div v-for="(flashcard, index) in generatedFlashcards" :key="index" class="flashcard-preview">
+              <div
+                v-for="(flashcard, index) in generatedFlashcards"
+                :key="index"
+                class="flashcard-preview"
+              >
                 <div class="flashcard-categories">
-                  <span 
-                    v-for="category in flashcard.categories" 
-                    :key="category" 
+                  <span
+                    v-for="category in flashcard.categories"
+                    :key="category"
                     class="category-tag"
                   >
                     {{ category }}
@@ -483,7 +688,7 @@
                 </div>
               </div>
             </div>
-            
+
             <div class="modal-actions">
               <button class="btn-primary" @click="closeFlashcardModal">
                 Done
@@ -497,272 +702,300 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { handleCreateNote, handleProcessNote, handleGetNotes } from '../services/handleNotes'
-import { useAuth } from '../stores/auth'
-import NoteViewer from './NoteViewer.vue'
-import FlashcardService from '../services/FlashcardService'
-import DeckService from '../services/DeckService'
-import type { Note } from '../types/Note'
-import type { Flashcard } from '../types/Flashcard'
-import type { Deck } from '../types/Deck'
+import { ref, computed, onMounted } from "vue";
+import {
+  handleCreateNote,
+  handleProcessNote,
+  handleGetNotes,
+} from "../services/handleNotes";
+import { useAuth } from "../stores/auth";
+import NoteViewer from "./NoteViewer.vue";
+import FlashcardService from "../services/FlashcardService";
+import DeckService from "../services/DeckService";
+import type { Note } from "../types/Note";
+import type { Flashcard } from "../types/Flashcard";
+import type { Deck } from "../types/Deck";
 
-const { getCurrentUserId } = useAuth()
+const { getCurrentUserId } = useAuth();
 
 // Create note form data
-const title = ref('')
-const content = ref('')
-const processType = ref<'none' | 'summarize' | 'expand'>('none')
-const isLoading = ref(false)
-const errorMessage = ref('')
-const successMessage = ref('')
-const processedContent = ref('')
+const title = ref("");
+const content = ref("");
+const processType = ref<"none" | "summarize" | "expand">("none");
+const isLoading = ref(false);
+const errorMessage = ref("");
+const successMessage = ref("");
+const processedContent = ref("");
 
 // Notes list data
-const activeTab = ref<'create' | 'list'>('list')
-const notes = ref<Note[]>([])
-const loadingNotes = ref(false)
-const selectedNote = ref<Note | null>(null)
+const activeTab = ref<"create" | "list">("list");
+const notes = ref<Note[]>([]);
+const loadingNotes = ref(false);
+const selectedNote = ref<Note | null>(null);
 
 // Flashcard generation data
-const selectedNoteIds = ref<string[]>([])
-const showFlashcardModal = ref(false)
-const generatingFlashcards = ref(false)
-const generatedFlashcards = ref<Flashcard[]>([])
-const flashcardError = ref('')
-const selectedDeckId = ref<string | null>(null)
-const decks = ref<Deck[]>([])
+const selectedNoteIds = ref<string[]>([]);
+const showFlashcardModal = ref(false);
+const generatingFlashcards = ref(false);
+const generatedFlashcards = ref<Flashcard[]>([]);
+const flashcardError = ref("");
+const selectedDeckId = ref<string | null>(null);
+const decks = ref<Deck[]>([]);
 
 // Hämta användar-ID från auth store
-const userId = computed(() => getCurrentUserId())
+const userId = computed(() => getCurrentUserId());
 
 // Load notes and decks when component mounts
 onMounted(async () => {
-  await Promise.all([loadNotes(), loadDecks()])
-})
+  await Promise.all([loadNotes(), loadDecks()]);
+});
 
 const loadNotes = async () => {
-  if (!userId.value) return
-  
-  loadingNotes.value = true
+  if (!userId.value) return;
+
+  loadingNotes.value = true;
   try {
-    const result = await handleGetNotes(userId.value)
+    const result = await handleGetNotes(userId.value);
     if (result.success) {
-      notes.value = result.notes.sort((a, b) => 
-        new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
-      )
+      notes.value = result.notes.sort(
+        (a, b) =>
+          new Date(b.createdAt).getTime() - new Date(a.createdAt).getTime()
+      );
     }
   } catch (error) {
-    console.error('Fel vid laddning av anteckningar:', error)
+    console.error("Fel vid laddning av anteckningar:", error);
   } finally {
-    loadingNotes.value = false
+    loadingNotes.value = false;
   }
-}
+};
 
 const loadDecks = async () => {
-  if (!userId.value) return
-  
+  if (!userId.value) return;
+
   try {
-    decks.value = await DeckService.getUserDecks(userId.value)
+    decks.value = await DeckService.getUserDecks(userId.value);
   } catch (error) {
-    console.error('Error loading decks:', error)
+    console.error("Error loading decks:", error);
   }
-}
+};
 
 const handleSubmit = async () => {
   if (!userId.value) {
-    errorMessage.value = 'Du måste vara inloggad för att skapa anteckningar'
-    return
+    errorMessage.value = "Du måste vara inloggad för att skapa anteckningar";
+    return;
   }
 
-  errorMessage.value = ''
-  successMessage.value = ''
-  isLoading.value = true
-  
+  errorMessage.value = "";
+  successMessage.value = "";
+  isLoading.value = true;
+
   try {
     const result = await handleCreateNote({
       title: title.value,
       content: content.value,
       processType: processType.value,
-      userId: userId.value
-    })
-    
+      userId: userId.value,
+    });
+
     if (result.success) {
-      successMessage.value = result.message || 'Anteckning skapad!'
-      
+      successMessage.value = result.message || "Anteckning skapad!";
+
       // Om AI-bearbetning valdes
-      if (processType.value !== 'none' && result.note) {
+      if (processType.value !== "none" && result.note) {
         const processResult = await handleProcessNote({
           noteId: result.note.id,
-          processType: processType.value
-        })
-        
+          processType: processType.value,
+        });
+
         if (processResult.success && processResult.note) {
-          processedContent.value = processResult.note.processedContent || ''
-          successMessage.value += ' AI-bearbetning klar!'
+          processedContent.value = processResult.note.processedContent || "";
+          successMessage.value += " AI-bearbetning klar!";
         }
       }
-      
+
       // Clear form
-      title.value = ''
-      content.value = ''
-      processType.value = 'none'
-      processedContent.value = ''
-      
+      title.value = "";
+      content.value = "";
+      processType.value = "none";
+      processedContent.value = "";
+
       // Reload notes and switch to list tab
-      await loadNotes()
-      activeTab.value = 'list'
-      
+      await loadNotes();
+      activeTab.value = "list";
     } else {
-      errorMessage.value = result.error || 'Ett fel uppstod'
+      errorMessage.value = result.error || "Ett fel uppstod";
     }
   } catch (error) {
-    errorMessage.value = 'Ett oväntat fel uppstod'
+    errorMessage.value = "Ett oväntat fel uppstod";
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const openNoteViewer = (note: Note) => {
-  selectedNote.value = note
-}
+  selectedNote.value = note;
+};
 
 const closeNoteViewer = () => {
-  selectedNote.value = null
-}
+  selectedNote.value = null;
+};
 
 const handleNoteUpdated = (updatedNote: Note) => {
   // Update the note in the notes array
-  const index = notes.value.findIndex(note => note.id === updatedNote.id)
+  const index = notes.value.findIndex((note) => note.id === updatedNote.id);
   if (index !== -1) {
-    notes.value[index] = updatedNote
+    notes.value[index] = updatedNote;
   }
-}
+};
+
+const handleNoteDeleted = (deletedNoteId: string) => {
+  // Remove the note from the notes array
+  const index = notes.value.findIndex((note) => note.id === deletedNoteId);
+  if (index !== -1) {
+    notes.value.splice(index, 1);
+  }
+  // Close the note viewer since the note is deleted
+  selectedNote.value = null;
+  // Also remove from selected notes if it was selected
+  const selectedIndex = selectedNoteIds.value.indexOf(deletedNoteId);
+  if (selectedIndex !== -1) {
+    selectedNoteIds.value.splice(selectedIndex, 1);
+  }
+};
 
 const formatRelativeDate = (dateInput: string | Date) => {
-  const date = dateInput instanceof Date ? dateInput : new Date(dateInput)
-  const now = new Date()
-  const diffInMinutes = Math.floor((now.getTime() - date.getTime()) / (1000 * 60))
-  
-  if (diffInMinutes < 1) return 'Just now'
-  if (diffInMinutes < 60) return `${diffInMinutes} min ago`
-  
-  const diffInHours = Math.floor(diffInMinutes / 60)
-  if (diffInHours < 24) return `${diffInHours} hour${diffInHours > 1 ? 's' : ''} ago`
-  
-  const diffInDays = Math.floor(diffInHours / 24)
-  if (diffInDays < 7) return `${diffInDays} day${diffInDays > 1 ? 's' : ''} ago`
-  
-  return date.toLocaleDateString('sv-SE', {
-    year: 'numeric',
-    month: 'short',
-    day: 'numeric'
-  })
-}
+  const date = dateInput instanceof Date ? dateInput : new Date(dateInput);
+  const now = new Date();
+  const diffInMinutes = Math.floor(
+    (now.getTime() - date.getTime()) / (1000 * 60)
+  );
+
+  if (diffInMinutes < 1) return "Just now";
+  if (diffInMinutes < 60) return `${diffInMinutes} min ago`;
+
+  const diffInHours = Math.floor(diffInMinutes / 60);
+  if (diffInHours < 24)
+    return `${diffInHours} hour${diffInHours > 1 ? "s" : ""} ago`;
+
+  const diffInDays = Math.floor(diffInHours / 24);
+  if (diffInDays < 7)
+    return `${diffInDays} day${diffInDays > 1 ? "s" : ""} ago`;
+
+  return date.toLocaleDateString("sv-SE", {
+    year: "numeric",
+    month: "short",
+    day: "numeric",
+  });
+};
 
 const getPreviewText = (content: string) => {
-  const maxLength = 150
-  if (content.length <= maxLength) return content
-  return content.slice(0, maxLength) + '...'
-}
+  const maxLength = 150;
+  if (content.length <= maxLength) return content;
+  return content.slice(0, maxLength) + "...";
+};
 
 const getProcessTypeLabel = (processType: string) => {
   switch (processType) {
-    case 'summarize': return 'Summary'
-    case 'expand': return 'Expansion'
-    default: return processType
+    case "summarize":
+      return "Summary";
+    case "expand":
+      return "Expansion";
+    default:
+      return processType;
   }
-}
+};
 
 const clearForm = () => {
-  title.value = ''
-  content.value = ''
-  processType.value = 'none'
-  processedContent.value = ''
-  errorMessage.value = ''
-  successMessage.value = ''
-}
+  title.value = "";
+  content.value = "";
+  processType.value = "none";
+  processedContent.value = "";
+  errorMessage.value = "";
+  successMessage.value = "";
+};
 
 const getWordCount = (text: string) => {
-  if (!text.trim()) return 0
-  return text.trim().split(/\s+/).length
-}
+  if (!text.trim()) return 0;
+  return text.trim().split(/\s+/).length;
+};
 
 const getReadingTime = (text: string) => {
-  const wordsPerMinute = 200
-  const wordCount = getWordCount(text)
-  const minutes = Math.ceil(wordCount / wordsPerMinute)
-  return minutes
-}
+  const wordsPerMinute = 200;
+  const wordCount = getWordCount(text);
+  const minutes = Math.ceil(wordCount / wordsPerMinute);
+  return minutes;
+};
 
 // Flashcard functions
 const toggleNoteSelection = (noteId: string) => {
-  const index = selectedNoteIds.value.indexOf(noteId)
+  const index = selectedNoteIds.value.indexOf(noteId);
   if (index > -1) {
-    selectedNoteIds.value.splice(index, 1)
+    selectedNoteIds.value.splice(index, 1);
   } else {
-    selectedNoteIds.value.push(noteId)
+    selectedNoteIds.value.push(noteId);
   }
-}
+};
 
 const selectAllNotes = () => {
   if (selectedNoteIds.value.length === notes.value.length) {
-    selectedNoteIds.value = []
+    selectedNoteIds.value = [];
   } else {
-    selectedNoteIds.value = notes.value.map(note => note.id)
+    selectedNoteIds.value = notes.value.map((note) => note.id);
   }
-}
+};
 
 const startFlashcardGeneration = () => {
   if (selectedNoteIds.value.length === 0) {
-    flashcardError.value = 'Please select at least one note to generate flashcards'
-    return
+    flashcardError.value =
+      "Please select at least one note to generate flashcards";
+    return;
   }
-  showFlashcardModal.value = true
-  flashcardError.value = ''
-}
+  showFlashcardModal.value = true;
+  flashcardError.value = "";
+};
 
 const generateFlashcards = async () => {
   if (!userId.value || selectedNoteIds.value.length === 0) {
-    flashcardError.value = 'Please select notes and ensure you are logged in'
-    return
+    flashcardError.value = "Please select notes and ensure you are logged in";
+    return;
   }
 
-  generatingFlashcards.value = true
-  flashcardError.value = ''
-  
+  generatingFlashcards.value = true;
+  flashcardError.value = "";
+
   try {
     const flashcards = await FlashcardService.generateFromNotes(
-      selectedNoteIds.value, 
+      selectedNoteIds.value,
       userId.value,
       selectedDeckId.value || undefined
-    )
-    generatedFlashcards.value = flashcards
-    
+    );
+    generatedFlashcards.value = flashcards;
+
     // Clear selection after successful generation
-    selectedNoteIds.value = []
+    selectedNoteIds.value = [];
   } catch (error) {
-    flashcardError.value = error instanceof Error ? error.message : 'Failed to generate flashcards'
-    console.error('Error generating flashcards:', error)
+    flashcardError.value =
+      error instanceof Error ? error.message : "Failed to generate flashcards";
+    console.error("Error generating flashcards:", error);
   } finally {
-    generatingFlashcards.value = false
+    generatingFlashcards.value = false;
   }
-}
+};
 
 const closeFlashcardModal = () => {
-  showFlashcardModal.value = false
-  generatedFlashcards.value = []
-  flashcardError.value = ''
-  selectedDeckId.value = null
-}
+  showFlashcardModal.value = false;
+  generatedFlashcards.value = [];
+  flashcardError.value = "";
+  selectedDeckId.value = null;
+};
 
 const isNoteSelected = (noteId: string) => {
-  return selectedNoteIds.value.includes(noteId)
-}
+  return selectedNoteIds.value.includes(noteId);
+};
 
 const canGenerateFlashcards = computed(() => {
-  return selectedNoteIds.value.length > 0 && !generatingFlashcards.value
-})
+  return selectedNoteIds.value.length > 0 && !generatingFlashcards.value;
+});
 </script>
 
 <style scoped>
@@ -837,8 +1070,14 @@ const canGenerateFlashcards = computed(() => {
 }
 
 @keyframes fadeIn {
-  from { opacity: 0; transform: translateY(10px); }
-  to { opacity: 1; transform: translateY(0); }
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
 }
 
 /* Create Note Layout */
@@ -1353,29 +1592,29 @@ const canGenerateFlashcards = computed(() => {
     grid-template-columns: 1fr;
     gap: 1.5rem;
   }
-  
+
   .stats-grid {
     grid-template-columns: repeat(2, 1fr);
   }
-  
+
   .ai-process-selector {
     gap: 0.5rem;
   }
-  
+
   .process-option {
     padding: 0.875rem 1rem;
     gap: 0.75rem;
   }
-  
+
   .option-icon {
     width: 36px;
     height: 36px;
   }
-  
+
   .option-title {
     font-size: 0.9rem;
   }
-  
+
   .option-desc {
     font-size: 0.8rem;
   }
@@ -1386,21 +1625,21 @@ const canGenerateFlashcards = computed(() => {
   .processed-result {
     padding: 1.5rem;
   }
-  
+
   .create-note-header {
     flex-direction: column;
     align-items: flex-start;
     text-align: center;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .stats-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .modern-input,
   .modern-textarea,
   .modern-select {
@@ -1429,8 +1668,12 @@ const canGenerateFlashcards = computed(() => {
 }
 
 @keyframes spin {
-  0% { transform: rotate(0deg); }
-  100% { transform: rotate(360deg); }
+  0% {
+    transform: rotate(0deg);
+  }
+  100% {
+    transform: rotate(360deg);
+  }
 }
 
 /* Empty State */
@@ -1581,36 +1824,36 @@ const canGenerateFlashcards = computed(() => {
   .notes-container {
     padding: 1rem;
   }
-  
+
   .notes-grid {
     grid-template-columns: 1fr;
   }
-  
+
   .tab-btn {
     padding: 0.75rem 1rem;
     font-size: 0.875rem;
   }
-  
+
   .tab-btn svg {
     width: 16px;
     height: 16px;
   }
-  
+
   .notes-form,
   .processed-content {
     padding: 1.5rem;
   }
-  
+
   .note-card {
     padding: 1rem;
   }
-  
+
   .note-card-header {
     flex-direction: column;
     align-items: flex-start;
     gap: 0.5rem;
   }
-  
+
   .note-card-header h3 {
     margin-right: 0;
   }
@@ -1975,20 +2218,20 @@ const canGenerateFlashcards = computed(() => {
     align-items: stretch;
     gap: 1rem;
   }
-  
+
   .toolbar-right {
     justify-content: space-between;
   }
-  
+
   .modal-content {
     width: 95%;
     margin: 1rem;
   }
-  
+
   .modal-actions {
     flex-direction: column;
   }
-  
+
   .flashcards-list {
     max-height: 300px;
   }

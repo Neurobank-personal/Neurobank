@@ -35,7 +35,7 @@
 
       <div class="deck-actions">
         <button
-          v-if="remainingFlashcards.length > 0"
+          v-if="flashcards.length > 0"
           class="btn-primary study-btn"
           @click="startStudyMode"
         >
@@ -51,7 +51,7 @@
             <line x1="8" y1="21" x2="16" y2="21" />
             <line x1="12" y1="17" x2="12" y2="21" />
           </svg>
-          Study Mode
+          {{ remainingFlashcards.length > 0 ? "Study Mode" : "Study Complete" }}
         </button>
 
         <button class="btn-secondary" @click="refreshReviews">
@@ -119,11 +119,12 @@
 
     <!-- Study Mode -->
     <StudyMode
-      v-else-if="studyMode && remainingFlashcards.length > 0"
+      v-else-if="studyMode"
       :flashcards="remainingFlashcards"
       :deckName="deck?.name || 'General Collection'"
       @exit="exitStudyMode"
       @markCard="handleMarkCard"
+      @markCardCustom="handleMarkCardCustom"
     />
 
     <!-- Cards List View -->
@@ -533,6 +534,33 @@ const handleMarkCard = async (
   } catch (err) {
     console.error("Error marking card:", err);
     error.value = "Failed to mark card as reviewed";
+  }
+};
+
+const handleMarkCardCustom = async (
+  days: number,
+  timeUnit: "days" | "months",
+  cardId: string
+) => {
+  if (!userId.value) return;
+
+  try {
+    const updatedCard = await FlashcardService.markCardCustomReview(
+      cardId,
+      days,
+      timeUnit
+    );
+
+    // Update the specific card in the local array
+    const cardIndex = flashcards.value.findIndex(
+      (card) => card.id.toString() === cardId
+    );
+    if (cardIndex !== -1) {
+      flashcards.value[cardIndex] = updatedCard;
+    }
+  } catch (err) {
+    console.error("Error marking card with custom review:", err);
+    error.value = "Failed to mark card with custom review";
   }
 };
 
