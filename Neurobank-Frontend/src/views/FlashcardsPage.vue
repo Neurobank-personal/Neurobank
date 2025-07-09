@@ -4,7 +4,7 @@ import { useRouter } from "vue-router";
 import { useAuth } from "../stores/auth";
 import AppSidebar from "../components/AppSidebar.vue";
 import AppNavbar from "../components/AppNavbar.vue";
-import HomeComponent from "../components/HomeComponent.vue";
+import FlashcardsHub from "../components/FlashcardsHub.vue";
 
 const router = useRouter();
 const { isAuthenticated, logout } = useAuth();
@@ -46,7 +46,7 @@ const navigateToSection = (section: string) => {
     <!-- Sidebar Navigation -->
     <AppSidebar
       :isOpen="sidebarOpen"
-      :currentSection="'home'"
+      :currentSection="'flashcards'"
       @toggle="toggleSidebar"
       @navigate="navigateToSection"
     />
@@ -58,7 +58,7 @@ const navigateToSection = (section: string) => {
 
       <!-- Dynamic Content Area -->
       <div class="content-area">
-        <HomeComponent @navigate="navigateToSection" />
+        <FlashcardsHub />
       </div>
     </div>
   </div>

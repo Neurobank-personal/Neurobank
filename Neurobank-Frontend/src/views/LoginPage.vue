@@ -1,30 +1,30 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { handleLogin } from '../services/handleLogin'
-import { useAuth } from '../stores/auth'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { handleLogin } from "../services/handleLogin";
+import { useAuth } from "../stores/auth";
 
-const router = useRouter()
-const { login } = useAuth()
+const router = useRouter();
+const { login } = useAuth();
 
-const email = ref('')
-const password = ref('')
-const isLoading = ref(false)
-const errorMessage = ref('')
+const email = ref("");
+const password = ref("");
+const isLoading = ref(false);
+const errorMessage = ref("");
 
 const handleSubmit = async () => {
-  errorMessage.value = ''
-  
+  errorMessage.value = "";
+
   if (!email.value || !password.value) {
-    errorMessage.value = 'Fill in both email and password'
-    return
+    errorMessage.value = "Fill in both email and password";
+    return;
   }
-  
-  isLoading.value = true
-  
+
+  isLoading.value = true;
+
   try {
-    const result = await handleLogin(email.value, password.value)
-    
+    const result = await handleLogin(email.value, password.value);
+
     if (result.success && result.user) {
       // Save the user in auth store
       login({
@@ -32,25 +32,25 @@ const handleSubmit = async () => {
         firstName: result.user.firstName,
         lastName: result.user.lastName,
         email: result.user.email,
-        password: '', // We don't save the password in frontend
-        createdAt: new Date() // We can fetch this from backend later
-      })
-      
+        password: "", // We don't save the password in frontend
+        createdAt: new Date(), // We can fetch this from backend later
+      });
+
       // Navigate to homepage on successful login
-      router.push('/homepage')
+      router.push("/home");
     } else {
-      errorMessage.value = result.error || 'Login failed'
+      errorMessage.value = result.error || "Login failed";
     }
   } catch (error) {
-    errorMessage.value = 'An unexpected error occurred'
+    errorMessage.value = "An unexpected error occurred";
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const goToRegister = () => {
-  router.push('/registerpage')
-}
+  router.push("/registerpage");
+};
 </script>
 
 <template>
@@ -72,28 +72,28 @@ const goToRegister = () => {
         <div class="login-content">
           <h2>Log in</h2>
           <p class="subtitle">Your second brain for notes and flashcards</p>
-          
+
           <div v-if="errorMessage" class="error-message">
             {{ errorMessage }}
           </div>
-          
+
           <form @submit.prevent="handleSubmit" class="login-form">
             <div class="input-group">
-              <input 
+              <input
                 id="email"
-                type="email" 
-                v-model="email" 
+                type="email"
+                v-model="email"
                 placeholder="Email"
                 required
                 :disabled="isLoading"
               />
             </div>
-            
+
             <div class="input-group">
-              <input 
+              <input
                 id="password"
-                type="password" 
-                v-model="password" 
+                type="password"
+                v-model="password"
                 placeholder="Password"
                 required
                 :disabled="isLoading"
@@ -102,15 +102,22 @@ const goToRegister = () => {
                 <a href="#" class="forgot-link">forgot?</a>
               </div>
             </div>
-            
+
             <button type="submit" class="login-btn" :disabled="isLoading">
-              {{ isLoading ? 'Logging in...' : 'Log in' }}
+              {{ isLoading ? "Logging in..." : "Log in" }}
             </button>
           </form>
-          
+
           <div class="register-link">
-            <p>New here? 
-              <button @click="goToRegister" class="link-btn" :disabled="isLoading">Create account</button>
+            <p>
+              New here?
+              <button
+                @click="goToRegister"
+                class="link-btn"
+                :disabled="isLoading"
+              >
+                Create account
+              </button>
             </p>
           </div>
         </div>
@@ -119,67 +126,165 @@ const goToRegister = () => {
 
     <!-- Sidebar Navigation -->
     <div class="sidebar">
-      <div class="floating-icon notes-floating small-icon" style="position: absolute; top: 15%; right: 20%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
+      <div
+        class="floating-icon notes-floating small-icon"
+        style="position: absolute; top: 15%; right: 20%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
           <rect x="3" y="3" width="18" height="18" rx="3" />
           <path d="M7 7h10M7 11h10M7 15h7" />
         </svg>
       </div>
-      
-      <div class="floating-icon tasks-floating large-icon" style="position: absolute; top: 35%; left: 5%;">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/>
-          <path d="m9 12 2 2 4-4"/>
+
+      <div
+        class="floating-icon tasks-floating large-icon"
+        style="position: absolute; top: 35%; left: 5%"
+      >
+        <svg
+          width="80"
+          height="80"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <path d="m9 12 2 2 4-4" />
         </svg>
       </div>
-      
-      <div class="floating-icon flashcards-floating medium-icon" style="position: absolute; top: 60%; right: 15%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <rect x="3" y="4" width="18" height="12" rx="2"/>
-          <rect x="5" y="6" width="14" height="8" rx="1"/>
-          <path d="M12 10h4"/>
+
+      <div
+        class="floating-icon flashcards-floating medium-icon"
+        style="position: absolute; top: 60%; right: 15%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <rect x="3" y="4" width="18" height="12" rx="2" />
+          <rect x="5" y="6" width="14" height="8" rx="1" />
+          <path d="M12 10h4" />
         </svg>
       </div>
-      
-      <div class="floating-icon extra-icon small-icon" style="position: absolute; top: 25%; left: 15%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/>
-          <polyline points="7,10 12,15 17,10"/>
-          <line x1="12" y1="15" x2="12" y2="3"/>
+
+      <div
+        class="floating-icon extra-icon small-icon"
+        style="position: absolute; top: 25%; left: 15%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4" />
+          <polyline points="7,10 12,15 17,10" />
+          <line x1="12" y1="15" x2="12" y2="3" />
         </svg>
       </div>
-      
-      <div class="floating-icon brain-floating medium-icon" style="position: absolute; top: 75%; left: 10%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M12 3C8.5 3 6 5.5 6 9c0 1.5.5 3 1.5 4C6.5 14 6 15.5 6 17c0 3.5 2.5 6 6 6s6-2.5 6-6c0-1.5-.5-3-1.5-4 1-1 1.5-2.5 1.5-4 0-3.5-2.5-6-6-6z"/>
-          <circle cx="9" cy="9" r="1" fill="#9ca3af"/>
-          <circle cx="15" cy="9" r="1" fill="#9ca3af"/>
+
+      <div
+        class="floating-icon brain-floating medium-icon"
+        style="position: absolute; top: 75%; left: 10%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path
+            d="M12 3C8.5 3 6 5.5 6 9c0 1.5.5 3 1.5 4C6.5 14 6 15.5 6 17c0 3.5 2.5 6 6 6s6-2.5 6-6c0-1.5-.5-3-1.5-4 1-1 1.5-2.5 1.5-4 0-3.5-2.5-6-6-6z"
+          />
+          <circle cx="9" cy="9" r="1" fill="#9ca3af" />
+          <circle cx="15" cy="9" r="1" fill="#9ca3af" />
         </svg>
       </div>
-      
-      <div class="floating-icon star-floating small-icon" style="position: absolute; top: 5%; left: 40%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"/>
+
+      <div
+        class="floating-icon star-floating small-icon"
+        style="position: absolute; top: 5%; left: 40%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <polygon
+            points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+          />
         </svg>
       </div>
-      
-      <div class="floating-icon settings-floating medium-icon" style="position: absolute; top: 45%; right: 5%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <circle cx="12" cy="12" r="3"/>
-          <path d="M12 1v6m0 6v6m11-7h-6m-6 0H1m21-7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8z"/>
+
+      <div
+        class="floating-icon settings-floating medium-icon"
+        style="position: absolute; top: 45%; right: 5%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <circle cx="12" cy="12" r="3" />
+          <path
+            d="M12 1v6m0 6v6m11-7h-6m-6 0H1m21-7a2 2 0 0 0-2-2H4a2 2 0 0 0-2 2v10a2 2 0 0 0 2 2h16a2 2 0 0 0 2-2V8z"
+          />
         </svg>
       </div>
-      
-      <div class="floating-icon search-floating small-icon" style="position: absolute; top: 85%; right: 25%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <circle cx="11" cy="11" r="8"/>
-          <path d="m21 21-4.35-4.35"/>
+
+      <div
+        class="floating-icon search-floating small-icon"
+        style="position: absolute; top: 85%; right: 25%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <circle cx="11" cy="11" r="8" />
+          <path d="m21 21-4.35-4.35" />
         </svg>
       </div>
-      
-      <div class="floating-icon folder-floating medium-icon" style="position: absolute; top: 8%; left: 60%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"/>
+
+      <div
+        class="floating-icon folder-floating medium-icon"
+        style="position: absolute; top: 8%; left: 60%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path
+            d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+          />
         </svg>
       </div>
     </div>
@@ -187,13 +292,14 @@ const goToRegister = () => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 .app-layout {
   display: flex;
   min-height: 100vh;
   background-color: #f8f9fa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
 .main-content {
@@ -233,7 +339,7 @@ const goToRegister = () => {
   color: #1f2937;
   margin: 0;
   letter-spacing: -0.5px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .login-section {
@@ -256,7 +362,7 @@ const goToRegister = () => {
   color: #1f2937;
   margin: 0 0 0.5rem 0;
   letter-spacing: -1px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .subtitle {
@@ -265,7 +371,7 @@ const goToRegister = () => {
   font-size: 1.125rem;
   line-height: 1.5;
   font-weight: 400;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .login-form {
@@ -287,7 +393,7 @@ const goToRegister = () => {
   background-color: white;
   box-sizing: border-box;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -314,7 +420,7 @@ const goToRegister = () => {
   color: #6b7280;
   text-decoration: none;
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -334,7 +440,7 @@ const goToRegister = () => {
   cursor: pointer;
   margin-top: 1rem;
   transition: background-color 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .login-btn:hover:not(:disabled) {
@@ -355,7 +461,7 @@ const goToRegister = () => {
   color: #6b7280;
   margin: 0;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -367,7 +473,7 @@ const goToRegister = () => {
   font-size: inherit;
   font-weight: 500;
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .link-btn:hover:not(:disabled) {
@@ -387,7 +493,7 @@ const goToRegister = () => {
   margin-bottom: 1.5rem;
   border: 1px solid #fecaca;
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* Sidebar */
@@ -472,7 +578,8 @@ const goToRegister = () => {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   25% {
@@ -492,26 +599,26 @@ const goToRegister = () => {
     width: 340px;
     padding: 1.5rem;
   }
-  
+
   .small-icon {
     width: 64px;
     height: 64px;
   }
-  
+
   .medium-icon {
     width: 96px;
     height: 96px;
   }
-  
+
   .large-icon {
     width: 128px;
     height: 128px;
   }
-  
+
   .header {
     padding: 2rem 0 1rem 2rem;
   }
-  
+
   .login-section {
     padding: 2rem;
     padding-top: 3rem;
@@ -522,7 +629,7 @@ const goToRegister = () => {
   .app-layout {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: 120px;
@@ -532,42 +639,42 @@ const goToRegister = () => {
     padding: 1rem;
     background-color: #f8f9fa;
   }
-  
+
   .floating-icon {
     position: relative !important;
     animation: none;
     display: inline-flex;
     margin: 0.5rem;
   }
-  
+
   .small-icon {
     width: 48px;
     height: 48px;
   }
-  
+
   .medium-icon {
     width: 56px;
     height: 56px;
   }
-  
+
   .large-icon {
     width: 64px;
     height: 64px;
   }
-  
+
   .header {
     padding: 1.5rem 1rem 0.5rem 1rem;
   }
-  
+
   .login-section {
     padding: 1rem;
     padding-top: 2rem;
   }
-  
+
   .login-content h2 {
     font-size: 2.5rem;
   }
-  
+
   .login-content {
     max-width: 100%;
   }

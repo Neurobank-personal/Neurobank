@@ -1,10 +1,10 @@
 <script setup lang="ts">
-import { useRouter, useRoute } from 'vue-router'
-import { onMounted, ref } from 'vue'
+import { useRouter, useRoute } from "vue-router";
+import { onMounted, ref } from "vue";
 
-const router = useRouter()
-const route = useRoute()
-const isVisible = ref(false)
+const router = useRouter();
+const route = useRoute();
+const isVisible = ref(false);
 
 // TODO: gör om denna så att den blir mer passande till hela hemsidan
 
@@ -13,24 +13,25 @@ const funnyMessages = [
   "404: Sidan har gått ut för att köpa mjölk och kom aldrig tillbaka 🥛",
   "Denna sida är på semester. Prova igen om 5 minuter... eller inte.",
   "Du har hittat det digitala Bermudatriangeln! 🛸",
-  "Sidan spelar kurragömma och vinner just nu! 🙈"
-]
+  "Sidan spelar kurragömma och vinner just nu! 🙈",
+];
 
-const randomMessage = funnyMessages[Math.floor(Math.random() * funnyMessages.length)]
+const randomMessage =
+  funnyMessages[Math.floor(Math.random() * funnyMessages.length)];
 
 const goToLogin = () => {
-  router.push('/loginpage')
-}
+  router.push("/loginpage");
+};
 
 const goBack = () => {
-  router.go(-1)
-}
+  router.go(-1);
+};
 
 onMounted(() => {
   setTimeout(() => {
-    isVisible.value = true
-  }, 100)
-})
+    isVisible.value = true;
+  }, 100);
+});
 </script>
 
 <template>
@@ -42,37 +43,44 @@ onMounted(() => {
           <div class="star" v-for="n in 6" :key="n"></div>
         </div>
       </div>
-      
+
       <h2 class="error-title">Whoops! Något gick snett! 🚀</h2>
       <p class="funny-message">{{ randomMessage }}</p>
-      <p class="path-info">Du försökte besöka: <code class="error-path">{{ route.fullPath }}</code></p>
-      
+      <p class="path-info">
+        Du försökte besöka: <code class="error-path">{{ route.fullPath }}</code>
+      </p>
+
       <div class="suggestions">
         <h3>🎯 Kanske du letade efter någon av dessa?</h3>
         <div class="suggestion-grid">
           <button @click="goToLogin" class="suggestion-btn login-btn">
             🔐 Logga in
           </button>
-          <button @click="() => router.push('/registerpage')" class="suggestion-btn register-btn">
+          <button
+            @click="() => router.push('/registerpage')"
+            class="suggestion-btn register-btn"
+          >
             ✨ Registrera dig
           </button>
-          <button @click="() => router.push('/homepage')" class="suggestion-btn home-btn-suggestion">
+          <button
+            @click="() => router.push('/home')"
+            class="suggestion-btn home-btn-suggestion"
+          >
             🏠 Startsida
           </button>
         </div>
       </div>
-      
+
       <div class="actions">
-        <button @click="goBack" class="back-btn">
-          ⬅️ Gå tillbaka
-        </button>
-        <button @click="goToLogin" class="home-btn">
-          🚀 Till startsidan
-        </button>
+        <button @click="goBack" class="back-btn">⬅️ Gå tillbaka</button>
+        <button @click="goToLogin" class="home-btn">🚀 Till startsidan</button>
       </div>
-      
+
       <div class="easter-egg">
-        <p>🎉 Fun fact: Du är den {{ Math.floor(Math.random() * 1000) + 1 }}:e personen som hittar denna sida idag!</p>
+        <p>
+          🎉 Fun fact: Du är den {{ Math.floor(Math.random() * 1000) + 1 }}:e
+          personen som hittar denna sida idag!
+        </p>
       </div>
     </div>
   </div>
@@ -107,9 +115,17 @@ onMounted(() => {
 }
 
 @keyframes cardBounce {
-  0% { transform: scale(0.3) rotate(-10deg); opacity: 0; }
-  50% { transform: scale(1.1) rotate(5deg); }
-  100% { transform: scale(1) rotate(0deg); opacity: 1; }
+  0% {
+    transform: scale(0.3) rotate(-10deg);
+    opacity: 0;
+  }
+  50% {
+    transform: scale(1.1) rotate(5deg);
+  }
+  100% {
+    transform: scale(1) rotate(0deg);
+    opacity: 1;
+  }
 }
 
 .error-animation {
@@ -125,18 +141,30 @@ onMounted(() => {
   background-clip: text;
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
-  animation: gradientShift 3s ease-in-out infinite, float 2s ease-in-out infinite;
+  animation: gradientShift 3s ease-in-out infinite,
+    float 2s ease-in-out infinite;
 }
 
 @keyframes gradientShift {
-  0% { background-position: 0% 50%; }
-  50% { background-position: 100% 50%; }
-  100% { background-position: 0% 50%; }
+  0% {
+    background-position: 0% 50%;
+  }
+  50% {
+    background-position: 100% 50%;
+  }
+  100% {
+    background-position: 0% 50%;
+  }
 }
 
 @keyframes float {
-  0%, 100% { transform: translateY(0px); }
-  50% { transform: translateY(-10px); }
+  0%,
+  100% {
+    transform: translateY(0px);
+  }
+  50% {
+    transform: translateY(-10px);
+  }
 }
 
 .stars {
@@ -157,16 +185,47 @@ onMounted(() => {
   animation: twinkle 2s ease-in-out infinite;
 }
 
-.star:nth-child(1) { top: 20%; left: 20%; animation-delay: 0s; }
-.star:nth-child(2) { top: 30%; right: 30%; animation-delay: 0.5s; }
-.star:nth-child(3) { top: 60%; left: 10%; animation-delay: 1s; }
-.star:nth-child(4) { bottom: 40%; right: 20%; animation-delay: 1.5s; }
-.star:nth-child(5) { bottom: 20%; left: 50%; animation-delay: 2s; }
-.star:nth-child(6) { top: 10%; left: 70%; animation-delay: 2.5s; }
+.star:nth-child(1) {
+  top: 20%;
+  left: 20%;
+  animation-delay: 0s;
+}
+.star:nth-child(2) {
+  top: 30%;
+  right: 30%;
+  animation-delay: 0.5s;
+}
+.star:nth-child(3) {
+  top: 60%;
+  left: 10%;
+  animation-delay: 1s;
+}
+.star:nth-child(4) {
+  bottom: 40%;
+  right: 20%;
+  animation-delay: 1.5s;
+}
+.star:nth-child(5) {
+  bottom: 20%;
+  left: 50%;
+  animation-delay: 2s;
+}
+.star:nth-child(6) {
+  top: 10%;
+  left: 70%;
+  animation-delay: 2.5s;
+}
 
 @keyframes twinkle {
-  0%, 100% { opacity: 0; transform: scale(0); }
-  50% { opacity: 1; transform: scale(1); }
+  0%,
+  100% {
+    opacity: 0;
+    transform: scale(0);
+  }
+  50% {
+    opacity: 1;
+    transform: scale(1);
+  }
 }
 
 .error-title {
@@ -177,8 +236,14 @@ onMounted(() => {
 }
 
 @keyframes slideInFromLeft {
-  0% { transform: translateX(-100px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(-100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .funny-message {
@@ -190,8 +255,14 @@ onMounted(() => {
 }
 
 @keyframes slideInFromRight {
-  0% { transform: translateX(100px); opacity: 0; }
-  100% { transform: translateX(0); opacity: 1; }
+  0% {
+    transform: translateX(100px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateX(0);
+    opacity: 1;
+  }
 }
 
 .path-info {
@@ -204,7 +275,7 @@ onMounted(() => {
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   color: #e74c3c;
-  font-family: 'Courier New', monospace;
+  font-family: "Courier New", monospace;
 }
 
 .suggestions {
@@ -213,8 +284,14 @@ onMounted(() => {
 }
 
 @keyframes fadeInUp {
-  0% { transform: translateY(30px); opacity: 0; }
-  100% { transform: translateY(0); opacity: 1; }
+  0% {
+    transform: translateY(30px);
+    opacity: 0;
+  }
+  100% {
+    transform: translateY(0);
+    opacity: 1;
+  }
 }
 
 .suggestions h3 {
@@ -268,7 +345,8 @@ onMounted(() => {
   animation: fadeInUp 0.8s ease-out 0.9s both;
 }
 
-.back-btn, .home-btn {
+.back-btn,
+.home-btn {
   padding: 0.75rem 1.5rem;
   border: none;
   border-radius: 25px;
@@ -288,7 +366,8 @@ onMounted(() => {
   color: white;
 }
 
-.back-btn:hover, .home-btn:hover {
+.back-btn:hover,
+.home-btn:hover {
   transform: scale(1.05);
   box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
 }
@@ -311,16 +390,16 @@ onMounted(() => {
   .actions {
     flex-direction: column;
   }
-  
+
   .not-found-card {
     padding: 2rem 1rem;
     margin: 1rem;
   }
-  
+
   .floating-404 {
     font-size: 4rem;
   }
-  
+
   .suggestion-grid {
     grid-template-columns: 1fr;
   }
