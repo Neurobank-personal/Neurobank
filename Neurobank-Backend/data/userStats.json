@@ -636,5 +636,20 @@
     ],
     "createdAt": "2025-07-05T15:05:28.321Z",
     "updatedAt": "2025-07-05T16:02:13.356Z"
+  },
+  {
+    "id": "1752075490504zjzmny65n",
+    "userId": "test-user-123",
+    "dailyStats": [
+      {
+        "date": "2025-07-09",
+        "notesCreated": 1,
+        "flashcardsStudied": 0,
+        "flashcardsCreated": 0,
+        "createdAt": "2025-07-09T15:38:10.505Z"
+      }
+    ],
+    "createdAt": "2025-07-09T15:38:10.504Z",
+    "updatedAt": "2025-07-09T15:38:10.505Z"
   }
 ]

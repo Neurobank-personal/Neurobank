@@ -12,7 +12,7 @@ class NoteService {
   async createNote(noteData) {
     validateNote(noteData);
 
-    const { title, content, processType, userId } = noteData;
+    const { title, content, processType, userId, folderId } = noteData;
     const notes = await fileService.readNotes();
 
     const newNote = {
@@ -21,6 +21,7 @@ class NoteService {
       content,
       processType,
       userId,
+      folderId: folderId || null, // Add folderId support
       createdAt: new Date().toISOString(),
       updatedAt: new Date().toISOString(),
     };

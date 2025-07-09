@@ -1,0 +1,22 @@
+[
+  {
+    "id": "eda0b365-44df-4fc6-a1e0-d3f321edd888",
+    "name": "Work Notes",
+    "description": "Notes related to work projects",
+    "color": "",
+    "userId": "test-user-123",
+    "createdAt": "2025-07-09T15:37:58.129Z",
+    "updatedAt": "2025-07-09T15:37:58.129Z",
+    "noteCount": 0
+  },
+  {
+    "id": "ff00a23b-f690-49b0-9a03-274fb13dce01",
+    "name": "Cyber Security",
+    "description": "",
+    "color": "#06b6d4",
+    "userId": "1751033764233vfurc86wp",
+    "createdAt": "2025-07-09T15:39:31.940Z",
+    "updatedAt": "2025-07-09T15:39:31.940Z",
+    "noteCount": 0
+  }
+]

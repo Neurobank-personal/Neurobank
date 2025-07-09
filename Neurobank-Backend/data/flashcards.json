@@ -33,9 +33,9 @@
     "nextReviewDate": "2025-07-06T14:41:02.313Z",
     "reviewCount": 6,
     "easyCount": 0,
-    "status": "completed",
+    "status": "remaining",
     "createdAt": "2025-07-05T13:55:16.561Z",
-    "updatedAt": "2025-07-05T14:41:02.314Z"
+    "updatedAt": "2025-07-07T11:41:30.826Z"
   },
   {
     "id": "1751723716561w5x3i89ei",
@@ -109,8 +109,8 @@
     "nextReviewDate": "2025-07-06T15:12:47.978Z",
     "reviewCount": 1,
     "easyCount": 1,
-    "status": "completed",
+    "status": "remaining",
     "createdAt": "2025-07-05T15:12:32.607Z",
-    "updatedAt": "2025-07-05T15:12:47.978Z"
+    "updatedAt": "2025-07-07T11:41:30.826Z"
   }
 ]

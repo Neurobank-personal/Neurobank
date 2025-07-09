@@ -1,12 +1,32 @@
 <template>
   <div class="notes-container">
+    <!-- Navigation Header -->
     <div class="notes-header">
       <h2>Notes</h2>
       <p class="subtitle">Create and manage your notes with AI support</p>
     </div>
 
-    <!-- Tabs for switching between views -->
+    <!-- Main Navigation Tabs -->
     <div class="tabs">
+      <button
+        class="tab-btn"
+        :class="{ active: activeTab === 'browse' }"
+        @click="activeTab = 'browse'"
+      >
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <path
+            d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+          />
+        </svg>
+        Browse folders
+      </button>
       <button
         class="tab-btn"
         :class="{ active: activeTab === 'create' }"
@@ -42,6 +62,11 @@
         </svg>
         My notes ({{ notes.length }})
       </button>
+    </div>
+
+    <!-- Browse Folders Tab -->
+    <div v-if="activeTab === 'browse'" class="tab-content">
+      <NotesHub />
     </div>
 
     <!-- Create Note Tab -->
@@ -277,6 +302,43 @@
                 <p class="help-text">
                   AI can help you improve your note by summarizing or expanding
                   the content.
+                </p>
+              </div>
+
+              <!-- Folder Selection -->
+              <div class="form-group">
+                <label for="folder-select">
+                  <svg
+                    width="20"
+                    height="20"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <path
+                      d="M22 19a2 2 0 0 1-2 2H4a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h5l2 3h9a2 2 0 0 1 2 2z"
+                    />
+                  </svg>
+                  Folder
+                </label>
+                <select
+                  id="folder-select"
+                  v-model="selectedFolderId"
+                  class="modern-select"
+                >
+                  <option :value="null">All Notes (No folder)</option>
+                  <option
+                    v-for="folder in noteFolders"
+                    :key="folder.id"
+                    :value="folder.id"
+                  >
+                    {{ folder.name }}
+                  </option>
+                </select>
+                <p class="form-hint">
+                  Choose a folder to organize your note, or leave unselected for
+                  general collection.
                 </p>
               </div>
             </div>
@@ -710,11 +772,14 @@ import {
 } from "../services/handleNotes";
 import { useAuth } from "../stores/auth";
 import NoteViewer from "./NoteViewer.vue";
+import NotesHub from "./NotesHub.vue";
 import FlashcardService from "../services/FlashcardService";
+import NoteFolderService from "../services/NoteFolderService";
 import DeckService from "../services/DeckService";
 import type { Note } from "../types/Note";
 import type { Flashcard } from "../types/Flashcard";
 import type { Deck } from "../types/Deck";
+import type { NoteFolder } from "../types/NoteFolder";
 
 const { getCurrentUserId } = useAuth();
 
@@ -728,7 +793,7 @@ const successMessage = ref("");
 const processedContent = ref("");
 
 // Notes list data
-const activeTab = ref<"create" | "list">("list");
+const activeTab = ref<"browse" | "create" | "list">("browse");
 const notes = ref<Note[]>([]);
 const loadingNotes = ref(false);
 const selectedNote = ref<Note | null>(null);
@@ -742,12 +807,16 @@ const flashcardError = ref("");
 const selectedDeckId = ref<string | null>(null);
 const decks = ref<Deck[]>([]);
 
+// Note folder data
+const selectedFolderId = ref<string | null>(null);
+const noteFolders = ref<NoteFolder[]>([]);
+
 // Hämta användar-ID från auth store
 const userId = computed(() => getCurrentUserId());
 
 // Load notes and decks when component mounts
 onMounted(async () => {
-  await Promise.all([loadNotes(), loadDecks()]);
+  await Promise.all([loadNotes(), loadDecks(), loadNoteFolders()]);
 });
 
 const loadNotes = async () => {
@@ -779,6 +848,18 @@ const loadDecks = async () => {
   }
 };
 
+const loadNoteFolders = async () => {
+  if (!userId.value) return;
+
+  try {
+    noteFolders.value = await NoteFolderService.getUserNoteFolders(
+      userId.value
+    );
+  } catch (error) {
+    console.error("Error loading note folders:", error);
+  }
+};
+
 const handleSubmit = async () => {
   if (!userId.value) {
     errorMessage.value = "Du måste vara inloggad för att skapa anteckningar";
@@ -795,6 +876,7 @@ const handleSubmit = async () => {
       content: content.value,
       processType: processType.value,
       userId: userId.value,
+      folderId: selectedFolderId.value || undefined,
     });
 
     if (result.success) {
@@ -818,6 +900,7 @@ const handleSubmit = async () => {
       content.value = "";
       processType.value = "none";
       processedContent.value = "";
+      selectedFolderId.value = null;
 
       // Reload notes and switch to list tab
       await loadNotes();
@@ -912,6 +995,7 @@ const clearForm = () => {
   processedContent.value = "";
   errorMessage.value = "";
   successMessage.value = "";
+  selectedFolderId.value = null;
 };
 
 const getWordCount = (text: string) => {

@@ -86,6 +86,16 @@ class FileService {
     const tasksFile = path.join(this.dataDir, "tasks.json");
     return this.writeFile(tasksFile, tasks);
   }
+
+  async readNoteFolders() {
+    const noteFoldersFile = path.join(this.dataDir, "noteFolders.json");
+    return this.readFile(noteFoldersFile, []);
+  }
+
+  async writeNoteFolders(noteFolders) {
+    const noteFoldersFile = path.join(this.dataDir, "noteFolders.json");
+    return this.writeFile(noteFoldersFile, noteFolders);
+  }
 }
 
 module.exports = new FileService();
