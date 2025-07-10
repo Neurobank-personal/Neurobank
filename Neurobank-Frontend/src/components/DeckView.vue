@@ -20,7 +20,9 @@
         <div class="deck-title-section">
           <div
             class="deck-icon"
-            :style="{ backgroundColor: deck?.color || '#f1f5f9' }"
+            :style="{
+              backgroundColor: deck?.color || 'rgba(255, 255, 255, 0.1)',
+            }"
           >
             {{ deckId ? "📋" : "🎯" }}
           </div>
@@ -697,6 +699,9 @@ const formatDate = (date: Date) => {
   max-width: 1200px;
   margin: 0 auto;
   font-family: "Inter", sans-serif;
+  background: transparent;
+  color: #ffffff;
+  min-height: 100vh;
 }
 
 /* Header Styles */
@@ -712,21 +717,23 @@ const formatDate = (date: Date) => {
 .back-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: transparent;
-  border: 1px solid #e2e8f0;
-  color: #64748b;
-  padding: 0.5rem 1rem;
-  border-radius: 0.5rem;
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  padding: 0.75rem 1.25rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.2s ease;
+  font-weight: 600;
+  transition: all 0.3s ease;
   margin-bottom: 1rem;
 }
 
 .back-btn:hover {
-  background: #f8fafc;
-  border-color: #94a3b8;
+  background: rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
+  transform: translateY(-2px);
 }
 
 .deck-title-section {
@@ -743,18 +750,18 @@ const formatDate = (date: Date) => {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .deck-title-section h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #ffffff;
   margin: 0;
 }
 
 .deck-description {
-  color: #64748b;
+  color: #94a3b8;
   margin: 0.25rem 0 0 0;
   font-size: 1rem;
 }
@@ -779,7 +786,7 @@ const formatDate = (date: Date) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
 }
 
@@ -789,13 +796,14 @@ const formatDate = (date: Date) => {
 }
 
 .btn-secondary {
-  background: #f8fafc;
-  color: #374151;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .btn-secondary:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
   border-color: #94a3b8;
 }
 
@@ -808,8 +816,10 @@ const formatDate = (date: Date) => {
 }
 
 .stat-card {
-  background: white;
-  border: 1px solid #e2e8f0;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 1.5rem;
   text-align: center;
@@ -825,22 +835,24 @@ const formatDate = (date: Date) => {
 .stat-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #ffffff;
   margin-bottom: 0.5rem;
 }
 
 .stat-label {
-  color: #64748b;
+  color: #94a3b8;
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 /* Cards List */
 .flashcards-list {
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   padding: 2rem;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .list-header {
@@ -851,7 +863,7 @@ const formatDate = (date: Date) => {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
 }
 
 .flashcards-grid {
@@ -860,8 +872,9 @@ const formatDate = (date: Date) => {
 }
 
 .flashcard-item {
-  background: #f8fafc;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.75rem;
   padding: 1.5rem;
   transition: all 0.2s ease;
@@ -887,7 +900,7 @@ const formatDate = (date: Date) => {
 
 .category-tag-small {
   background: #e2e8f0;
-  color: #64748b;
+  color: #94a3b8;
   padding: 0.25rem 0.5rem;
   border-radius: 0.5rem;
   font-size: 0.75rem;
@@ -905,18 +918,18 @@ const formatDate = (date: Date) => {
   padding: 0.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  color: #64748b;
+  color: #94a3b8;
   transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
   color: #334155;
 }
 
 .action-btn.delete:hover {
   color: #ef4444;
-  background: #fef2f2;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .action-btn.reset:hover {
@@ -954,7 +967,7 @@ const formatDate = (date: Date) => {
 
 .review-info {
   font-size: 0.75rem;
-  color: #64748b;
+  color: #94a3b8;
 }
 
 .next-review {
@@ -1007,7 +1020,7 @@ const formatDate = (date: Date) => {
 .loading-spinner {
   width: 40px;
   height: 40px;
-  border: 4px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 4px solid #667eea;
   border-radius: 50%;
   animation: spin 1s linear infinite;
@@ -1057,7 +1070,9 @@ const formatDate = (date: Date) => {
 }
 
 .modal-content {
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 1rem;
   width: 100%;
   max-width: 600px;
@@ -1070,14 +1085,14 @@ const formatDate = (date: Date) => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
 }
 
 .close-btn {
@@ -1085,7 +1100,7 @@ const formatDate = (date: Date) => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #64748b;
+  color: #94a3b8;
   padding: 0;
   width: 2rem;
   height: 2rem;
@@ -1096,7 +1111,7 @@ const formatDate = (date: Date) => {
 }
 
 .close-btn:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .card-form {
@@ -1111,14 +1126,14 @@ const formatDate = (date: Date) => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #374151;
+  color: #ffffff;
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -1133,7 +1148,7 @@ const formatDate = (date: Date) => {
 }
 
 .categories-input {
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   padding: 0.75rem;
 }
@@ -1168,7 +1183,7 @@ const formatDate = (date: Date) => {
 
 .add-category input {
   flex: 1;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 0.25rem;
   padding: 0.5rem;
 }
@@ -1205,9 +1220,10 @@ const formatDate = (date: Date) => {
 }
 
 .cancel-btn {
-  background: #f8fafc;
-  color: #64748b;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  color: #94a3b8;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;

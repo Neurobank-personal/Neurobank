@@ -390,51 +390,55 @@ const formatDate = (date: Date) => {
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 .note-folder-overview-container {
-  padding: 2rem;
+  padding: 0;
   max-width: 1200px;
   margin: 0 auto;
   font-family: "Inter", sans-serif;
+  background: transparent;
 }
 
 .note-folder-overview-header {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
   flex-wrap: wrap;
   gap: 1rem;
 }
 
 .note-folder-overview-header h2 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #1e293b;
+  color: #ffffff;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .subtitle {
-  color: #64748b;
+  color: #94a3b8;
   margin: 0.5rem 0 0 0;
-  font-size: 1rem;
+  font-size: 1.125rem;
+  font-weight: 400;
 }
 
 .btn-primary {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
 }
 
 /* Loading State */
@@ -447,7 +451,7 @@ const formatDate = (date: Date) => {
 .loading-spinner {
   width: 3rem;
   height: 3rem;
-  border: 3px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-top: 3px solid #667eea;
   border-radius: 50%;
   margin: 0 auto 1rem;
@@ -498,24 +502,47 @@ const formatDate = (date: Date) => {
 }
 
 .folder-card {
-  background: white;
-  border: 2px solid #e2e8f0;
-  border-radius: 1rem;
-  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  padding: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
+  overflow: hidden;
+}
+
+.folder-card::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(
+    135deg,
+    rgba(59, 130, 246, 0.1),
+    rgba(147, 51, 234, 0.1)
+  );
+  opacity: 0;
+  transition: opacity 0.3s ease;
+  border-radius: 24px;
+}
+
+.folder-card:hover::before {
+  opacity: 1;
 }
 
 .folder-card:hover {
-  transform: translateY(-4px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border-color: #667eea;
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
+  border-color: rgba(59, 130, 246, 0.3);
 }
 
 .folder-card.general-collection {
-  background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
-  border-color: #94a3b8;
+  background: rgba(15, 23, 42, 0.8);
+  border-color: rgba(59, 130, 246, 0.2);
 }
 
 .folder-header {
@@ -526,19 +553,22 @@ const formatDate = (date: Date) => {
 }
 
 .folder-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: 0.75rem;
+  width: 56px;
+  height: 56px;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   font-size: 1.5rem;
-  background: #f1f5f9;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  position: relative;
+  z-index: 1;
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
 }
 
 .folder-icon.general-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
 }
 
@@ -564,13 +594,13 @@ const formatDate = (date: Date) => {
 }
 
 .edit-btn:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
   color: #334155;
 }
 
 .delete-btn:hover {
   color: #ef4444;
-  background: #fef2f2;
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .note-count {
@@ -585,15 +615,19 @@ const formatDate = (date: Date) => {
 .folder-content h3 {
   font-size: 1.25rem;
   font-weight: 600;
-  color: #1e293b;
+  color: #ffffff;
   margin: 0 0 0.5rem 0;
+  position: relative;
+  z-index: 1;
 }
 
 .folder-content p {
-  color: #64748b;
+  color: #94a3b8;
   margin: 0;
   font-size: 0.875rem;
   line-height: 1.4;
+  position: relative;
+  z-index: 1;
 }
 
 .folder-footer {
@@ -603,6 +637,8 @@ const formatDate = (date: Date) => {
   margin-top: 1rem;
   font-size: 0.875rem;
   color: #64748b;
+  position: relative;
+  z-index: 1;
 }
 
 /* Modal Styles */
@@ -621,13 +657,16 @@ const formatDate = (date: Date) => {
 }
 
 .modal-content {
-  background: white;
-  border-radius: 1rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  color: #ffffff;
 }
 
 .modal-header {
@@ -635,7 +674,7 @@ const formatDate = (date: Date) => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header h3 {
@@ -661,7 +700,7 @@ const formatDate = (date: Date) => {
 }
 
 .close-btn:hover {
-  background: #f1f5f9;
+  background: rgba(255, 255, 255, 0.05);
 }
 
 .create-folder-form {
@@ -683,7 +722,7 @@ const formatDate = (date: Date) => {
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid #d1d5db;
+  border: 1px solid rgba(255, 255, 255, 0.15);
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.2s ease;
@@ -742,9 +781,9 @@ const formatDate = (date: Date) => {
 }
 
 .cancel-btn {
-  background: #f8fafc;
+  background: rgba(255, 255, 255, 0.05);
   color: #64748b;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;

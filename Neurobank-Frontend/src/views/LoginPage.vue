@@ -297,7 +297,7 @@ const goToRegister = () => {
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
@@ -387,10 +387,12 @@ const goToRegister = () => {
 .input-group input {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 2px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   font-size: 1rem;
-  background-color: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
   transition: all 0.2s ease;
   font-family: "Inter", sans-serif;
@@ -404,7 +406,8 @@ const goToRegister = () => {
 }
 
 .input-group input:disabled {
-  background-color: #f9fafb;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -486,12 +489,13 @@ const goToRegister = () => {
 }
 
 .error-message {
-  background-color: #fef2f2;
+  background: rgba(239, 68, 68, 0.1);
+  border: 1px solid rgba(239, 68, 68, 0.3);
   color: #dc2626;
   padding: 0.75rem 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
-  border: 1px solid #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.3);
   font-size: 0.9rem;
   font-family: "Inter", sans-serif;
 }
@@ -499,7 +503,9 @@ const goToRegister = () => {
 /* Sidebar */
 .sidebar {
   width: 420px;
-  background-color: #f8f9fa;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border: none;
   position: relative;
@@ -634,10 +640,11 @@ const goToRegister = () => {
     width: 100%;
     height: 120px;
     border: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     order: 2;
     padding: 1rem;
-    background-color: #f8f9fa;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
   }
 
   .floating-icon {

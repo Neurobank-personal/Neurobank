@@ -3,9 +3,16 @@
     <div class="tasks-header">
       <h2>Tasks</h2>
       <button class="add-btn" @click="showAddTaskModal = true">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-          <line x1="12" y1="5" x2="12" y2="19"/>
-          <line x1="5" y1="12" x2="19" y2="12"/>
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="12" y1="5" x2="12" y2="19" />
+          <line x1="5" y1="12" x2="19" y2="12" />
         </svg>
         Add Task
       </button>
@@ -13,8 +20,8 @@
 
     <!-- Filter Tabs -->
     <div class="filter-tabs">
-      <button 
-        v-for="filter in filters" 
+      <button
+        v-for="filter in filters"
         :key="filter.value"
         class="filter-tab"
         :class="{ active: currentFilter === filter.value }"
@@ -28,57 +35,98 @@
     <!-- Tasks List -->
     <div class="tasks-container">
       <div v-if="filteredTasks.length === 0" class="empty-state">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1">
-          <path d="M9 12l2 2 4-4"/>
-          <path d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"/>
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="1"
+        >
+          <path d="M9 12l2 2 4-4" />
+          <path
+            d="M21 12c0 4.97-4.03 9-9 9s-9-4.03-9-9 4.03-9 9-9 9 4.03 9 9z"
+          />
         </svg>
         <h3>No tasks found</h3>
         <p>{{ getEmptyStateMessage() }}</p>
       </div>
 
       <div v-else class="tasks-list">
-        <div 
-          v-for="task in filteredTasks" 
+        <div
+          v-for="task in filteredTasks"
           :key="task.id"
           class="task-item"
           :class="{
             completed: task.status === 'completed',
-            overdue: isOverdue(task)
+            overdue: isOverdue(task),
           }"
         >
           <div class="task-checkbox">
-            <input 
-              type="checkbox" 
+            <input
+              type="checkbox"
               :checked="task.status === 'completed'"
               @change="toggleTaskStatus(task)"
             />
           </div>
-          
+
           <div class="task-content" @click="editTask(task)">
             <div class="task-title">{{ task.title }}</div>
-            <div v-if="task.description" class="task-description">{{ task.description }}</div>
+            <div v-if="task.description" class="task-description">
+              {{ task.description }}
+            </div>
             <div class="task-meta">
-              <span class="task-priority" :class="task.priority">{{ task.priority }}</span>
+              <span class="task-priority" :class="task.priority">{{
+                task.priority
+              }}</span>
               <span v-if="task.dueDate" class="task-due-date">
                 Due: {{ formatDate(task.dueDate) }}
               </span>
-              <span class="task-created">Created: {{ formatDate(task.createdAt) }}</span>
+              <span class="task-created"
+                >Created: {{ formatDate(task.createdAt) }}</span
+              >
             </div>
           </div>
-          
+
           <div class="task-actions">
-            <button class="action-btn edit" @click="editTask(task)" title="Edit task">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M12 20h9"/>
-                <path d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"/>
+            <button
+              class="action-btn edit"
+              @click="editTask(task)"
+              title="Edit task"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <path d="M12 20h9" />
+                <path
+                  d="M16.5 3.5a2.121 2.121 0 0 1 3 3L7 19l-4 1 1-4L16.5 3.5z"
+                />
               </svg>
             </button>
-            <button class="action-btn delete" @click="deleteTask(task)" title="Delete task">
-              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <polyline points="3,6 5,6 21,6"/>
-                <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"/>
-                <line x1="10" y1="11" x2="10" y2="17"/>
-                <line x1="14" y1="11" x2="14" y2="17"/>
+            <button
+              class="action-btn delete"
+              @click="deleteTask(task)"
+              title="Delete task"
+            >
+              <svg
+                width="16"
+                height="16"
+                viewBox="0 0 24 24"
+                fill="none"
+                stroke="currentColor"
+                stroke-width="2"
+              >
+                <polyline points="3,6 5,6 21,6" />
+                <path
+                  d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"
+                />
+                <line x1="10" y1="11" x2="10" y2="17" />
+                <line x1="14" y1="11" x2="14" y2="17" />
               </svg>
             </button>
           </div>
@@ -87,40 +135,51 @@
     </div>
 
     <!-- Add/Edit Task Modal -->
-    <div v-if="showAddTaskModal || showEditTaskModal" class="modal-overlay" @click="closeModals">
+    <div
+      v-if="showAddTaskModal || showEditTaskModal"
+      class="modal-overlay"
+      @click="closeModals"
+    >
       <div class="modal" @click.stop>
         <div class="modal-header">
-          <h3>{{ isEditing ? 'Edit Task' : 'Add New Task' }}</h3>
+          <h3>{{ isEditing ? "Edit Task" : "Add New Task" }}</h3>
           <button class="close-btn" @click="closeModals">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-              <line x1="18" y1="6" x2="6" y2="18"/>
-              <line x1="6" y1="6" x2="18" y2="18"/>
+            <svg
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              stroke-width="2"
+            >
+              <line x1="18" y1="6" x2="6" y2="18" />
+              <line x1="6" y1="6" x2="18" y2="18" />
             </svg>
           </button>
         </div>
-        
+
         <form @submit.prevent="saveTask" class="task-form">
           <div class="form-group">
             <label for="title">Title*</label>
-            <input 
+            <input
               id="title"
-              v-model="taskForm.title" 
-              type="text" 
-              required 
+              v-model="taskForm.title"
+              type="text"
+              required
               placeholder="Enter task title"
             />
           </div>
-          
+
           <div class="form-group">
             <label for="description">Description</label>
-            <textarea 
+            <textarea
               id="description"
-              v-model="taskForm.description" 
+              v-model="taskForm.description"
               placeholder="Enter task description (optional)"
               rows="3"
             ></textarea>
           </div>
-          
+
           <div class="form-row">
             <div class="form-group">
               <label for="priority">Priority</label>
@@ -131,27 +190,36 @@
                   <option value="high">High</option>
                 </select>
                 <div class="select-arrow">
-                  <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                    <polyline points="6,9 12,15 18,9"/>
+                  <svg
+                    width="12"
+                    height="12"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="2"
+                  >
+                    <polyline points="6,9 12,15 18,9" />
                   </svg>
                 </div>
               </div>
             </div>
-            
+
             <div class="form-group">
               <label for="dueDate">Due Date</label>
-              <input 
-                id="dueDate"
-                v-model="taskForm.dueDate" 
-                type="date"
-              />
+              <input id="dueDate" v-model="taskForm.dueDate" type="date" />
             </div>
           </div>
-          
+
           <div class="form-actions">
-            <button type="button" class="btn-secondary" @click="closeModals">Cancel</button>
-            <button type="submit" class="btn-primary" :disabled="!taskForm.title.trim()">
-              {{ isEditing ? 'Update Task' : 'Add Task' }}
+            <button type="button" class="btn-secondary" @click="closeModals">
+              Cancel
+            </button>
+            <button
+              type="submit"
+              class="btn-primary"
+              :disabled="!taskForm.title.trim()"
+            >
+              {{ isEditing ? "Update Task" : "Add Task" }}
             </button>
           </div>
         </form>
@@ -161,111 +229,111 @@
 </template>
 
 <script setup lang="ts">
-import { ref, computed, onMounted } from 'vue'
-import { useAuth } from '../stores/auth'
-import { TaskService } from '../services/TaskService'
-import type { Task, CreateTaskRequest, UpdateTaskRequest } from '../types/Task'
+import { ref, computed, onMounted } from "vue";
+import { useAuth } from "../stores/auth";
+import { TaskService } from "../services/TaskService";
+import type { Task, CreateTaskRequest, UpdateTaskRequest } from "../types/Task";
 
-const { currentUser } = useAuth()
-const taskService = new TaskService()
+const { currentUser } = useAuth();
+const taskService = new TaskService();
 
-const tasks = ref<Task[]>([])
-const showAddTaskModal = ref(false)
-const showEditTaskModal = ref(false)
-const currentFilter = ref<'all' | 'pending' | 'completed'>('all')
-const editingTask = ref<Task | null>(null)
+const tasks = ref<Task[]>([]);
+const showAddTaskModal = ref(false);
+const showEditTaskModal = ref(false);
+const currentFilter = ref<"all" | "pending" | "completed">("all");
+const editingTask = ref<Task | null>(null);
 
 const taskForm = ref({
-  title: '',
-  description: '',
-  priority: 'medium' as 'low' | 'medium' | 'high',
-  dueDate: ''
-})
+  title: "",
+  description: "",
+  priority: "medium" as "low" | "medium" | "high",
+  dueDate: "",
+});
 
 const filters = [
-  { label: 'All', value: 'all' as const },
-  { label: 'Pending', value: 'pending' as const },
-  { label: 'Completed', value: 'completed' as const }
-]
+  { label: "All", value: "all" as const },
+  { label: "Pending", value: "pending" as const },
+  { label: "Completed", value: "completed" as const },
+];
 
-const isEditing = computed(() => editingTask.value !== null)
+const isEditing = computed(() => editingTask.value !== null);
 
 const filteredTasks = computed(() => {
-  if (currentFilter.value === 'all') return tasks.value
-  return tasks.value.filter(task => task.status === currentFilter.value)
-})
+  if (currentFilter.value === "all") return tasks.value;
+  return tasks.value.filter((task) => task.status === currentFilter.value);
+});
 
-const getFilteredTasksCount = (filter: 'all' | 'pending' | 'completed') => {
-  if (filter === 'all') return tasks.value.length
-  return tasks.value.filter(task => task.status === filter).length
-}
+const getFilteredTasksCount = (filter: "all" | "pending" | "completed") => {
+  if (filter === "all") return tasks.value.length;
+  return tasks.value.filter((task) => task.status === filter).length;
+};
 
 const getEmptyStateMessage = () => {
   switch (currentFilter.value) {
-    case 'pending':
-      return 'No pending tasks. Great job!'
-    case 'completed':
-      return 'No completed tasks yet.'
+    case "pending":
+      return "No pending tasks. Great job!";
+    case "completed":
+      return "No completed tasks yet.";
     default:
-      return 'Create your first task to get started.'
+      return "Create your first task to get started.";
   }
-}
+};
 
 const isOverdue = (task: Task) => {
-  if (!task.dueDate || task.status === 'completed') return false
-  return new Date(task.dueDate) < new Date()
-}
+  if (!task.dueDate || task.status === "completed") return false;
+  return new Date(task.dueDate) < new Date();
+};
 
 const formatDate = (dateString: string) => {
-  return new Date(dateString).toLocaleDateString('sv-SE')
-}
+  return new Date(dateString).toLocaleDateString("sv-SE");
+};
 
 const loadTasks = async () => {
   if (currentUser?.value?.id) {
     try {
-      console.log('Loading tasks for user:', currentUser.value.id)
-      tasks.value = await taskService.getUserTasks(currentUser.value.id)
-      console.log('Loaded tasks:', tasks.value)
+      console.log("Loading tasks for user:", currentUser.value.id);
+      tasks.value = await taskService.getUserTasks(currentUser.value.id);
+      console.log("Loaded tasks:", tasks.value);
     } catch (error) {
-      console.error('Could not fetch tasks:', error)
+      console.error("Could not fetch tasks:", error);
     }
   }
-}
+};
 
 const resetForm = () => {
   taskForm.value = {
-    title: '',
-    description: '',
-    priority: 'medium',
-    dueDate: ''
-  }
-}
+    title: "",
+    description: "",
+    priority: "medium",
+    dueDate: "",
+  };
+};
 
 const closeModals = () => {
-  showAddTaskModal.value = false
-  showEditTaskModal.value = false
-  editingTask.value = null
-  resetForm()
-}
+  showAddTaskModal.value = false;
+  showEditTaskModal.value = false;
+  editingTask.value = null;
+  resetForm();
+};
 
 const editTask = (task: Task) => {
-  editingTask.value = task
+  editingTask.value = task;
   taskForm.value = {
     title: task.title,
-    description: task.description || '',
+    description: task.description || "",
     priority: task.priority,
-    dueDate: task.dueDate || ''
-  }
-  showEditTaskModal.value = true
-}
+    dueDate: task.dueDate || "",
+  };
+  showEditTaskModal.value = true;
+};
 
 const saveTask = async () => {
   if (!currentUser?.value?.id) {
-    console.error('No current user found')
-    return
+    console.error("No current user found");
+    return;
   }
 
-  console.log('Saving task:', taskForm.value)
+  console.log("Saving task:", taskForm.value);
 
   try {
     if (isEditing.value && editingTask.value) {
@@ -274,74 +342,74 @@ const saveTask = async () => {
         title: taskForm.value.title,
         description: taskForm.value.description || undefined,
         priority: taskForm.value.priority,
-        dueDate: taskForm.value.dueDate || undefined
-      }
-      console.log('Updating task:', editingTask.value.id, updates)
-      await taskService.updateTask(editingTask.value.id, updates)
+        dueDate: taskForm.value.dueDate || undefined,
+      };
+      console.log("Updating task:", editingTask.value.id, updates);
+      await taskService.updateTask(editingTask.value.id, updates);
     } else {
       // Create new task
       const newTask: CreateTaskRequest = {
         title: taskForm.value.title,
         description: taskForm.value.description || undefined,
         priority: taskForm.value.priority,
-        dueDate: taskForm.value.dueDate || undefined
-      }
-      console.log('Creating new task for user:', currentUser.value.id, newTask)
-      await taskService.createTask(currentUser.value.id, newTask)
+        dueDate: taskForm.value.dueDate || undefined,
+      };
+      console.log("Creating new task for user:", currentUser.value.id, newTask);
+      await taskService.createTask(currentUser.value.id, newTask);
     }
-    
-    await loadTasks()
-    closeModals()
-    console.log('Task saved successfully')
+
+    await loadTasks();
+    closeModals();
+    console.log("Task saved successfully");
   } catch (error) {
-    console.error('Error saving task:', error)
-    alert('Failed to save task. Please try again.')
+    console.error("Error saving task:", error);
+    alert("Failed to save task. Please try again.");
   }
-}
+};
 
 const toggleTaskStatus = async (task: Task) => {
   try {
-    const newStatus = task.status === 'completed' ? 'pending' : 'completed'
-    await taskService.toggleTaskStatus(task.id, newStatus)
-    await loadTasks()
+    const newStatus = task.status === "completed" ? "pending" : "completed";
+    await taskService.toggleTaskStatus(task.id, newStatus);
+    await loadTasks();
   } catch (error) {
-    console.error('Error toggling task status:', error)
+    console.error("Error toggling task status:", error);
   }
-}
+};
 
 const deleteTask = async (task: Task) => {
   if (confirm(`Are you sure you want to delete "${task.title}"?`)) {
     try {
-      await taskService.deleteTask(task.id)
-      await loadTasks()
+      await taskService.deleteTask(task.id);
+      await loadTasks();
     } catch (error) {
-      console.error('Error deleting task:', error)
+      console.error("Error deleting task:", error);
     }
   }
-}
+};
 
 onMounted(() => {
-  loadTasks()
-  
+  loadTasks();
+
   // Check if there's a task to edit from localStorage
-  const taskToEdit = localStorage.getItem('editTask')
+  const taskToEdit = localStorage.getItem("editTask");
   if (taskToEdit) {
     try {
-      const task = JSON.parse(taskToEdit) as Task
-      editTask(task)
-      localStorage.removeItem('editTask') // Clean up
+      const task = JSON.parse(taskToEdit) as Task;
+      editTask(task);
+      localStorage.removeItem("editTask"); // Clean up
     } catch (error) {
-      console.error('Error parsing task to edit:', error)
-      localStorage.removeItem('editTask')
+      console.error("Error parsing task to edit:", error);
+      localStorage.removeItem("editTask");
     }
   }
-})
+});
 </script>
 
 <style scoped>
 .tasks {
-  padding: 2rem;
-  background-color: #f8f9fa;
+  padding: 0;
+  background: transparent;
   min-height: 100vh;
 }
 
@@ -349,68 +417,76 @@ onMounted(() => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  margin-bottom: 2rem;
+  margin-bottom: 3rem;
 }
 
 .tasks-header h2 {
-  color: #2d3748;
-  font-size: 2rem;
-  font-weight: 600;
+  color: #ffffff;
+  font-size: 2.5rem;
+  font-weight: 700;
   margin: 0;
+  letter-spacing: -0.02em;
 }
 
 .add-btn {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: #667eea;
+  gap: 0.75rem;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
   border: none;
-  border-radius: 8px;
-  padding: 0.75rem 1.25rem;
-  font-weight: 500;
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
+  font-weight: 600;
   cursor: pointer;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .add-btn:hover {
-  background: #5a67d8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
 }
 
 .filter-tabs {
   display: flex;
   gap: 1rem;
-  margin-bottom: 2rem;
+  margin-bottom: 2.5rem;
+  flex-wrap: wrap;
 }
 
 .filter-tab {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
-  background: white;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  padding: 0.75rem 1rem;
+  gap: 0.75rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 12px;
+  padding: 1rem 1.5rem;
   cursor: pointer;
-  transition: all 0.2s ease;
-  font-weight: 500;
-  color: #4a5568;
+  transition: all 0.3s ease;
+  font-weight: 600;
+  color: #94a3b8;
 }
 
 .filter-tab:hover {
-  border-color: #cbd5e0;
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+  color: #e2e8f0;
 }
 
 .filter-tab.active {
-  background: #667eea;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
-  border-color: #667eea;
+  border-color: #3b82f6;
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
 }
 
 .count {
   background: rgba(255, 255, 255, 0.2);
   border-radius: 12px;
-  padding: 0.125rem 0.5rem;
+  padding: 0.25rem 0.75rem;
   font-size: 0.75rem;
   font-weight: 600;
 }
@@ -420,32 +496,38 @@ onMounted(() => {
 }
 
 .tasks-container {
-  background: white;
+  background: transparent;
   border-radius: 12px;
-  padding: 1.5rem;
-  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+  padding: 0;
 }
 
 .empty-state {
   text-align: center;
-  padding: 3rem 1rem;
-  color: #718096;
+  padding: 4rem 2rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
+  color: #94a3b8;
 }
 
 .empty-state svg {
-  margin-bottom: 1rem;
-  opacity: 0.5;
+  margin-bottom: 1.5rem;
+  opacity: 0.6;
+  color: #64748b;
 }
 
 .empty-state h3 {
-  margin: 0 0 0.5rem 0;
-  font-size: 1.25rem;
+  margin: 0 0 0.75rem 0;
+  font-size: 1.5rem;
   font-weight: 600;
+  color: #ffffff;
 }
 
 .empty-state p {
   margin: 0;
   opacity: 0.8;
+  font-size: 1rem;
 }
 
 .tasks-list {
@@ -458,25 +540,30 @@ onMounted(() => {
   display: flex;
   align-items: flex-start;
   gap: 1rem;
-  padding: 1rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 8px;
-  transition: all 0.2s ease;
+  padding: 1.5rem;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 16px;
+  transition: all 0.3s ease;
+  color: #ffffff;
 }
 
 .task-item:hover {
-  border-color: #cbd5e0;
-  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(59, 130, 246, 0.1);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.3);
 }
 
 .task-item.completed {
-  opacity: 0.7;
-  background: #f7fafc;
+  opacity: 0.6;
+  background: rgba(15, 23, 42, 0.5);
 }
 
 .task-item.overdue {
-  border-color: #fed7d7;
-  background: #fef5e7;
+  border-color: rgba(239, 68, 68, 0.5);
+  background: rgba(239, 68, 68, 0.1);
 }
 
 .task-checkbox input {
@@ -492,18 +579,18 @@ onMounted(() => {
 
 .task-title {
   font-weight: 600;
-  color: #2d3748;
+  color: #ffffff;
   margin-bottom: 0.25rem;
   line-height: 1.4;
 }
 
 .task-item.completed .task-title {
   text-decoration: line-through;
-  color: #718096;
+  color: #94a3b8;
 }
 
 .task-description {
-  color: #718096;
+  color: #94a3b8;
   font-size: 0.9rem;
   margin-bottom: 0.5rem;
   line-height: 1.4;
@@ -514,7 +601,7 @@ onMounted(() => {
   align-items: center;
   gap: 1rem;
   font-size: 0.75rem;
-  color: #a0aec0;
+  color: #64748b;
 }
 
 .task-priority {
@@ -525,12 +612,12 @@ onMounted(() => {
 }
 
 .task-priority.high {
-  background: #fed7d7;
+  background: rgba(239, 68, 68, 0.15);
   color: #c53030;
 }
 
 .task-priority.medium {
-  background: #feebc8;
+  background: rgba(251, 146, 60, 0.15);
   color: #dd6b20;
 }
 
@@ -566,23 +653,25 @@ onMounted(() => {
 }
 
 .action-btn.edit {
-  background: #edf2f7;
-  color: #4a5568;
+  background: rgba(59, 130, 246, 0.2);
+  color: #3b82f6;
+  border: 1px solid rgba(59, 130, 246, 0.3);
 }
 
 .action-btn.edit:hover {
-  background: #e2e8f0;
-  color: #2d3748;
+  background: rgba(59, 130, 246, 0.3);
+  color: #ffffff;
 }
 
 .action-btn.delete {
-  background: #fed7d7;
-  color: #c53030;
+  background: rgba(239, 68, 68, 0.2);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
 }
 
 .action-btn.delete:hover {
-  background: #fbb6ce;
-  color: #b91c1c;
+  background: rgba(239, 68, 68, 0.3);
+  color: #ffffff;
 }
 
 .modal-overlay {
@@ -599,13 +688,16 @@ onMounted(() => {
 }
 
 .modal {
-  background: white;
-  border-radius: 12px;
+  background: rgba(15, 23, 42, 0.95);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 20px;
   padding: 2rem;
   width: 90%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  color: #ffffff;
 }
 
 .modal-header {
@@ -619,7 +711,7 @@ onMounted(() => {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #2d3748;
+  color: #ffffff;
 }
 
 .close-btn {
@@ -630,15 +722,15 @@ onMounted(() => {
   height: 32px;
   border: none;
   border-radius: 6px;
-  background: #f7fafc;
-  color: #4a5568;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .close-btn:hover {
-  background: #edf2f7;
-  color: #2d3748;
+  background: rgba(255, 255, 255, 0.2);
+  color: #ffffff;
 }
 
 .task-form {
@@ -661,24 +753,32 @@ onMounted(() => {
 
 .form-group label {
   font-weight: 500;
-  color: #2d3748;
+  color: #ffffff;
   font-size: 0.9rem;
 }
 
 .form-group input,
 .form-group textarea {
   padding: 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
+  transition: all 0.2s ease;
+  color: #ffffff;
+}
+
+.form-group input::placeholder,
+.form-group textarea::placeholder {
+  color: #94a3b8;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: #3b82f6;
+  background: rgba(255, 255, 255, 0.15);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
 }
 
 .custom-select {
@@ -688,29 +788,29 @@ onMounted(() => {
 .custom-select select {
   width: 100%;
   padding: 0.75rem 2.5rem 0.75rem 0.75rem;
-  border: 1px solid #e2e8f0;
-  border-radius: 6px;
+  background: rgba(255, 255, 255, 0.1);
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  border-radius: 8px;
   font-size: 1rem;
-  background: white;
   cursor: pointer;
   appearance: none;
   -webkit-appearance: none;
   -moz-appearance: none;
   transition: all 0.2s ease;
-  color: #2d3748;
+  color: #ffffff;
   font-weight: 500;
 }
 
 .custom-select select:hover {
-  border-color: #cbd5e0;
-  background: #f9fafb;
+  border-color: rgba(255, 255, 255, 0.3);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .custom-select select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
-  background: white;
+  border-color: #3b82f6;
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+  background: rgba(255, 255, 255, 0.15);
 }
 
 .custom-select .select-arrow {
@@ -719,17 +819,17 @@ onMounted(() => {
   top: 50%;
   transform: translateY(-50%);
   pointer-events: none;
-  color: #718096;
+  color: #94a3b8;
   transition: all 0.2s ease;
 }
 
 .custom-select:hover .select-arrow {
-  color: #4a5568;
+  color: #ffffff;
   transform: translateY(-50%) scale(1.1);
 }
 
 .custom-select select:focus + .select-arrow {
-  color: #667eea;
+  color: #3b82f6;
 }
 
 .form-actions {
@@ -750,22 +850,25 @@ onMounted(() => {
 }
 
 .btn-secondary {
-  background: #f7fafc;
-  color: #4a5568;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.1);
+  color: #ffffff;
+  border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn-secondary:hover {
-  background: #edf2f7;
+  background: rgba(255, 255, 255, 0.2);
 }
 
 .btn-primary {
-  background: #667eea;
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
+  border: none;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #5a67d8;
+  background: linear-gradient(135deg, #2563eb, #7c3aed);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.4);
 }
 
 .btn-primary:disabled {
@@ -777,34 +880,34 @@ onMounted(() => {
   .tasks {
     padding: 1rem;
   }
-  
+
   .tasks-header {
     flex-direction: column;
     gap: 1rem;
     align-items: stretch;
   }
-  
+
   .filter-tabs {
     flex-wrap: wrap;
   }
-  
+
   .form-row {
     grid-template-columns: 1fr;
   }
-  
+
   .form-actions {
     flex-direction: column;
   }
-  
+
   .task-item {
     flex-direction: column;
     gap: 0.75rem;
   }
-  
+
   .task-checkbox {
     align-self: flex-start;
   }
-  
+
   .task-actions {
     align-self: flex-end;
   }

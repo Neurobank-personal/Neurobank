@@ -619,10 +619,12 @@ const getReadingTime = (text: string) => {
 
 <style scoped>
 .note-viewer {
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   margin-bottom: 2rem;
   overflow: hidden;
 }
@@ -632,8 +634,9 @@ const getReadingTime = (text: string) => {
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  border-bottom: 1px solid #e2e8f0;
-  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
 }
 
 .header-left {
@@ -645,7 +648,7 @@ const getReadingTime = (text: string) => {
 .header-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   border-radius: 12px;
   display: flex;
   align-items: center;
@@ -655,7 +658,7 @@ const getReadingTime = (text: string) => {
 }
 
 .header-text h3 {
-  color: #2d3748;
+  color: #ffffff;
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 0.25rem 0;
@@ -663,7 +666,7 @@ const getReadingTime = (text: string) => {
 }
 
 .header-text p {
-  color: #718096;
+  color: #94a3b8;
   margin: 0;
   font-size: 0.95rem;
 }
@@ -687,7 +690,7 @@ const getReadingTime = (text: string) => {
 }
 
 .edit-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
   color: white;
 }
 
@@ -697,14 +700,14 @@ const getReadingTime = (text: string) => {
 }
 
 .close-btn {
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   color: #4a5568;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .close-btn:hover {
   background: #edf2f7;
-  border-color: #cbd5e0;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .delete-btn {
@@ -737,7 +740,7 @@ const getReadingTime = (text: string) => {
 }
 
 .ai-section {
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
   padding-top: 2rem;
 }
 
@@ -759,7 +762,7 @@ const getReadingTime = (text: string) => {
 }
 
 .section-title h4 {
-  color: #2d3748;
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
@@ -786,9 +789,9 @@ const getReadingTime = (text: string) => {
   align-items: center;
   gap: 0.5rem;
   padding: 0.5rem 0.75rem;
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   color: #4a5568;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 6px;
   font-size: 0.875rem;
   font-weight: 500;
@@ -798,7 +801,7 @@ const getReadingTime = (text: string) => {
 
 .edit-section-btn:hover:not(:disabled) {
   background: #edf2f7;
-  border-color: #cbd5e0;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .edit-section-btn:disabled {
@@ -807,19 +810,27 @@ const getReadingTime = (text: string) => {
 }
 
 .content-display {
-  background: #f8f9fa;
-  border-radius: 12px;
-  padding: 1.5rem;
-  border: 1px solid #e2e8f0;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border-radius: 16px;
+  padding: 2rem;
+  border: 1px solid rgba(255, 255, 255, 0.1);
+  transition: all 0.3s ease;
+}
+
+.content-display:hover {
+  background: rgba(255, 255, 255, 0.08);
 }
 
 .ai-content {
-  background: linear-gradient(135deg, #fef5e7 0%, #fed7aa 100%);
-  border-left: 4px solid #ed8936;
+  background: rgba(251, 146, 60, 0.1);
+  backdrop-filter: blur(10px);
+  border-left: 4px solid #f59e0b;
+  border-radius: 16px;
 }
 
 .content-text {
-  color: #2d3748;
+  color: #ffffff;
   line-height: 1.7;
   font-size: 1rem;
   white-space: pre-wrap;
@@ -827,20 +838,22 @@ const getReadingTime = (text: string) => {
 }
 
 .ai-content .content-text {
-  color: #7c2d12;
+  color: #fbbf24;
 }
 
 .content-meta {
   display: flex;
   gap: 1rem;
-  color: #718096;
+  color: #94a3b8;
   font-size: 0.875rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(113, 128, 150, 0.2);
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .edit-form {
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;
   border: 2px solid #667eea;
@@ -867,11 +880,11 @@ const getReadingTime = (text: string) => {
 .form-textarea {
   width: 100%;
   padding: 0.875rem;
-  border: 2px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-size: 1rem;
   transition: all 0.2s ease;
-  background: #fafafa;
+  background: rgba(255, 255, 255, 0.05);
   font-family: inherit;
   line-height: 1.6;
 }
@@ -880,7 +893,9 @@ const getReadingTime = (text: string) => {
 .form-textarea:focus {
   outline: none;
   border-color: #667eea;
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
 }
 
@@ -894,7 +909,7 @@ const getReadingTime = (text: string) => {
   gap: 0.75rem;
   margin-top: 1.5rem;
   padding-top: 1.5rem;
-  border-top: 1px solid #e2e8f0;
+  border-top: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .save-btn,
@@ -928,14 +943,14 @@ const getReadingTime = (text: string) => {
 }
 
 .cancel-btn {
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   color: #4a5568;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .cancel-btn:hover:not(:disabled) {
   background: #edf2f7;
-  border-color: #cbd5e0;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 /* Modal Styles */
@@ -954,7 +969,9 @@ const getReadingTime = (text: string) => {
 }
 
 .modal-content {
-  background: white;
+  background: rgba(15, 23, 42, 0.7);
+  backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 16px;
   box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   max-width: 480px;
@@ -980,11 +997,11 @@ const getReadingTime = (text: string) => {
   align-items: center;
   justify-content: space-between;
   padding: 1.5rem 2rem;
-  border-bottom: 1px solid #e2e8f0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .modal-header h3 {
-  color: #2d3748;
+  color: #ffffff;
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
@@ -1003,7 +1020,7 @@ const getReadingTime = (text: string) => {
 }
 
 .modal-header .close-btn:hover {
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   color: #4a5568;
 }
 
@@ -1018,7 +1035,7 @@ const getReadingTime = (text: string) => {
 }
 
 .modal-body h4 {
-  color: #2d3748;
+  color: #ffffff;
   font-size: 1.1rem;
   font-weight: 600;
   margin: 0 0 1rem 0;
@@ -1039,9 +1056,9 @@ const getReadingTime = (text: string) => {
 
 .btn-secondary {
   padding: 0.75rem 1.5rem;
-  background: #f7fafc;
+  background: rgba(255, 255, 255, 0.1);
   color: #4a5568;
-  border: 1px solid #e2e8f0;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 8px;
   font-weight: 500;
   cursor: pointer;
@@ -1053,7 +1070,7 @@ const getReadingTime = (text: string) => {
 
 .btn-secondary:hover:not(:disabled) {
   background: #edf2f7;
-  border-color: #cbd5e0;
+  border-color: rgba(255, 255, 255, 0.1);
 }
 
 .btn-danger {
@@ -1101,7 +1118,7 @@ const getReadingTime = (text: string) => {
 }
 
 .error-message {
-  background: #fed7d7;
+  background: rgba(239, 68, 68, 0.2);
   color: #c53030;
   padding: 1rem;
   border-radius: 8px;

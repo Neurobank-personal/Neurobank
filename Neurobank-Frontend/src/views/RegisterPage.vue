@@ -1,52 +1,52 @@
 <script setup lang="ts">
-import { ref } from 'vue'
-import { useRouter } from 'vue-router'
-import { handleRegister } from '../services/handleRegister'
+import { ref } from "vue";
+import { useRouter } from "vue-router";
+import { handleRegister } from "../services/handleRegister";
 
-const router = useRouter()
+const router = useRouter();
 
-const firstName = ref('')
-const lastName = ref('')
-const email = ref('')
-const password = ref('')
-const confirmPassword = ref('')
-const isLoading = ref(false)
-const errorMessage = ref('')
+const firstName = ref("");
+const lastName = ref("");
+const email = ref("");
+const password = ref("");
+const confirmPassword = ref("");
+const isLoading = ref(false);
+const errorMessage = ref("");
 
 const handleSubmit = async () => {
-  errorMessage.value = ''
-  
+  errorMessage.value = "";
+
   if (password.value !== confirmPassword.value) {
-    errorMessage.value = 'Passwords do not match!'
-    return
+    errorMessage.value = "Passwords do not match!";
+    return;
   }
-  
-  isLoading.value = true
-  
+
+  isLoading.value = true;
+
   try {
     const result = await handleRegister({
       firstName: firstName.value,
       lastName: lastName.value,
       email: email.value,
-      password: password.value
-    })
-    
+      password: password.value,
+    });
+
     if (result.success) {
-      alert('Registration successful! You can now log in.')
-      router.push('/loginpage')
+      alert("Registration successful! You can now log in.");
+      router.push("/loginpage");
     } else {
-      errorMessage.value = result.error || 'An error occurred'
+      errorMessage.value = result.error || "An error occurred";
     }
   } catch (error) {
-    errorMessage.value = 'An unexpected error occurred'
+    errorMessage.value = "An unexpected error occurred";
   } finally {
-    isLoading.value = false
+    isLoading.value = false;
   }
-}
+};
 
 const goToLogin = () => {
-  router.push('/loginpage')
-}
+  router.push("/loginpage");
+};
 </script>
 
 <template>
@@ -68,77 +68,80 @@ const goToLogin = () => {
         <div class="register-content">
           <h2>Create Account</h2>
           <p class="subtitle">Create your second brain</p>
-          
+
           <div v-if="errorMessage" class="error-message">
             {{ errorMessage }}
           </div>
-          
+
           <form @submit.prevent="handleSubmit" class="register-form">
             <div class="name-row">
               <div class="input-group">
-                <input 
+                <input
                   id="firstName"
-                  type="text" 
-                  v-model="firstName" 
+                  type="text"
+                  v-model="firstName"
                   placeholder="First name"
                   required
                   :disabled="isLoading"
                 />
               </div>
-              
+
               <div class="input-group">
-                <input 
+                <input
                   id="lastName"
-                  type="text" 
-                  v-model="lastName" 
+                  type="text"
+                  v-model="lastName"
                   placeholder="Last name"
                   required
                   :disabled="isLoading"
                 />
               </div>
             </div>
-            
+
             <div class="input-group">
-              <input 
+              <input
                 id="email"
-                type="email" 
-                v-model="email" 
+                type="email"
+                v-model="email"
                 placeholder="Email"
                 required
                 :disabled="isLoading"
               />
             </div>
-            
+
             <div class="input-group">
-              <input 
+              <input
                 id="password"
-                type="password" 
-                v-model="password" 
+                type="password"
+                v-model="password"
                 placeholder="Password (at least 6 characters)"
                 required
                 :disabled="isLoading"
               />
             </div>
-            
+
             <div class="input-group">
-              <input 
+              <input
                 id="confirmPassword"
-                type="password" 
-                v-model="confirmPassword" 
+                type="password"
+                v-model="confirmPassword"
                 placeholder="Confirm password"
                 required
                 :disabled="isLoading"
               />
             </div>
-            
+
             <button type="submit" class="register-btn" :disabled="isLoading">
-              {{ isLoading ? 'Creating account...' : 'Create account' }}
+              {{ isLoading ? "Creating account..." : "Create account" }}
             </button>
           </form>
-          
+
           <div class="login-link">
-            <p>Already have an account? 
-              <button @click="goToLogin" class="link-btn" :disabled="isLoading">Log in here</button>
+            <p>
+              Already have an account?
+              <button @click="goToLogin" class="link-btn" :disabled="isLoading">
+                Log in here
+              </button>
             </p>
           </div>
         </div>
@@ -147,53 +150,129 @@ const goToLogin = () => {
 
     <!-- Sidebar with Different Icons -->
     <div class="sidebar">
-      <div class="floating-icon user-floating large-icon" style="position: absolute; top: 20%; left: 10%;">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"/>
-          <circle cx="12" cy="7" r="4"/>
+      <div
+        class="floating-icon user-floating large-icon"
+        style="position: absolute; top: 20%; left: 10%"
+      >
+        <svg
+          width="80"
+          height="80"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2" />
+          <circle cx="12" cy="7" r="4" />
         </svg>
       </div>
-      
-      <div class="floating-icon lock-floating medium-icon" style="position: absolute; top: 10%; right: 20%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <rect x="3" y="11" width="18" height="11" rx="2" ry="2"/>
-          <circle cx="12" cy="16" r="1"/>
-          <path d="M7 11V7a5 5 0 0 1 10 0v4"/>
+
+      <div
+        class="floating-icon lock-floating medium-icon"
+        style="position: absolute; top: 10%; right: 20%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+          <circle cx="12" cy="16" r="1" />
+          <path d="M7 11V7a5 5 0 0 1 10 0v4" />
         </svg>
       </div>
-      
-      <div class="floating-icon mail-floating small-icon" style="position: absolute; top: 45%; left: 20%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/>
-          <polyline points="22,6 12,13 2,6"/>
+
+      <div
+        class="floating-icon mail-floating small-icon"
+        style="position: absolute; top: 45%; left: 20%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path
+            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"
+          />
+          <polyline points="22,6 12,13 2,6" />
         </svg>
       </div>
-      
-      <div class="floating-icon shield-floating medium-icon" style="position: absolute; top: 65%; right: 15%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/>
-          <path d="M9 12l2 2 4-4"/>
+
+      <div
+        class="floating-icon shield-floating medium-icon"
+        style="position: absolute; top: 65%; right: 15%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+          <path d="M9 12l2 2 4-4" />
         </svg>
       </div>
-      
-      <div class="floating-icon edit-floating small-icon" style="position: absolute; top: 35%; right: 5%;">
-        <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/>
-          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/>
+
+      <div
+        class="floating-icon edit-floating small-icon"
+        style="position: absolute; top: 35%; right: 5%"
+      >
+        <svg
+          width="48"
+          height="48"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <path
+            d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"
+          />
+          <path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z" />
         </svg>
       </div>
-      
-      <div class="floating-icon check-floating large-icon" style="position: absolute; top: 80%; left: 25%;">
-        <svg width="80" height="80" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <circle cx="12" cy="12" r="10"/>
-          <polyline points="9,12 12,15 16,11"/>
+
+      <div
+        class="floating-icon check-floating large-icon"
+        style="position: absolute; top: 80%; left: 25%"
+      >
+        <svg
+          width="80"
+          height="80"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <circle cx="12" cy="12" r="10" />
+          <polyline points="9,12 12,15 16,11" />
         </svg>
       </div>
-      
-      <div class="floating-icon key-floating medium-icon" style="position: absolute; top: 5%; left: 45%;">
-        <svg width="64" height="64" viewBox="0 0 24 24" fill="none" stroke="#9ca3af" stroke-width="1.5">
-          <circle cx="7" cy="7" r="3"/>
-          <path d="M10 9h10a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H12l-2-4h-2a2 2 0 0 1-2-2V7"/>
+
+      <div
+        class="floating-icon key-floating medium-icon"
+        style="position: absolute; top: 5%; left: 45%"
+      >
+        <svg
+          width="64"
+          height="64"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="#9ca3af"
+          stroke-width="1.5"
+        >
+          <circle cx="7" cy="7" r="3" />
+          <path
+            d="M10 9h10a2 2 0 0 1 2 2v2a2 2 0 0 1-2 2H12l-2-4h-2a2 2 0 0 1-2-2V7"
+          />
         </svg>
       </div>
     </div>
@@ -201,13 +280,14 @@ const goToLogin = () => {
 </template>
 
 <style scoped>
-@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap');
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f8f9fa;
-  font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
+    sans-serif;
 }
 
 .main-content {
@@ -247,7 +327,7 @@ const goToLogin = () => {
   color: #1f2937;
   margin: 0;
   letter-spacing: -0.5px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .register-section {
@@ -270,7 +350,7 @@ const goToLogin = () => {
   color: #1f2937;
   margin: 0 0 0.5rem 0;
   letter-spacing: -1px;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .subtitle {
@@ -279,7 +359,7 @@ const goToLogin = () => {
   font-size: 1.125rem;
   line-height: 1.5;
   font-weight: 400;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .register-form {
@@ -300,13 +380,15 @@ const goToLogin = () => {
 .input-group input {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 2px solid #e5e7eb;
+  border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   font-size: 1rem;
-  background-color: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   box-sizing: border-box;
   transition: all 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -317,7 +399,8 @@ const goToLogin = () => {
 }
 
 .input-group input:disabled {
-  background-color: #f9fafb;
+  background: rgba(255, 255, 255, 0.03);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -334,7 +417,7 @@ const goToLogin = () => {
   cursor: pointer;
   margin-top: 1rem;
   transition: background-color 0.2s ease;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .register-btn:hover:not(:disabled) {
@@ -355,7 +438,7 @@ const goToLogin = () => {
   color: #6b7280;
   margin: 0;
   font-size: 1rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -367,7 +450,7 @@ const goToLogin = () => {
   font-size: inherit;
   font-weight: 500;
   text-decoration: none;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 .link-btn:hover:not(:disabled) {
@@ -385,15 +468,17 @@ const goToLogin = () => {
   padding: 0.75rem 1rem;
   border-radius: 8px;
   margin-bottom: 1.5rem;
-  border: 1px solid #fecaca;
+  border: 1px solid rgba(239, 68, 68, 0.3);
   font-size: 0.9rem;
-  font-family: 'Inter', sans-serif;
+  font-family: "Inter", sans-serif;
 }
 
 /* Sidebar */
 .sidebar {
   width: 420px;
-  background-color: #f8f9fa;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 2rem;
   border: none;
   position: relative;
@@ -464,7 +549,8 @@ const goToLogin = () => {
 }
 
 @keyframes float {
-  0%, 100% {
+  0%,
+  100% {
     transform: translateY(0px) translateX(0px);
   }
   25% {
@@ -484,26 +570,26 @@ const goToLogin = () => {
     width: 340px;
     padding: 1.5rem;
   }
-  
+
   .small-icon {
     width: 64px;
     height: 64px;
   }
-  
+
   .medium-icon {
     width: 96px;
     height: 96px;
   }
-  
+
   .large-icon {
     width: 128px;
     height: 128px;
   }
-  
+
   .header {
     padding: 2rem 0 1rem 2rem;
   }
-  
+
   .register-section {
     padding: 2rem;
     padding-top: 2rem;
@@ -514,56 +600,57 @@ const goToLogin = () => {
   .app-layout {
     flex-direction: column;
   }
-  
+
   .sidebar {
     width: 100%;
     height: 120px;
     border: none;
-    border-top: 1px solid #e5e7eb;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
     order: 2;
     padding: 1rem;
-    background-color: #f8f9fa;
+    background: rgba(255, 255, 255, 0.05);
+    backdrop-filter: blur(10px);
   }
-  
+
   .floating-icon {
     position: relative !important;
     animation: none;
     display: inline-flex;
     margin: 0.5rem;
   }
-  
+
   .small-icon {
     width: 48px;
     height: 48px;
   }
-  
+
   .medium-icon {
     width: 56px;
     height: 56px;
   }
-  
+
   .large-icon {
     width: 64px;
     height: 64px;
   }
-  
+
   .header {
     padding: 1.5rem 1rem 0.5rem 1rem;
   }
-  
+
   .register-section {
     padding: 1rem;
     padding-top: 2rem;
   }
-  
+
   .register-content h2 {
     font-size: 2.5rem;
   }
-  
+
   .register-content {
     max-width: 100%;
   }
-  
+
   .name-row {
     flex-direction: column;
     gap: 1.5rem;

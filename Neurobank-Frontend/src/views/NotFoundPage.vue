@@ -102,7 +102,9 @@ onMounted(() => {
 }
 
 .not-found-card {
-  background: white;
+  background: rgba(255, 255, 255, 0.05);
+  backdrop-filter: blur(10px);
+  border: 1px solid rgba(255, 255, 255, 0.1);
   padding: 3rem;
   border-radius: 20px;
   box-shadow: 0 20px 60px rgba(0, 0, 0, 0.2);
@@ -271,7 +273,7 @@ onMounted(() => {
 }
 
 .error-path {
-  background: #f8f9fa;
+  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
   padding: 0.2rem 0.5rem;
   border-radius: 4px;
   color: #e74c3c;
@@ -375,7 +377,7 @@ onMounted(() => {
 .easter-egg {
   margin-top: 2rem;
   padding: 1rem;
-  background: linear-gradient(45deg, #f8f9fa, #e9ecef);
+  background: linear-gradient(135deg, #2d2d2d 0%, #1a1a1a 100%);
   border-radius: 10px;
   animation: fadeInUp 0.8s ease-out 1.1s both;
 }

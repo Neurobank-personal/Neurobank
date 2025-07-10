@@ -70,7 +70,7 @@ const navigateToSection = (section: string) => {
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background-color: #f8f9fa;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
@@ -78,7 +78,7 @@ const navigateToSection = (section: string) => {
 /* Main Content */
 .main-content {
   flex: 1;
-  margin-left: 220px;
+  margin-left: 280px;
   display: flex;
   flex-direction: column;
   transition: margin-left 0.3s ease;
@@ -92,6 +92,7 @@ const navigateToSection = (section: string) => {
 .content-area {
   flex: 1;
   overflow-y: auto;
+  padding: 2rem;
 }
 
 /* Responsive Design */

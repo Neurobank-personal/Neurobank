@@ -38,6 +38,6 @@ const goBackToOverview = () => {
 <style scoped>
 .notes-container {
   min-height: 100vh;
-  background: #f8f9fa;
+  background: transparent;
 }
 </style>
