@@ -21,7 +21,10 @@ const app = express();
 // CORS setup - tillåt requests från frontend
 app.use(
   cors({
-    origin: config.frontendUrl,
+    origin: [
+      config.frontendUrl, // din localhost/nuvarande
+      "https://neurobank-frontend.vercel.app", // Vercel URL
+    ],
     credentials: true,
   })
 );
