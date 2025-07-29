@@ -626,33 +626,56 @@ const getReadingTime = (text: string) => {
 
 .notes-header {
   margin-bottom: 3rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--cream), var(--beige));
+  border-radius: 32px;
+  border: 2px solid var(--border);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.notes-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .notes-header h2 {
-  color: #ffffff;
+  color: var(--text-dark);
   font-size: 2.5rem;
   font-weight: 700;
   margin: 0 0 0.5rem 0;
   letter-spacing: -0.02em;
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0;
   font-size: 1.125rem;
   font-weight: 400;
+  font-family: "Inter", sans-serif;
 }
 
 /* Tabs */
 .tabs {
   display: flex;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: var(--cream);
+  border: 2px solid var(--border);
+  border-radius: 20px;
   padding: 0.75rem;
   margin-bottom: 2.5rem;
   gap: 0.5rem;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
 }
 
 .tab-btn {
@@ -660,17 +683,18 @@ const getReadingTime = (text: string) => {
   padding: 1rem 1.5rem;
   border: none;
   background: transparent;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
   font-weight: 600;
-  color: #94a3b8;
-  transition: all 0.3s ease;
+  color: var(--text-medium);
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   align-items: center;
   justify-content: center;
   gap: 0.75rem;
   position: relative;
   overflow: hidden;
+  font-family: "Inter", sans-serif;
 }
 
 .tab-btn::before {
@@ -680,14 +704,10 @@ const getReadingTime = (text: string) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.1),
-    rgba(147, 51, 234, 0.1)
-  );
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 12px;
+  border-radius: 16px;
 }
 
 .tab-btn:hover::before {
@@ -695,14 +715,14 @@ const getReadingTime = (text: string) => {
 }
 
 .tab-btn:hover {
-  color: #ffffff;
+  color: var(--sage);
   transform: translateY(-2px);
 }
 
 .tab-btn.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
 }
 
 .tab-btn.active::before {
@@ -746,12 +766,23 @@ const getReadingTime = (text: string) => {
 }
 
 .create-note-main {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: var(--cream);
+  border: 2px solid var(--border);
+  border-radius: 28px;
   padding: 2.5rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.create-note-main::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .create-note-header {
@@ -760,34 +791,36 @@ const getReadingTime = (text: string) => {
   gap: 1.5rem;
   margin-bottom: 2.5rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid var(--border);
 }
 
 .header-icon {
   width: 56px;
   height: 56px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--beige));
   border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
+  color: var(--cream);
   flex-shrink: 0;
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
 }
 
 .header-text h3 {
-  color: #ffffff;
+  color: var(--sage);
   font-size: 1.75rem;
   font-weight: 700;
+  font-family: "Playfair Display", serif;
   margin: 0 0 0.5rem 0;
   letter-spacing: -0.02em;
 }
 
 .header-text p {
-  color: #94a3b8;
+  color: rgba(162, 175, 155, 0.8);
   margin: 0;
   font-size: 1rem;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -813,32 +846,35 @@ const getReadingTime = (text: string) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  color: #4a5568;
+  color: var(--sage);
   font-weight: 600;
+  font-family: "Inter", sans-serif;
   font-size: 0.95rem;
 }
 
 .input-label svg {
-  color: #667eea;
+  color: var(--sage);
 }
 
 .modern-input,
 .modern-select {
   width: 100%;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--beige);
   border-radius: 12px;
   font-size: 1rem;
+  font-family: "Inter", sans-serif;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--light-gray);
+  color: var(--sage);
 }
 
 .modern-input:focus,
 .modern-select:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  border-color: var(--sage);
+  background: var(--cream);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.2);
 }
 
 .textarea-container {
@@ -848,22 +884,23 @@ const getReadingTime = (text: string) => {
 .modern-textarea {
   width: 100%;
   padding: 1rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--beige);
   border-radius: 12px;
   font-size: 1rem;
+  font-family: "Inter", sans-serif;
   resize: vertical;
   min-height: 200px;
   transition: all 0.2s ease;
-  background: rgba(255, 255, 255, 0.05);
-  font-family: inherit;
+  background: var(--light-gray);
+  color: var(--sage);
   line-height: 1.6;
 }
 
 .modern-textarea:focus {
   outline: none;
-  border-color: #3b82f6;
-  background: rgba(255, 255, 255, 0.15);
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.2);
+  border-color: var(--sage);
+  background: var(--cream);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.2);
 }
 
 .character-count {
@@ -871,17 +908,19 @@ const getReadingTime = (text: string) => {
   justify-content: flex-end;
   margin-top: 0.5rem;
   font-size: 0.875rem;
-  color: #718096;
+  font-family: "Inter", sans-serif;
+  color: rgba(162, 175, 155, 0.8);
 }
 
 .character-count .near-limit {
-  color: #e53e3e;
+  color: #dc3545;
   font-weight: 600;
 }
 
 .help-text {
-  color: #718096;
+  color: rgba(162, 175, 155, 0.8);
   font-size: 0.875rem;
+  font-family: "Inter", sans-serif;
   margin: 0;
   font-style: italic;
 }
@@ -899,19 +938,21 @@ const getReadingTime = (text: string) => {
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
-  color: white;
+  background: linear-gradient(135deg, var(--sage), var(--beige));
+  color: var(--cream);
   border: none;
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
 }
 
 .primary-btn:hover:not(:disabled) {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(162, 175, 155, 0.3);
 }
 
 .primary-btn:disabled {
@@ -926,19 +967,20 @@ const getReadingTime = (text: string) => {
   justify-content: center;
   gap: 0.5rem;
   padding: 1rem 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-  color: #4a5568;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  color: var(--sage);
+  border: 2px solid var(--beige);
   border-radius: 12px;
   font-size: 1rem;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
   cursor: pointer;
   transition: all 0.2s ease;
 }
 
 .secondary-btn:hover:not(:disabled) {
-  background: #edf2f7;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--beige);
+  border-color: var(--sage);
 }
 
 .loading-spinner-small {
@@ -960,12 +1002,11 @@ const getReadingTime = (text: string) => {
 .tips-card,
 .preview-card,
 .stats-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 16px;
   padding: 2rem;
-  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.2);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
   transition: all 0.3s ease;
 }
 
@@ -973,8 +1014,8 @@ const getReadingTime = (text: string) => {
 .preview-card:hover,
 .stats-card:hover {
   transform: translateY(-4px);
-  box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 16px 64px rgba(162, 175, 155, 0.2);
+  border-color: var(--sage);
 }
 
 .tips-header,
@@ -989,16 +1030,17 @@ const getReadingTime = (text: string) => {
 .tips-header h4,
 .preview-header h4,
 .stats-header h4 {
-  color: #2d3748;
+  color: var(--sage);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
   margin: 0;
 }
 
 .tips-header svg,
 .preview-header svg,
 .stats-header svg {
-  color: #667eea;
+  color: var(--sage);
 }
 
 .tips-list {
@@ -1009,10 +1051,11 @@ const getReadingTime = (text: string) => {
 
 .tips-list li {
   padding: 0.5rem 0;
-  color: #4a5568;
+  color: rgba(162, 175, 155, 0.8);
   font-size: 0.9rem;
+  font-family: "Inter", sans-serif;
   line-height: 1.5;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--beige);
   position: relative;
   padding-left: 1.5rem;
 }
@@ -1023,22 +1066,24 @@ const getReadingTime = (text: string) => {
 
 .tips-list li::before {
   content: "•";
-  color: #667eea;
+  color: var(--sage);
   position: absolute;
   left: 0;
   font-weight: bold;
 }
 
 .preview-content h5 {
-  color: #2d3748;
+  color: var(--sage);
   font-size: 1rem;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
   margin: 0 0 0.5rem 0;
 }
 
 .preview-content p {
-  color: #4a5568;
+  color: rgba(162, 175, 155, 0.8);
   font-size: 0.9rem;
+  font-family: "Inter", sans-serif;
   line-height: 1.5;
   margin: 0;
 }
@@ -1052,13 +1097,13 @@ const getReadingTime = (text: string) => {
 .stat-item {
   text-align: center;
   padding: 0.75rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--light-gray);
   border-radius: 8px;
 }
 
 .stat-value {
   display: block;
-  color: #667eea;
+  color: var(--sage);
   font-size: 1.25rem;
   font-weight: 700;
   margin-bottom: 0.25rem;
@@ -1165,13 +1210,13 @@ const getReadingTime = (text: string) => {
 }
 
 .process-option.active {
-  border-color: #667eea;
+  border-color: var(--sage);
   background: linear-gradient(
     135deg,
     rgba(255, 255, 255, 0.05) 0%,
     rgba(255, 255, 255, 0.1) 100%
   );
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .process-option:disabled {
@@ -1200,7 +1245,7 @@ const getReadingTime = (text: string) => {
 }
 
 .process-option.active .option-icon {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--accent) 100%);
   color: white;
 }
 
@@ -1242,7 +1287,7 @@ const getReadingTime = (text: string) => {
 }
 
 .process-option.active .option-title {
-  color: #667eea;
+  color: var(--sage);
 }
 
 /* Enhanced Messages */
@@ -1348,7 +1393,7 @@ const getReadingTime = (text: string) => {
   width: 40px;
   height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid #667eea;
+  border-top: 3px solid var(--sage);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin-bottom: 1rem;
@@ -1387,7 +1432,7 @@ const getReadingTime = (text: string) => {
 }
 
 .create-first-btn {
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--accent) 100%);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -1423,7 +1468,7 @@ const getReadingTime = (text: string) => {
 .note-card:hover {
   transform: translateY(-6px);
   box-shadow: 0 16px 64px rgba(0, 0, 0, 0.3);
-  border-color: rgba(59, 130, 246, 0.4);
+  border-color: rgba(162, 175, 155, 0.4);
   background: rgba(59, 130, 246, 0.1);
 }
 
@@ -1610,7 +1655,7 @@ const getReadingTime = (text: string) => {
 .note-card.selected {
   transform: translateY(-2px);
   box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
-  border: 2px solid #4299e1;
+  border: 2px solid var(--sage);
 }
 
 .note-selection {
@@ -1650,12 +1695,12 @@ const getReadingTime = (text: string) => {
 }
 
 .checkbox-container:hover input ~ .checkmark {
-  border-color: #4299e1;
+  border-color: var(--sage);
 }
 
 .checkbox-container input:checked ~ .checkmark {
-  background-color: #4299e1;
-  border-color: #4299e1;
+  background-color: var(--sage);
+  border-color: var(--sage);
 }
 
 .checkmark:after {
@@ -1775,8 +1820,8 @@ const getReadingTime = (text: string) => {
 
 .deck-select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .form-hint {
@@ -1841,7 +1886,7 @@ const getReadingTime = (text: string) => {
 
 .category-tag {
   display: inline-block;
-  background: #4299e1;
+  background: var(--sage);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 20px;
@@ -1885,12 +1930,12 @@ const getReadingTime = (text: string) => {
 }
 
 .btn-primary {
-  background: #4299e1;
+  background: var(--sage);
   color: white;
 }
 
 .btn-primary:hover:not(:disabled) {
-  background: #3182ce;
+  background: var(--sage);
 }
 
 .btn-primary:disabled {

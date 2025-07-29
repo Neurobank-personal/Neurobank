@@ -103,7 +103,7 @@
         v-for="folder in folders"
         :key="folder.id"
         class="folder-card"
-        :style="{ borderLeftColor: folder.color || '#6b7280' }"
+        :style="{ borderColor: folder.color || '#6b7280' }"
         @click="$emit('viewFolder', folder.id)"
       >
         <div class="folder-header">
@@ -269,8 +269,8 @@ const colorOptions = [
   "#eab308",
   "#22c55e",
   "#06b6d4",
-  "#3b82f6",
-  "#8b5cf6",
+  "var(--sage)",
+  "var(--accent)",
   "#ec4899",
 ];
 
@@ -409,15 +409,17 @@ const formatDate = (date: Date) => {
 .note-folder-overview-header h2 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
   margin: 0;
   letter-spacing: -0.02em;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0.5rem 0 0 0;
   font-size: 1.125rem;
+  font-family: "Inter", sans-serif;
   font-weight: 400;
 }
 
@@ -425,7 +427,7 @@ const formatDate = (date: Date) => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
   padding: 1rem 1.5rem;
@@ -433,12 +435,12 @@ const formatDate = (date: Date) => {
   cursor: pointer;
   font-weight: 600;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
 }
 
 /* Loading State */
@@ -452,7 +454,7 @@ const formatDate = (date: Date) => {
   width: 3rem;
   height: 3rem;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid #667eea;
+  border-top: 3px solid var(--sage);
   border-radius: 50%;
   margin: 0 auto 1rem;
   animation: spin 1s linear infinite;
@@ -483,7 +485,7 @@ const formatDate = (date: Date) => {
 
 .retry-btn,
 .create-btn {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -502,15 +504,15 @@ const formatDate = (date: Date) => {
 }
 
 .folder-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 24px;
   padding: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
 }
 
 .folder-card::before {
@@ -536,13 +538,13 @@ const formatDate = (date: Date) => {
 
 .folder-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.2);
+  border-color: var(--sage);
 }
 
 .folder-card.general-collection {
-  background: rgba(15, 23, 42, 0.8);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, var(--cream), var(--beige));
+  border-color: var(--sage);
 }
 
 .folder-header {
@@ -559,16 +561,17 @@ const formatDate = (date: Date) => {
   display: flex;
   align-items: center;
   justify-content: center;
-  color: white;
   font-size: 1.5rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: var(--beige);
+  color: white;
   position: relative;
   z-index: 1;
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
+  font-weight: 600;
 }
 
 .folder-icon.general-icon {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
 }
 
@@ -604,7 +607,7 @@ const formatDate = (date: Date) => {
 }
 
 .note-count {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
@@ -614,17 +617,19 @@ const formatDate = (date: Date) => {
 
 .folder-content h3 {
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
   margin: 0 0 0.5rem 0;
   position: relative;
   z-index: 1;
 }
 
 .folder-content p {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0;
   font-size: 0.875rem;
+  font-family: "Inter", sans-serif;
   line-height: 1.4;
   position: relative;
   z-index: 1;
@@ -657,16 +662,15 @@ const formatDate = (date: Date) => {
 }
 
 .modal-content {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 20px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.2);
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
-  color: #ffffff;
+  color: var(--sage);
 }
 
 .modal-header {
@@ -731,8 +735,8 @@ const formatDate = (date: Date) => {
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .color-picker {
@@ -766,7 +770,7 @@ const formatDate = (date: Date) => {
 }
 
 .save-btn {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;

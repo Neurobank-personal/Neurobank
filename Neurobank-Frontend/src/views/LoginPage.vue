@@ -292,54 +292,98 @@ const goToRegister = () => {
 </template>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap");
 
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    var(--beige) 50%,
+    var(--light-gray) 100%
+  );
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.app-layout::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: radial-gradient(
+      circle at 20% 80%,
+      rgba(162, 175, 155, 0.1) 0%,
+      transparent 50%
+    ),
+    radial-gradient(
+      circle at 80% 20%,
+      rgba(104, 185, 132, 0.1) 0%,
+      transparent 50%
+    );
+  z-index: 0;
 }
 
 .main-content {
   flex: 1;
   display: flex;
   flex-direction: column;
+  position: relative;
+  z-index: 1;
 }
 
 .header {
-  padding: 2rem 0 1rem 4rem;
+  padding: 3rem 0 2rem 4rem;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .brain-icon {
-  width: 84px;
-  height: 84px;
+  width: 96px;
+  height: 96px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  border-radius: 24px;
+  padding: 16px;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
+  transition: all 0.3s ease;
+}
+
+.brain-icon:hover {
+  transform: scale(1.05) rotate(2deg);
+  box-shadow: 0 12px 40px rgba(162, 175, 155, 0.4);
 }
 
 .brain-icon img {
-  width: 84px;
-  height: 84px;
+  width: 64px;
+  height: 64px;
   object-fit: contain;
+  filter: brightness(0) invert(1);
 }
 
 .logo h1 {
-  font-size: 2rem;
+  font-size: 2.5rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--text-dark);
   margin: 0;
-  letter-spacing: -0.5px;
-  font-family: "Inter", sans-serif;
+  letter-spacing: -0.02em;
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .login-section {
@@ -348,27 +392,45 @@ const goToRegister = () => {
   justify-content: flex-start;
   align-items: flex-start;
   padding: 2rem 4rem;
-  padding-top: 4rem;
+  padding-top: 2rem;
 }
 
 .login-content {
   width: 100%;
-  max-width: 480px;
+  max-width: 520px;
+  background: rgba(250, 249, 238, 0.8);
+  backdrop-filter: blur(20px);
+  border: 2px solid var(--border);
+  border-radius: 32px;
+  padding: 3rem;
+  box-shadow: 0 20px 60px rgba(162, 175, 155, 0.15);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .login-content h2 {
-  font-size: 3rem;
-  font-weight: 400;
-  color: #1f2937;
+  font-size: 3.5rem;
+  font-weight: 600;
+  color: var(--text-dark);
   margin: 0 0 0.5rem 0;
-  letter-spacing: -1px;
-  font-family: "Inter", sans-serif;
+  letter-spacing: -0.02em;
+  font-family: "Playfair Display", serif;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--text-medium);
   margin-bottom: 3rem;
-  font-size: 1.125rem;
+  font-size: 1.25rem;
   line-height: 1.5;
   font-weight: 400;
   font-family: "Inter", sans-serif;
@@ -377,7 +439,7 @@ const goToRegister = () => {
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 1.5rem;
+  gap: 2rem;
 }
 
 .input-group {
@@ -386,73 +448,104 @@ const goToRegister = () => {
 
 .input-group input {
   width: 100%;
-  padding: 1rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 12px;
+  padding: 1.25rem 1.5rem;
+  border: 2px solid var(--border);
+  border-radius: 16px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  color: var(--text-dark);
   box-sizing: border-box;
-  transition: all 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: "Inter", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
+}
+
+.input-group input::placeholder {
+  color: var(--text-light);
 }
 
 .input-group input:focus {
   outline: none;
-  border-color: #3b82f6;
-  box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
+  transform: translateY(-1px);
 }
 
 .input-group input:disabled {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border-color: var(--border);
   opacity: 0.6;
   cursor: not-allowed;
 }
 
 .forgot-password {
   position: absolute;
-  right: 1.25rem;
+  right: 1.5rem;
   top: 50%;
   transform: translateY(-50%);
 }
 
 .forgot-link {
-  color: #6b7280;
+  color: var(--text-light);
   text-decoration: none;
   font-size: 0.9rem;
   font-family: "Inter", sans-serif;
-  font-weight: 400;
+  font-weight: 500;
+  transition: color 0.3s ease;
 }
 
 .forgot-link:hover {
-  color: #3b82f6;
+  color: var(--sage);
 }
 
 .login-btn {
   width: 100%;
-  padding: 1rem 1.25rem;
-  background-color: #3b82f6;
+  padding: 1.25rem 1.5rem;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
-  border-radius: 12px;
-  font-size: 1rem;
-  font-weight: 500;
+  border-radius: 16px;
+  font-size: 1.1rem;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 1rem;
-  transition: background-color 0.2s ease;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   font-family: "Inter", sans-serif;
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.login-btn::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
 }
 
 .login-btn:hover:not(:disabled) {
-  background-color: #2563eb;
+  transform: translateY(-2px);
+  box-shadow: 0 12px 32px rgba(162, 175, 155, 0.4);
+}
+
+.login-btn:hover:not(:disabled)::before {
+  left: 100%;
 }
 
 .login-btn:disabled {
-  background-color: #9ca3af;
+  background: var(--text-light);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .register-link {
@@ -461,7 +554,7 @@ const goToRegister = () => {
 }
 
 .register-link p {
-  color: #6b7280;
+  color: var(--text-medium);
   margin: 0;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
@@ -471,65 +564,82 @@ const goToRegister = () => {
 .link-btn {
   background: none;
   border: none;
-  color: #3b82f6;
+  color: var(--sage);
   cursor: pointer;
   font-size: inherit;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   font-family: "Inter", sans-serif;
+  transition: all 0.3s ease;
+  position: relative;
 }
 
-.link-btn:hover:not(:disabled) {
-  text-decoration: underline;
+.link-btn::after {
+  content: "";
+  position: absolute;
+  bottom: -2px;
+  left: 0;
+  width: 0;
+  height: 2px;
+  background: var(--sage);
+  transition: width 0.3s ease;
+}
+
+.link-btn:hover:not(:disabled)::after {
+  width: 100%;
 }
 
 .link-btn:disabled {
-  color: #9ca3af;
+  color: var(--text-light);
   cursor: not-allowed;
 }
 
 .error-message {
   background: rgba(239, 68, 68, 0.1);
-  border: 1px solid rgba(239, 68, 68, 0.3);
+  border: 2px solid rgba(239, 68, 68, 0.3);
   color: #dc2626;
-  padding: 0.75rem 1rem;
-  border-radius: 8px;
-  margin-bottom: 1.5rem;
-  border: 1px solid rgba(239, 68, 68, 0.3);
-  font-size: 0.9rem;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
+  margin-bottom: 2rem;
+  font-size: 0.95rem;
   font-family: "Inter", sans-serif;
+  font-weight: 500;
 }
 
 /* Sidebar */
 .sidebar {
-  width: 420px;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  width: 480px;
+  background: rgba(220, 207, 192, 0.4);
+  backdrop-filter: blur(20px);
+  border-left: 2px solid var(--border);
   padding: 2rem;
-  border: none;
   position: relative;
   height: 100vh;
   overflow: hidden;
+  z-index: 1;
 }
 
 .floating-icon {
-  background-color: transparent;
-  border: none;
+  background-color: rgba(250, 249, 238, 0.8);
+  border: 2px solid var(--border);
   border-radius: 50%;
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.4s ease;
-  box-shadow: none;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.2);
 }
 
 .floating-icon:hover {
-  background-color: transparent;
-  border: none;
-  transform: scale(1.1);
-  box-shadow: none;
+  background-color: var(--sage);
+  border-color: var(--sage);
+  transform: scale(1.1) rotate(5deg);
+  box-shadow: 0 12px 32px rgba(162, 175, 155, 0.3);
+}
+
+.floating-icon:hover svg {
+  stroke: white;
 }
 
 .small-icon {
@@ -599,10 +709,19 @@ const goToRegister = () => {
   }
 }
 
+/* Enhanced floating animation */
+.floating-icon {
+  animation-play-state: running;
+}
+
+.floating-icon:hover {
+  animation-play-state: paused;
+}
+
 /* Responsive */
 @media (max-width: 1024px) {
   .sidebar {
-    width: 340px;
+    width: 380px;
     padding: 1.5rem;
   }
 
@@ -627,7 +746,11 @@ const goToRegister = () => {
 
   .login-section {
     padding: 2rem;
-    padding-top: 3rem;
+    padding-top: 2rem;
+  }
+
+  .login-content {
+    padding: 2.5rem;
   }
 }
 
@@ -638,20 +761,25 @@ const goToRegister = () => {
 
   .sidebar {
     width: 100%;
-    height: 120px;
-    border: none;
-    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    height: 140px;
+    border-left: none;
+    border-top: 2px solid var(--border);
     order: 2;
     padding: 1rem;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
+    background: rgba(220, 207, 192, 0.6);
+    backdrop-filter: blur(20px);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex-wrap: wrap;
+    gap: 1rem;
   }
 
   .floating-icon {
     position: relative !important;
     animation: none;
     display: inline-flex;
-    margin: 0.5rem;
+    margin: 0;
   }
 
   .small-icon {
@@ -673,17 +801,32 @@ const goToRegister = () => {
     padding: 1.5rem 1rem 0.5rem 1rem;
   }
 
-  .login-section {
-    padding: 1rem;
-    padding-top: 2rem;
+  .brain-icon {
+    width: 72px;
+    height: 72px;
   }
 
-  .login-content h2 {
-    font-size: 2.5rem;
+  .brain-icon img {
+    width: 48px;
+    height: 48px;
+  }
+
+  .logo h1 {
+    font-size: 2rem;
+  }
+
+  .login-section {
+    padding: 1rem;
+    padding-top: 1rem;
   }
 
   .login-content {
     max-width: 100%;
+    padding: 2rem;
+  }
+
+  .login-content h2 {
+    font-size: 2.5rem;
   }
 }
 </style>

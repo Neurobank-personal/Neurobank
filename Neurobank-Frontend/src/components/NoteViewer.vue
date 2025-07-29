@@ -619,14 +619,23 @@ const getReadingTime = (text: string) => {
 
 <style scoped>
 .note-viewer {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--border);
+  border-radius: 24px;
+  box-shadow: 0 20px 40px var(--shadow);
   margin-bottom: 2rem;
   overflow: hidden;
+  position: relative;
+}
+
+.note-viewer::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .note-viewer-header {
@@ -634,9 +643,8 @@ const getReadingTime = (text: string) => {
   justify-content: space-between;
   align-items: center;
   padding: 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
+  border-bottom: 2px solid var(--border);
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
 }
 
 .header-left {
@@ -648,25 +656,27 @@ const getReadingTime = (text: string) => {
 .header-icon {
   width: 48px;
   height: 48px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border-radius: 12px;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   color: white;
   flex-shrink: 0;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
 }
 
 .header-text h3 {
-  color: #ffffff;
+  color: var(--text-dark);
   font-size: 1.5rem;
   font-weight: 600;
   margin: 0 0 0.25rem 0;
   line-height: 1.3;
+  font-family: "Playfair Display", serif;
 }
 
 .header-text p {
-  color: #94a3b8;
+  color: var(--text-light);
   margin: 0;
   font-size: 0.95rem;
 }
@@ -690,35 +700,41 @@ const getReadingTime = (text: string) => {
 }
 
 .edit-btn {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .edit-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(162, 175, 155, 0.3);
 }
 
 .close-btn {
-  background: rgba(255, 255, 255, 0.1);
-  color: #4a5568;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--beige);
+  color: var(--text-medium);
+  border: 2px solid var(--border);
+  transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  background: #edf2f7;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border-color: var(--sage);
+  transform: translateY(-2px);
 }
 
 .delete-btn {
   background: linear-gradient(135deg, #e53e3e 0%, #c53030 100%);
   color: white;
   margin-right: 0.5rem;
+  border: none;
+  transition: all 0.3s ease;
 }
 
 .delete-btn:hover:not(:disabled) {
-  transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(229, 62, 62, 0.3);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(229, 62, 62, 0.3);
 }
 
 .action-btn:disabled {
@@ -740,7 +756,7 @@ const getReadingTime = (text: string) => {
 }
 
 .ai-section {
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid var(--border);
   padding-top: 2rem;
 }
 
@@ -758,25 +774,27 @@ const getReadingTime = (text: string) => {
 }
 
 .section-title svg {
-  color: #667eea;
+  color: var(--sage);
 }
 
 .section-title h4 {
-  color: #ffffff;
+  color: var(--text-dark);
   font-size: 1.25rem;
   font-weight: 600;
   margin: 0;
+  font-family: "Playfair Display", serif;
 }
 
 .ai-badge {
-  background: linear-gradient(135deg, #ed8936 0%, #dd6b20 100%);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
-  padding: 0.25rem 0.75rem;
+  padding: 0.5rem 1rem;
   border-radius: 20px;
   font-size: 0.75rem;
   font-weight: 600;
   text-transform: uppercase;
   letter-spacing: 0.5px;
+  font-family: "Inter", sans-serif;
 }
 
 .section-actions {
@@ -788,20 +806,22 @@ const getReadingTime = (text: string) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  padding: 0.5rem 0.75rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: #4a5568;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 6px;
+  padding: 0.75rem 1rem;
+  background: var(--beige);
+  color: var(--text-medium);
+  border: 2px solid var(--border);
+  border-radius: 12px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
 }
 
 .edit-section-btn:hover:not(:disabled) {
-  background: #edf2f7;
-  border-color: rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border-color: var(--sage);
+  transform: translateY(-2px);
 }
 
 .edit-section-btn:disabled {
@@ -810,44 +830,50 @@ const getReadingTime = (text: string) => {
 }
 
 .content-display {
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border-radius: 16px;
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
+  border-radius: 24px;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border);
   transition: all 0.3s ease;
+  box-shadow: 0 4px 16px var(--shadow);
 }
 
 .content-display:hover {
-  background: rgba(255, 255, 255, 0.08);
+  border-color: var(--sage);
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.2);
 }
 
 .ai-content {
-  background: rgba(251, 146, 60, 0.1);
-  backdrop-filter: blur(10px);
-  border-left: 4px solid #f59e0b;
-  border-radius: 16px;
+  background: linear-gradient(
+    135deg,
+    rgba(104, 185, 132, 0.1),
+    rgba(162, 175, 155, 0.1)
+  );
+  border-left: 4px solid var(--accent);
+  border-radius: 24px;
 }
 
 .content-text {
-  color: #ffffff;
+  color: var(--text-dark);
   line-height: 1.7;
   font-size: 1rem;
   white-space: pre-wrap;
   margin-bottom: 1rem;
+  font-family: "Inter", sans-serif;
 }
 
 .ai-content .content-text {
-  color: #fbbf24;
+  color: var(--text-dark);
 }
 
 .content-meta {
   display: flex;
   gap: 1rem;
-  color: #94a3b8;
+  color: var(--text-light);
   font-size: 0.875rem;
   padding-top: 1rem;
-  border-top: 1px solid rgba(255, 255, 255, 0.1);
+  border-top: 2px solid var(--border);
+  font-family: "Inter", sans-serif;
 }
 
 .edit-form {
@@ -856,8 +882,8 @@ const getReadingTime = (text: string) => {
   border: 1px solid rgba(255, 255, 255, 0.1);
   border-radius: 12px;
   padding: 1.5rem;
-  border: 2px solid #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border: 2px solid var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
 }
 
 .form-group {
@@ -892,11 +918,11 @@ const getReadingTime = (text: string) => {
 .form-input:focus,
 .form-textarea:focus {
   outline: none;
-  border-color: #667eea;
+  border-color: var(--sage);
   background: rgba(15, 23, 42, 0.7);
   backdrop-filter: blur(20px);
   border: 1px solid rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .form-textarea {

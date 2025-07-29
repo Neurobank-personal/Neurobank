@@ -92,7 +92,7 @@ onMounted(() => {
   justify-content: center;
   align-items: center;
   min-height: 100vh;
-  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--accent) 100%);
   opacity: 0;
   transition: opacity 0.6s ease-in-out;
 }
@@ -138,7 +138,7 @@ onMounted(() => {
 .floating-404 {
   font-size: 6rem;
   font-weight: bold;
-  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, #45b7d1, #96ceb4);
+  background: linear-gradient(45deg, #ff6b6b, #4ecdc4, var(--accent), #96ceb4);
   background-size: 300% 300%;
   background-clip: text;
   -webkit-background-clip: text;
@@ -325,7 +325,7 @@ onMounted(() => {
 }
 
 .login-btn {
-  background: linear-gradient(45deg, #007bff, #0056b3);
+  background: linear-gradient(45deg, var(--sage), var(--text-dark));
   color: white;
 }
 
@@ -364,7 +364,7 @@ onMounted(() => {
 }
 
 .home-btn {
-  background: linear-gradient(45deg, #17a2b8, #138496);
+  background: linear-gradient(45deg, var(--sage), var(--text-dark));
   color: white;
 }
 

@@ -43,62 +43,117 @@ const navigateToSection = (section: string) => {
 
 <template>
   <div class="app-layout">
-    <!-- Sidebar Navigation -->
-    <AppSidebar
+    <!-- Top Navigation Bar -->
+    <AppNavbar
       :isOpen="sidebarOpen"
-      :currentSection="'home'"
+      @logout="handleLogout"
       @toggle="toggleSidebar"
-      @navigate="navigateToSection"
     />
 
-    <!-- Main Content -->
-    <div class="main-content" :class="{ 'sidebar-closed': !sidebarOpen }">
-      <!-- Header -->
-      <AppNavbar :isOpen="sidebarOpen" @logout="handleLogout" />
+    <!-- Content with Sidebar -->
+    <div class="content-layout">
+      <!-- Sidebar Navigation -->
+      <AppSidebar
+        :isOpen="sidebarOpen"
+        :currentSection="'home'"
+        @toggle="toggleSidebar"
+        @navigate="navigateToSection"
+      />
 
-      <!-- Dynamic Content Area -->
-      <div class="content-area">
-        <HomeComponent @navigate="navigateToSection" />
+      <!-- Main Content -->
+      <div class="main-content" :class="{ 'sidebar-closed': !sidebarOpen }">
+        <!-- Dynamic Content Area -->
+        <div class="content-area">
+          <HomeComponent @navigate="navigateToSection" />
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <style scoped>
-@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
+@import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Playfair+Display:wght@400;500;600;700&display=swap");
 
 .app-layout {
   display: flex;
+  flex-direction: column;
   min-height: 100vh;
-  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  background: linear-gradient(135deg, var(--cream) 0%, var(--light-gray) 100%);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
+}
+
+/* Content Layout with Sidebar */
+.content-layout {
+  position: relative;
+  flex: 1;
+  min-height: calc(100vh - 80px); /* Subtract navbar height */
 }
 
 /* Main Content */
 .main-content {
   flex: 1;
-  margin-left: 280px;
   display: flex;
   flex-direction: column;
-  transition: margin-left 0.3s ease;
+  transition: margin-left 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  min-height: 100%;
+  margin-left: 280px; /* Account for fixed sidebar */
+  padding: 2rem;
+  overflow-y: auto;
+  max-height: calc(100vh - 80px);
 }
 
 .main-content.sidebar-closed {
-  margin-left: 80px;
+  margin-left: 80px; /* Account for closed sidebar */
+}
+
+@media (max-width: 768px) {
+  .main-content {
+    margin-left: 0;
+    padding: 1rem;
+  }
+
+  .main-content.sidebar-closed {
+    margin-left: 0;
+  }
 }
 
 /* Content Area */
 .content-area {
   flex: 1;
   overflow-y: auto;
-  padding: 2rem;
+  padding: 2.5rem;
+  background: transparent;
+}
+
+/* Custom scrollbar for content area */
+.content-area::-webkit-scrollbar {
+  width: 8px;
+}
+
+.content-area::-webkit-scrollbar-track {
+  background: var(--light-gray);
+  border-radius: 4px;
+}
+
+.content-area::-webkit-scrollbar-thumb {
+  background: var(--sage);
+  border-radius: 4px;
+  border: 1px solid var(--light-gray);
+}
+
+.content-area::-webkit-scrollbar-thumb:hover {
+  background: #8a9585;
 }
 
 /* Responsive Design */
 @media (max-width: 1024px) {
   .main-content.sidebar-closed {
     margin-left: 80px;
+  }
+
+  .content-area {
+    padding: 2rem;
   }
 }
 
@@ -110,5 +165,15 @@ const navigateToSection = (section: string) => {
   .main-content.sidebar-closed {
     margin-left: 0;
   }
+
+  .content-area {
+    padding: 1.5rem;
+  }
+}
+
+/* Smooth animations */
+.app-layout * {
+  transition: background-color 0.3s ease, border-color 0.3s ease,
+    color 0.3s ease;
 }
 </style>

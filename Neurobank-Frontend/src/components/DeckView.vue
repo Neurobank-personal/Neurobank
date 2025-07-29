@@ -21,10 +21,11 @@
           <div
             class="deck-icon"
             :style="{
-              backgroundColor: deck?.color || 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: deck?.color || 'var(--beige)',
+              color: 'white',
             }"
           >
-            {{ deckId ? "📋" : "🎯" }}
+            {{ deckId ? deck?.name?.charAt(0)?.toUpperCase() || "📋" : "🎯" }}
           </div>
           <div>
             <h2>{{ deck?.name || "General Collection" }}</h2>
@@ -731,8 +732,8 @@ const formatDate = (date: Date) => {
 }
 
 .back-btn:hover {
-  background: rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
+  background: rgba(162, 175, 155, 0.2);
+  border-color: rgba(162, 175, 155, 0.3);
   transform: translateY(-2px);
 }
 
@@ -750,18 +751,26 @@ const formatDate = (date: Date) => {
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  transition: all 0.3s ease;
+  font-weight: 600;
+}
+
+.deck-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
 }
 
 .deck-title-section h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sage);
   margin: 0;
 }
 
 .deck-description {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0.25rem 0 0 0;
   font-size: 1rem;
 }
@@ -786,25 +795,28 @@ const formatDate = (date: Date) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  color: white;
+  border: none;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.05);
-  border-color: #94a3b8;
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
 }
 
 /* Stats */
@@ -816,10 +828,13 @@ const formatDate = (date: Date) => {
 }
 
 .stat-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 2px solid var(--beige);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
   padding: 1.5rem;
   text-align: center;
@@ -828,31 +843,35 @@ const formatDate = (date: Date) => {
 }
 
 .stat-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-color: var(--sage);
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15);
+  transform: translateY(-2px);
 }
 
 .stat-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sage);
   margin-bottom: 0.5rem;
 }
 
 .stat-label {
-  color: #94a3b8;
+  color: var(--text-medium);
   font-size: 0.875rem;
   font-weight: 500;
 }
 
 /* Cards List */
 .flashcards-list {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 2px solid var(--beige);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .list-header {
@@ -863,7 +882,7 @@ const formatDate = (date: Date) => {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--sage);
 }
 
 .flashcards-grid {
@@ -872,17 +891,21 @@ const formatDate = (date: Date) => {
 }
 
 .flashcard-item {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    rgba(255, 255, 255, 0.9) 0%,
+    var(--light-gray) 100%
+  );
+  border: 1px solid var(--beige);
   border-radius: 0.75rem;
   padding: 1.5rem;
   transition: all 0.2s ease;
 }
 
 .flashcard-item:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
+  transform: translateY(-1px);
 }
 
 .flashcard-item-header {
@@ -923,8 +946,8 @@ const formatDate = (date: Date) => {
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #334155;
+  background: rgba(162, 175, 155, 0.1);
+  color: var(--text-dark);
 }
 
 .action-btn.delete:hover {
@@ -933,8 +956,8 @@ const formatDate = (date: Date) => {
 }
 
 .action-btn.reset:hover {
-  color: #667eea;
-  background: #eef2ff;
+  color: var(--sage);
+  background: rgba(162, 175, 155, 0.15);
 }
 
 .flashcard-item-content {
@@ -945,11 +968,12 @@ const formatDate = (date: Date) => {
 .answer {
   margin-bottom: 0.75rem;
   line-height: 1.5;
+  color: var(--text-dark);
 }
 
 .question strong,
 .answer strong {
-  color: #667eea;
+  color: var(--sage);
 }
 
 .flashcard-item-footer {
@@ -967,7 +991,7 @@ const formatDate = (date: Date) => {
 
 .review-info {
   font-size: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-medium);
 }
 
 .next-review {
@@ -1005,7 +1029,7 @@ const formatDate = (date: Date) => {
 }
 
 .status-badge.remaining {
-  background: #667eea;
+  background: var(--sage);
   color: white;
 }
 
@@ -1021,7 +1045,7 @@ const formatDate = (date: Date) => {
   width: 40px;
   height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 4px solid #667eea;
+  border-top: 4px solid var(--sage);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -1044,14 +1068,22 @@ const formatDate = (date: Date) => {
 
 .retry-btn,
 .create-btn {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
   margin-top: 1rem;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+  transition: all 0.3s ease;
+}
+
+.retry-btn:hover,
+.create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
 }
 
 /* Modal Styles */
@@ -1070,9 +1102,13 @@ const formatDate = (date: Date) => {
 }
 
 .modal-content {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    rgba(255, 255, 255, 0.95) 100%
+  );
+  border: 2px solid var(--beige);
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
   border-radius: 1rem;
   width: 100%;
   max-width: 600px;
@@ -1085,14 +1121,14 @@ const formatDate = (date: Date) => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 1px solid var(--beige);
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 1.25rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--sage);
 }
 
 .close-btn {
@@ -1100,7 +1136,7 @@ const formatDate = (date: Date) => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #94a3b8;
+  color: var(--text-medium);
   padding: 0;
   width: 2rem;
   height: 2rem;
@@ -1111,7 +1147,8 @@ const formatDate = (date: Date) => {
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: rgba(162, 175, 155, 0.1);
+  color: var(--text-dark);
 }
 
 .card-form {
@@ -1126,31 +1163,34 @@ const formatDate = (date: Date) => {
   display: block;
   margin-bottom: 0.5rem;
   font-weight: 500;
-  color: #ffffff;
+  color: var(--text-dark);
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--beige);
   border-radius: 0.5rem;
   font-size: 1rem;
   transition: border-color 0.2s ease;
   font-family: inherit;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .categories-input {
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  border: 1px solid var(--beige);
   border-radius: 0.5rem;
   padding: 0.75rem;
+  background: rgba(255, 255, 255, 0.9);
 }
 
 .selected-categories {
@@ -1183,13 +1223,15 @@ const formatDate = (date: Date) => {
 
 .add-category input {
   flex: 1;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 1px solid var(--beige);
   border-radius: 0.25rem;
   padding: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  color: var(--text-dark);
 }
 
 .add-category button {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.5rem 1rem;
@@ -1205,25 +1247,31 @@ const formatDate = (date: Date) => {
 }
 
 .save-btn {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+  transition: all 0.3s ease;
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
 }
 
 .save-btn:disabled {
-  background: #94a3b8;
+  background: var(--text-medium);
   cursor: not-allowed;
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--beige);
+  color: var(--text-medium);
   padding: 0.75rem 1.5rem;
   border-radius: 0.5rem;
   cursor: pointer;

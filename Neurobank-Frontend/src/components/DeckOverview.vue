@@ -101,7 +101,7 @@
         v-for="deck in decks"
         :key="deck.id"
         class="deck-card"
-        :style="{ borderLeftColor: deck.color || '#6b7280' }"
+        :style="{ borderColor: deck.color || '#6b7280' }"
         @click="$emit('viewDeck', deck.id)"
       >
         <div class="deck-header">
@@ -263,8 +263,8 @@ const colorOptions = [
   "#eab308",
   "#22c55e",
   "#06b6d4",
-  "#3b82f6",
-  "#8b5cf6",
+  "var(--sage)",
+  "var(--accent)",
   "#ec4899",
 ];
 
@@ -397,40 +397,87 @@ const formatDate = (date: Date) => {
   margin-bottom: 3rem;
   flex-wrap: wrap;
   gap: 1rem;
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--cream), var(--beige));
+  border-radius: 32px;
+  border: 2px solid var(--border);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.deck-overview-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .deck-overview-header h2 {
   font-size: 2.5rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-dark);
   margin: 0;
   letter-spacing: -0.02em;
+  font-family: "Playfair Display", serif;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .subtitle {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0.5rem 0 0 0;
   font-size: 1.125rem;
   font-weight: 400;
+  font-family: "Inter", sans-serif;
 }
 
 .btn-primary {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.75rem;
+  padding: 1rem 1.5rem;
+  border-radius: 16px;
   cursor: pointer;
-  font-weight: 500;
-  transition: all 0.3s ease;
+  font-weight: 600;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+  font-family: "Inter", sans-serif;
+  position: relative;
+  overflow: hidden;
+}
+
+.btn-primary::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 4px 20px rgba(102, 126, 234, 0.4);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.4);
+}
+
+.btn-primary:hover::before {
+  left: 100%;
 }
 
 /* Loading and Error States */
@@ -457,7 +504,7 @@ const formatDate = (date: Date) => {
   width: 40px;
   height: 40px;
   border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 4px solid #667eea;
+  border-top: 4px solid var(--sage);
   border-radius: 50%;
   animation: spin 1s linear infinite;
   margin: 0 auto 1rem;
@@ -488,14 +535,23 @@ const formatDate = (date: Date) => {
 
 .retry-btn,
 .create-btn {
-  background: #667eea;
-  color: white;
+  background: linear-gradient(135deg, var(--sage), var(--beige));
+  color: var(--cream);
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
   margin-top: 1rem;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
+}
+
+.retry-btn:hover,
+.create-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(162, 175, 155, 0.3);
 }
 
 /* Decks Grid */
@@ -507,15 +563,15 @@ const formatDate = (date: Date) => {
 }
 
 .deck-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 24px;
+  background: var(--cream);
+  border: 2px solid var(--beige);
+  border-radius: 16px;
   padding: 2rem;
   cursor: pointer;
   transition: all 0.3s ease;
   position: relative;
   overflow: hidden;
+  box-shadow: 0 4px 20px rgba(162, 175, 155, 0.1);
 }
 
 .deck-card::before {
@@ -527,12 +583,12 @@ const formatDate = (date: Date) => {
   bottom: 0;
   background: linear-gradient(
     135deg,
-    rgba(59, 130, 246, 0.1),
-    rgba(147, 51, 234, 0.1)
+    rgba(162, 175, 155, 0.05),
+    rgba(220, 207, 192, 0.1)
   );
   opacity: 0;
   transition: opacity 0.3s ease;
-  border-radius: 24px;
+  border-radius: 16px;
 }
 
 .deck-card:hover::before {
@@ -541,13 +597,13 @@ const formatDate = (date: Date) => {
 
 .deck-card:hover {
   transform: translateY(-8px);
-  box-shadow: 0 20px 40px rgba(59, 130, 246, 0.2);
-  border-color: rgba(59, 130, 246, 0.3);
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.2);
+  border-color: var(--sage);
 }
 
 .deck-card.general-collection {
-  background: rgba(15, 23, 42, 0.8);
-  border-color: rgba(59, 130, 246, 0.2);
+  background: linear-gradient(135deg, var(--cream), var(--beige));
+  border-color: var(--sage);
 }
 
 .deck-header {
@@ -560,21 +616,22 @@ const formatDate = (date: Date) => {
 .deck-icon {
   width: 48px;
   height: 48px;
-  border-radius: 0.75rem;
+  border-radius: 12px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  background: rgba(255, 255, 255, 0.05);
-}
-
-.deck-icon.general-icon {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: var(--beige);
   color: white;
 }
 
+.deck-icon.general-icon {
+  background: linear-gradient(135deg, var(--sage), var(--beige));
+  color: var(--cream);
+}
+
 .deck-icon.general-icon svg {
-  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 1px 2px rgba(162, 175, 155, 0.3));
 }
 
 .deck-actions {
@@ -587,42 +644,69 @@ const formatDate = (date: Date) => {
   background: transparent;
   border: none;
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
-  color: #94a3b8;
+  color: var(--sage);
   transition: all 0.2s ease;
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #334155;
+  background: var(--beige);
+  color: var(--sage);
 }
 
 .action-btn.delete:hover {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  color: #dc3545;
+  background: rgba(220, 53, 69, 0.1);
+}
+
+.edit-btn,
+.delete-btn {
+  background: transparent;
+  border: none;
+  padding: 0.5rem;
+  border-radius: 8px;
+  cursor: pointer;
+  color: var(--text-light);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.edit-btn:hover {
+  background: var(--beige);
+  color: var(--sage);
+}
+
+.delete-btn:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
 }
 
 .card-count {
-  background: #667eea;
-  color: white;
+  background: var(--sage);
+  color: var(--cream);
   padding: 0.25rem 0.75rem;
-  border-radius: 1rem;
+  border-radius: 12px;
   font-size: 0.875rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
 }
 
 .deck-content h3 {
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
   margin: 0 0 0.5rem 0;
 }
 
 .deck-content p {
-  color: #94a3b8;
+  color: rgba(162, 175, 155, 0.8);
   margin: 0;
   font-size: 0.875rem;
+  font-family: "Inter", sans-serif;
   line-height: 1.4;
 }
 
@@ -632,7 +716,8 @@ const formatDate = (date: Date) => {
   align-items: center;
   margin-top: 1rem;
   font-size: 0.875rem;
-  color: #94a3b8;
+  font-family: "Inter", sans-serif;
+  color: rgba(162, 175, 155, 0.8);
 }
 
 /* Modal Styles */
@@ -642,7 +727,8 @@ const formatDate = (date: Date) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.5);
+  background: rgba(162, 175, 155, 0.3);
+  backdrop-filter: blur(10px);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -651,14 +737,14 @@ const formatDate = (date: Date) => {
 }
 
 .modal-content {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
+  background: var(--cream);
+  border: 2px solid var(--beige);
+  border-radius: 16px;
   width: 100%;
   max-width: 500px;
   max-height: 90vh;
   overflow-y: auto;
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.2);
 }
 
 .modal-header {
@@ -666,14 +752,16 @@ const formatDate = (date: Date) => {
   justify-content: space-between;
   align-items: center;
   padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid var(--beige);
+  background: linear-gradient(135deg, var(--cream), var(--light-gray));
 }
 
 .modal-header h3 {
   margin: 0;
   font-size: 1.25rem;
-  font-weight: 600;
-  color: #ffffff;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
 }
 
 .close-btn {
@@ -681,18 +769,19 @@ const formatDate = (date: Date) => {
   border: none;
   font-size: 1.5rem;
   cursor: pointer;
-  color: #94a3b8;
+  color: var(--sage);
   padding: 0;
   width: 2rem;
   height: 2rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
+  border-radius: 8px;
+  transition: all 0.2s ease;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--beige);
 }
 
 .create-deck-form {
@@ -706,25 +795,29 @@ const formatDate = (date: Date) => {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #ffffff;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  color: var(--sage);
 }
 
 .form-group input,
 .form-group textarea {
   width: 100%;
   padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0.5rem;
+  border: 2px solid var(--beige);
+  border-radius: 12px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
+  font-family: "Inter", sans-serif;
+  background: var(--light-gray);
+  color: var(--sage);
+  transition: all 0.2s ease;
 }
 
 .form-group input:focus,
 .form-group textarea:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 3px rgba(162, 175, 155, 0.1);
 }
 
 .color-picker {
@@ -736,7 +829,7 @@ const formatDate = (date: Date) => {
 .color-option {
   width: 2rem;
   height: 2rem;
-  border-radius: 0.5rem;
+  border-radius: 8px;
   cursor: pointer;
   border: 2px solid transparent;
   transition: all 0.2s ease;
@@ -747,7 +840,7 @@ const formatDate = (date: Date) => {
 }
 
 .color-option.active {
-  border-color: rgba(255, 255, 255, 0.3);
+  border-color: var(--sage);
   transform: scale(1.1);
 }
 
@@ -758,29 +851,44 @@ const formatDate = (date: Date) => {
 }
 
 .save-btn {
-  background: #667eea;
-  color: white;
+  background: linear-gradient(135deg, var(--sage), var(--beige));
+  color: var(--cream);
   border: none;
   padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  transition: all 0.2s ease;
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
+}
+
+.save-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(162, 175, 155, 0.3);
 }
 
 .save-btn:disabled {
-  background: #94a3b8;
+  background: var(--beige);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border: 2px solid var(--beige);
+  color: var(--sage);
   padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  transition: all 0.2s ease;
+}
+
+.cancel-btn:hover {
+  background: var(--beige);
 }
 
 /* Responsive Design */

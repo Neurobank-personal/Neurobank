@@ -104,13 +104,13 @@ const getProcessTypeLabel = (processType: string) => {
 </script>
 
 <style scoped>
-.note-popup-overlay {
+.popup-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100vw;
   height: 100vh;
-  background: rgba(0, 0, 0, 0.8);
+  background: rgba(162, 175, 155, 0.3);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -119,17 +119,16 @@ const getProcessTypeLabel = (processType: string) => {
 }
 
 .note-popup {
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 24px;
   width: 90vw;
   max-width: 800px;
   max-height: 90vh;
   overflow: hidden;
-  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.5);
+  box-shadow: 0 20px 60px rgba(162, 175, 155, 0.2);
   animation: popupAnimation 0.3s ease-out;
-  color: #ffffff;
+  color: var(--sage);
 }
 
 @keyframes popupAnimation {
@@ -145,25 +144,26 @@ const getProcessTypeLabel = (processType: string) => {
 
 .popup-header {
   padding: 2rem 2rem 1rem 2rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid var(--beige);
+  background: linear-gradient(135deg, var(--cream), var(--light-gray));
   display: flex;
   justify-content: space-between;
   align-items: flex-start;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  color: white;
 }
 
 .popup-header h2 {
   margin: 0;
   font-size: 1.5rem;
-  font-weight: 600;
+  font-weight: 700;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
   flex: 1;
   margin-right: 1rem;
 }
 
 .close-btn {
-  background: rgba(255, 255, 255, 0.2);
-  border: none;
+  background: var(--light-gray);
+  border: 2px solid var(--beige);
   border-radius: 8px;
   width: 40px;
   height: 40px;
@@ -171,12 +171,13 @@ const getProcessTypeLabel = (processType: string) => {
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: background-color 0.2s ease;
-  color: white;
+  transition: all 0.2s ease;
+  color: var(--sage);
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.3);
+  background: var(--beige);
+  border-color: var(--sage);
 }
 
 .popup-content {
@@ -188,9 +189,9 @@ const getProcessTypeLabel = (processType: string) => {
 .note-meta {
   margin-bottom: 2rem;
   padding: 1rem;
-  background: rgba(255, 255, 255, 0.05);
+  background: var(--light-gray);
   border-radius: 8px;
-  border-left: 4px solid #667eea;
+  border-left: 4px solid var(--sage);
 }
 
 .meta-item {

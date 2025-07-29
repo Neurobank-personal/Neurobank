@@ -23,24 +23,6 @@ const navigateToSection = (section: string) => {
 
 <template>
   <div class="sidebar" :class="{ open: isOpen, closed: !isOpen }">
-    <!-- Toggle Button -->
-    <div class="sidebar-header">
-      <button class="toggle-btn" @click="emit('toggle')">
-        <svg
-          width="20"
-          height="20"
-          viewBox="0 0 24 24"
-          fill="none"
-          stroke="currentColor"
-          stroke-width="2"
-        >
-          <line x1="3" y1="6" x2="21" y2="6" />
-          <line x1="3" y1="12" x2="21" y2="12" />
-          <line x1="3" y1="18" x2="21" y2="18" />
-        </svg>
-      </button>
-    </div>
-
     <!-- Navigation Items -->
     <div class="nav-items">
       <div
@@ -130,57 +112,27 @@ const navigateToSection = (section: string) => {
 <style scoped>
 .sidebar {
   width: 280px;
-  background: rgba(15, 23, 42, 0.9);
-  backdrop-filter: blur(10px);
-  border-right: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border-right: 2px solid var(--border);
   padding: 0;
-  position: fixed;
-  height: 100vh;
-  z-index: 10;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   display: flex;
   flex-direction: column;
+  box-shadow: 4px 0 20px rgba(162, 175, 155, 0.1);
+  height: 100vh;
+  position: fixed;
+  top: 80px;
+  left: 0;
+  z-index: 100;
 }
 
 .sidebar.closed {
   width: 80px;
-}
-
-.sidebar-header {
-  padding: 2rem 1.5rem 1rem;
-  display: flex;
-  justify-content: flex-start;
-  align-items: center;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
-}
-
-.sidebar.closed .sidebar-header {
-  justify-content: center;
-  padding: 2rem 1rem 1rem;
-}
-
-.toggle-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: none;
-  padding: 0.75rem;
-  border-radius: 12px;
-  cursor: pointer;
-  color: #e2e8f0;
-  transition: all 0.3s ease;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  backdrop-filter: blur(10px);
-}
-
-.toggle-btn:hover {
-  background: rgba(255, 255, 255, 0.2);
-  color: #ffffff;
-  transform: translateY(-2px);
+  transform: translateX(0);
 }
 
 .nav-items {
-  padding: 1.5rem;
+  padding: 2rem 1.5rem;
   flex: 1;
 }
 
@@ -188,21 +140,22 @@ const navigateToSection = (section: string) => {
   display: flex;
   align-items: center;
   gap: 1rem;
-  padding: 1rem 1.25rem;
+  padding: 1.25rem 1.5rem;
   margin-bottom: 0.75rem;
-  border-radius: 16px;
+  border-radius: 20px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #94a3b8;
-  font-weight: 500;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-medium);
+  font-weight: 600;
   white-space: nowrap;
   position: relative;
   overflow: hidden;
+  border: 2px solid transparent;
 }
 
 .sidebar.closed .nav-item {
   justify-content: center;
-  padding: 1rem;
+  padding: 1.25rem;
 }
 
 .nav-item::before {
@@ -212,14 +165,10 @@ const navigateToSection = (section: string) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.1),
-    rgba(147, 51, 234, 0.1)
-  );
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
   opacity: 0;
-  transition: opacity 0.3s ease;
-  border-radius: 16px;
+  transition: all 0.3s ease;
+  border-radius: 18px;
 }
 
 .nav-item:hover::before {
@@ -227,15 +176,17 @@ const navigateToSection = (section: string) => {
 }
 
 .nav-item:hover {
-  color: #ffffff;
+  color: var(--sage);
   transform: translateX(8px);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  border-color: var(--border);
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.2);
 }
 
 .nav-item.active {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.4);
+  border-color: var(--sage);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
   transform: translateX(4px);
 }
 
@@ -243,11 +194,24 @@ const navigateToSection = (section: string) => {
   opacity: 0;
 }
 
+.nav-item.active::after {
+  content: "";
+  position: absolute;
+  top: 50%;
+  left: -2px;
+  width: 4px;
+  height: 60%;
+  background: white;
+  border-radius: 0 4px 4px 0;
+  transform: translateY(-50%);
+  box-shadow: 0 2px 8px rgba(255, 255, 255, 0.3);
+}
+
 .nav-item svg {
   flex-shrink: 0;
   position: relative;
   z-index: 1;
-  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.1));
+  filter: drop-shadow(0 2px 4px rgba(162, 175, 155, 0.1));
 }
 
 .nav-item span {
@@ -255,6 +219,7 @@ const navigateToSection = (section: string) => {
   position: relative;
   z-index: 1;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
 }
 
 .sidebar.closed .nav-item span {
@@ -263,14 +228,35 @@ const navigateToSection = (section: string) => {
   overflow: hidden;
 }
 
+/* Floating effect for active item */
+.nav-item.active {
+  animation: float 3s ease-in-out infinite;
+}
+
+@keyframes float {
+  0%,
+  100% {
+    transform: translateX(4px) translateY(0px);
+  }
+  50% {
+    transform: translateX(4px) translateY(-2px);
+  }
+}
+
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
+    top: 80px;
+    height: calc(100vh - 80px);
   }
 
   .sidebar.open {
     transform: translateX(0);
     width: 280px;
+  }
+
+  .sidebar.closed {
+    transform: translateX(-100%);
   }
 }
 </style>

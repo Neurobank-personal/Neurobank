@@ -639,10 +639,17 @@
         "flashcardsStudied": 0,
         "flashcardsCreated": 0,
         "createdAt": "2025-07-09T15:47:22.749Z"
+      },
+      {
+        "date": "2025-07-28",
+        "notesCreated": 0,
+        "flashcardsStudied": 0,
+        "flashcardsCreated": 2,
+        "createdAt": "2025-07-28T16:38:00.873Z"
       }
     ],
     "createdAt": "2025-07-05T15:05:28.321Z",
-    "updatedAt": "2025-07-09T15:47:22.749Z"
+    "updatedAt": "2025-07-28T17:24:51.100Z"
   },
   {
     "id": "1752075490504zjzmny65n",

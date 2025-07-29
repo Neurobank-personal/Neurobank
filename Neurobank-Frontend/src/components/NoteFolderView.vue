@@ -21,7 +21,8 @@
           <div
             class="folder-icon"
             :style="{
-              backgroundColor: folder?.color || 'rgba(255, 255, 255, 0.1)',
+              backgroundColor: folder?.color || 'var(--beige)',
+              color: 'white',
             }"
           >
             {{
@@ -806,9 +807,9 @@ const handleNoteDeleted = (deletedNoteId: string) => {
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: transparent;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  color: #94a3b8;
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--beige);
+  color: var(--text-medium);
   padding: 0.5rem 1rem;
   border-radius: 0.5rem;
   cursor: pointer;
@@ -818,9 +819,9 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .back-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  border-color: #94a3b8;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--sage);
+  color: var(--text-dark);
 }
 
 .folder-title-section {
@@ -832,24 +833,32 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 .folder-icon {
   width: 48px;
   height: 48px;
-  border-radius: 0.75rem;
+  border-radius: 16px;
   display: flex;
   align-items: center;
   justify-content: center;
   font-size: 1.5rem;
-  background: rgba(255, 255, 255, 0.1);
-  color: white;
+  font-weight: 600;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.3);
+  border: 2px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.folder-icon:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 12px 40px rgba(162, 175, 155, 0.4);
 }
 
 .folder-title-section h2 {
   font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sage);
   margin: 0;
+  font-family: "Playfair Display", serif;
 }
 
 .folder-description {
-  color: #94a3b8;
+  color: var(--text-medium);
   margin: 0.25rem 0 0 0;
   font-size: 1rem;
 }
@@ -874,25 +883,26 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .btn-primary {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
 }
 
 .btn-primary:hover {
   transform: translateY(-2px);
-  box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 8px 25px rgba(162, 175, 155, 0.3);
 }
 
 .btn-secondary {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: rgba(255, 255, 255, 0.7);
+  border: 1px solid var(--beige);
+  color: var(--text-dark);
 }
 
 .btn-secondary:hover {
-  background: rgba(255, 255, 255, 0.1);
-  border-color: #94a3b8;
+  background: rgba(255, 255, 255, 0.9);
+  border-color: var(--sage);
+  transform: translateY(-1px);
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
 }
 
 /* Stats */
@@ -904,62 +914,84 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .stat-card {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   padding: 1.5rem;
-  border-radius: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border-radius: 24px;
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
 }
 
 .stat-card:hover {
-  border-color: #667eea;
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.15);
+  border-color: var(--sage);
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.2);
+  transform: translateY(-4px);
 }
 
 .stat-number {
   font-size: 2rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--sage);
   margin-bottom: 0.5rem;
+  font-family: "Playfair Display", serif;
 }
 
 .stat-label {
-  color: #94a3b8;
+  color: var(--text-medium);
   font-size: 0.875rem;
   font-weight: 500;
+  font-family: "Inter", sans-serif;
 }
 
 /* Notes List */
 .notes-list {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 2px solid var(--beige);
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
   border-radius: 1rem;
   padding: 2rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
 }
 
 .flashcard-toolbar {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  padding: 2rem;
+  background: linear-gradient(
+    135deg,
+    var(--cream) 0%,
+    rgba(255, 255, 255, 0.9) 100%
+  );
+  border: 2px solid var(--beige);
+  border-radius: 24px;
   margin-bottom: 2rem;
   gap: 1rem;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+  position: relative;
+  overflow: hidden;
+}
+
+.flashcard-toolbar::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .toolbar-left h3 {
-  color: #ffffff;
+  color: var(--text-dark);
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
+  font-family: "Playfair Display", serif;
 }
 
 .toolbar-right {
@@ -972,14 +1004,29 @@ const handleNoteDeleted = (deletedNoteId: string) => {
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  color: #94a3b8;
+  color: var(--text-medium);
   font-size: 0.9rem;
+  font-family: "Inter", sans-serif;
 }
 
 .flashcard-btn {
   display: flex;
   align-items: center;
   gap: 0.5rem;
+}
+
+.list-header {
+  margin-bottom: 1.5rem;
+  padding-bottom: 1rem;
+  border-bottom: 2px solid var(--beige);
+}
+
+.list-header h3 {
+  margin: 0;
+  font-size: 1.25rem;
+  font-weight: 600;
+  color: var(--sage);
+  font-family: "Playfair Display", serif;
 }
 
 .notes-grid {
@@ -990,20 +1037,42 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 
 .note-item {
   position: relative;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
+  background: var(--cream);
+  border: 2px solid var(--beige);
+  border-radius: 24px;
   padding: 0;
-  transition: all 0.3s ease;
+  transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
   display: flex;
   flex-direction: column;
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+}
+
+.note-item::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
+  transform: scaleX(0);
+  transition: transform 0.3s ease;
+}
+
+.note-item:hover {
+  transform: translateY(-8px);
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.15);
+  border-color: var(--sage);
+}
+
+.note-item:hover::before {
+  transform: scaleX(1);
 }
 
 .note-item.selected {
-  border-color: rgba(59, 130, 246, 0.5);
-  box-shadow: 0 0 0 2px rgba(59, 130, 246, 0.2);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.2);
 }
 
 .note-checkbox {
@@ -1014,29 +1083,29 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .note-checkbox input[type="checkbox"] {
-  width: 18px;
-  height: 18px;
-  border: 2px solid rgba(255, 255, 255, 0.3);
-  border-radius: 4px;
-  background: rgba(15, 23, 42, 0.8);
+  width: 20px;
+  height: 20px;
+  border: 2px solid var(--beige);
+  border-radius: 8px;
+  background: var(--cream);
   cursor: pointer;
-  transition: all 0.2s ease;
+  transition: all 0.3s ease;
 }
 
 .note-checkbox input[type="checkbox"]:checked {
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  border-color: #3b82f6;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  border-color: var(--sage);
 }
 
 .note-content {
-  padding: 1.5rem;
-  padding-left: 3rem; /* Make room for checkbox */
+  padding: 2rem;
+  padding-left: 3.5rem; /* Make room for checkbox */
   cursor: pointer;
   flex: 1;
 }
 
 .note-content:hover {
-  background: rgba(255, 255, 255, 0.05);
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
 }
 
 .note-item-header {
@@ -1048,9 +1117,12 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 
 .note-title {
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-dark);
   flex: 1;
   margin-right: 1rem;
+  font-family: "Playfair Display", serif;
+  font-size: 1.25rem;
+  line-height: 1.3;
 }
 
 .note-actions {
@@ -1059,23 +1131,26 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .action-btn {
-  background: transparent;
-  border: none;
+  background: var(--beige);
+  border: 2px solid var(--beige);
   padding: 0.5rem;
-  border-radius: 0.5rem;
+  border-radius: 12px;
   cursor: pointer;
-  color: #94a3b8;
-  transition: all 0.2s ease;
+  color: var(--text-medium);
+  transition: all 0.3s ease;
 }
 
 .action-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #334155;
+  background: var(--light-gray);
+  border-color: var(--sage);
+  color: var(--text-dark);
+  transform: translateY(-2px);
 }
 
 .action-btn.delete:hover {
   color: #ef4444;
-  background: rgba(239, 68, 68, 0.2);
+  background: rgba(239, 68, 68, 0.1);
+  border-color: #ef4444;
 }
 
 .note-item-content {
@@ -1083,9 +1158,11 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .note-preview {
-  color: #94a3b8;
-  line-height: 1.5;
-  margin-bottom: 0.75rem;
+  color: var(--text-medium);
+  line-height: 1.6;
+  margin-bottom: 1rem;
+  font-family: "Inter", sans-serif;
+  font-size: 0.95rem;
 }
 
 .note-tags {
@@ -1095,20 +1172,22 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .tag {
-  padding: 0.25rem 0.5rem;
-  border-radius: 0.5rem;
+  padding: 0.5rem 1rem;
+  border-radius: 12px;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
 }
 
 .ai-tag {
-  background: #dbeafe;
-  color: #1e40af;
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
+  color: var(--sage);
+  border: 1px solid var(--border);
 }
 
 .processed-tag {
-  background: #dcfce7;
-  color: #166534;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  color: white;
 }
 
 .note-item-footer {
@@ -1116,7 +1195,10 @@ const handleNoteDeleted = (deletedNoteId: string) => {
   justify-content: space-between;
   align-items: center;
   font-size: 0.875rem;
-  color: #94a3b8;
+  color: var(--text-light);
+  padding: 1rem 2rem;
+  border-top: 2px solid var(--border);
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
 }
 
 /* States */
@@ -1125,14 +1207,14 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  color: #94a3b8;
+  color: var(--text-medium);
 }
 
 .loading-spinner {
   width: 3rem;
   height: 3rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-top: 3px solid #667eea;
+  border: 2px solid var(--border);
+  border-top: 3px solid var(--sage);
   border-radius: 50%;
   margin: 0 auto 1rem;
   animation: spin 1s linear infinite;
@@ -1156,7 +1238,7 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 
 .create-btn,
 .retry-btn {
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 0.75rem 1.5rem;
@@ -1173,24 +1255,35 @@ const handleNoteDeleted = (deletedNoteId: string) => {
   left: 0;
   right: 0;
   bottom: 0;
-  background: rgba(0, 0, 0, 0.6);
+  background: rgba(162, 175, 155, 0.1);
   display: flex;
   align-items: center;
   justify-content: center;
   z-index: 1000;
-  backdrop-filter: blur(4px);
+  backdrop-filter: blur(8px);
 }
 
 .modal-content {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 1rem;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+  background: var(--cream);
+  border: 2px solid var(--beige);
+  border-radius: 24px;
+  box-shadow: 0 20px 60px rgba(162, 175, 155, 0.2);
   width: 100%;
   max-width: 600px;
   max-height: 90vh;
   overflow-y: auto;
+  position: relative;
+}
+
+.modal-content::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
+  border-radius: 24px 24px 0 0;
 }
 
 .modal-content.large {
@@ -1201,38 +1294,45 @@ const handleNoteDeleted = (deletedNoteId: string) => {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 1.5rem;
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  padding: 2rem;
+  border-bottom: 2px solid var(--beige);
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
+  border-radius: 24px 24px 0 0;
+  margin-top: 4px;
 }
 
 .modal-header h3 {
   margin: 0;
-  font-size: 1.25rem;
+  font-size: 1.5rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--text-dark);
+  font-family: "Playfair Display", serif;
 }
 
 .close-btn {
-  background: none;
-  border: none;
+  background: var(--beige);
+  border: 2px solid var(--beige);
   font-size: 1.5rem;
   cursor: pointer;
-  color: #94a3b8;
-  padding: 0;
-  width: 2rem;
-  height: 2rem;
+  color: var(--text-medium);
+  padding: 0.5rem;
+  width: 2.5rem;
+  height: 2.5rem;
   display: flex;
   align-items: center;
   justify-content: center;
-  border-radius: 0.5rem;
+  border-radius: 12px;
+  transition: all 0.3s ease;
 }
 
 .close-btn:hover {
-  background: rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border-color: var(--sage);
+  transform: translateY(-2px);
 }
 
 .note-form {
-  padding: 1.5rem;
+  padding: 2rem;
 }
 
 .form-group {
@@ -1242,28 +1342,32 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 .form-group label {
   display: block;
   margin-bottom: 0.5rem;
-  font-weight: 500;
-  color: #ffffff;
+  font-weight: 600;
+  color: var(--text-dark);
+  font-family: "Inter", sans-serif;
 }
 
 .form-group input,
 .form-group textarea,
 .form-group select {
   width: 100%;
-  padding: 0.75rem;
-  border: 1px solid rgba(255, 255, 255, 0.15);
-  border-radius: 0.5rem;
+  padding: 1rem;
+  border: 2px solid var(--border);
+  border-radius: 16px;
   font-size: 1rem;
-  transition: border-color 0.2s ease;
-  font-family: inherit;
+  transition: all 0.3s ease;
+  font-family: "Inter", sans-serif;
+  background: var(--cream);
+  color: var(--text-dark);
 }
 
 .form-group input:focus,
 .form-group textarea:focus,
 .form-group select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
+  transform: translateY(-1px);
 }
 
 .form-actions {
@@ -1273,70 +1377,51 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .save-btn {
-  background: #667eea;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
+  padding: 1rem 2rem;
+  border-radius: 16px;
   cursor: pointer;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+}
+
+.save-btn:hover:not(:disabled) {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.4);
 }
 
 .save-btn:disabled {
-  background: #94a3b8;
+  background: var(--text-light);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .cancel-btn {
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  color: #94a3b8;
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  padding: 0.75rem 1.5rem;
-  border-radius: 0.5rem;
-  cursor: pointer;
-  font-weight: 500;
-}
-
-/* Flashcard Toolbar */
-.flashcard-toolbar {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1.5rem 2rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--beige);
+  border: 2px solid var(--beige);
+  color: var(--text-medium);
+  padding: 1rem 2rem;
   border-radius: 16px;
-  margin-bottom: 2rem;
-  gap: 1rem;
-}
-
-.toolbar-left h3 {
-  color: #ffffff;
-  margin: 0;
-  font-size: 1.25rem;
+  cursor: pointer;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
+  transition: all 0.3s ease;
 }
 
-.toolbar-right {
-  display: flex;
-  align-items: center;
-  gap: 1rem;
+.cancel-btn:hover:not(:disabled) {
+  background: var(--light-gray);
+  border-color: var(--sage);
+  transform: translateY(-2px);
 }
 
-.selection-info {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
-  color: #94a3b8;
-  font-size: 0.9rem;
-}
-
-.flashcard-btn {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+/* Note Forms */
+.note-form {
+  padding: 2rem;
 }
 
 /* Flashcard Modal Styles */
@@ -1381,8 +1466,8 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 }
 
 .category-tag {
-  background: rgba(59, 130, 246, 0.2);
-  color: #60a5fa;
+  background: rgba(162, 175, 155, 0.2);
+  color: var(--accent);
   padding: 0.25rem 0.5rem;
   border-radius: 6px;
   font-size: 0.75rem;
@@ -1403,7 +1488,7 @@ const handleNoteDeleted = (deletedNoteId: string) => {
 
 .flashcard-question strong,
 .flashcard-answer strong {
-  color: #60a5fa;
+  color: var(--accent);
 }
 
 .generation-info {

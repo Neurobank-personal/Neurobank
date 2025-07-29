@@ -396,14 +396,13 @@ watch(
 @import url("https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap");
 
 .study-mode {
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 24px;
   padding: 2.5rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
   font-family: "Inter", sans-serif;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  color: #ffffff;
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.1);
+  color: var(--sage);
 }
 
 .study-header {
@@ -411,13 +410,16 @@ watch(
   justify-content: space-between;
   align-items: center;
   margin-bottom: 3rem;
+  padding-bottom: 1.5rem;
+  border-bottom: 2px solid var(--beige);
 }
 
 .study-header h3 {
   margin: 0;
   font-size: 1.5rem;
   font-weight: 700;
-  color: #ffffff;
+  font-family: "Playfair Display", serif;
+  color: var(--sage);
   letter-spacing: -0.02em;
 }
 
@@ -425,21 +427,22 @@ watch(
   display: flex;
   align-items: center;
   gap: 0.75rem;
-  background: linear-gradient(135deg, #ef4444, #dc2626);
-  color: white;
+  background: linear-gradient(135deg, #dc3545, #c82333);
+  color: var(--cream);
   border: none;
   padding: 0.75rem 1.5rem;
   border-radius: 12px;
   cursor: pointer;
   font-weight: 600;
+  font-family: "Inter", sans-serif;
   transition: all 0.3s ease;
-  box-shadow: 0 4px 16px rgba(239, 68, 68, 0.3);
+  box-shadow: 0 4px 16px rgba(220, 53, 69, 0.3);
 }
 
 .exit-study-btn:hover {
-  background: linear-gradient(135deg, #dc2626, #b91c1c);
+  background: linear-gradient(135deg, #c82333, #bd2130);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(239, 68, 68, 0.4);
+  box-shadow: 0 8px 32px rgba(220, 53, 69, 0.4);
 }
 
 .flashcard-container {
@@ -456,12 +459,13 @@ watch(
 }
 
 .category-tag {
-  background: #667eea;
-  color: white;
+  background: var(--sage);
+  color: var(--cream);
   padding: 0.25rem 0.75rem;
   border-radius: 1rem;
   font-size: 0.75rem;
-  font-weight: 500;
+  font-weight: 600;
+  font-family: "Inter", sans-serif;
 }
 
 .flashcard {
@@ -489,27 +493,26 @@ watch(
   width: 100%;
   height: 100%;
   backface-visibility: hidden;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 1rem;
   display: flex;
   flex-direction: column;
   padding: 2rem;
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.1);
 }
 
 .flashcard-back {
   transform: rotateY(180deg);
-  background: rgba(255, 255, 255, 0.1);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--light-gray);
+  border: 2px solid var(--sage);
 }
 
 .card-type {
   font-size: 0.875rem;
   font-weight: 600;
-  color: #667eea;
+  font-family: "Inter", sans-serif;
+  color: var(--sage);
   margin-bottom: 1rem;
   text-transform: uppercase;
   letter-spacing: 0.05em;
@@ -522,8 +525,9 @@ watch(
   justify-content: center;
   text-align: center;
   font-size: 1.25rem;
+  font-family: "Inter", sans-serif;
   line-height: 1.6;
-  color: #ffffff;
+  color: var(--sage);
 }
 
 .study-controls {
@@ -667,8 +671,8 @@ watch(
 
 .custom-input:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
   transform: scale(1.02);
 }
 
@@ -687,7 +691,7 @@ watch(
   width: 22px;
   height: 18px;
   border: none;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border-radius: 0.25rem;
   cursor: pointer;
@@ -700,7 +704,7 @@ watch(
 }
 
 .number-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--accent) 100%);
   transform: scale(1.1);
   box-shadow: 0 2px 6px rgba(0, 0, 0, 0.15);
 }
@@ -739,8 +743,8 @@ watch(
 
 .custom-select:focus {
   outline: none;
-  border-color: #667eea;
-  box-shadow: 0 0 0 4px rgba(102, 126, 234, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
 }
 
 .select-icon {
@@ -754,7 +758,7 @@ watch(
 }
 
 .custom-select:focus + .select-icon {
-  color: #667eea;
+  color: var(--sage);
 }
 
 .custom-btn {
@@ -762,7 +766,7 @@ watch(
   align-items: center;
   gap: 0.375rem;
   padding: 0.625rem 1.5rem;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
   border-radius: 0.5rem;
@@ -777,9 +781,9 @@ watch(
 }
 
 .custom-btn:hover:not(:disabled) {
-  background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+  background: linear-gradient(135deg, var(--sage) 0%, var(--accent) 100%);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.3);
 }
 
 .custom-btn:disabled {
@@ -860,7 +864,7 @@ watch(
   font-weight: 700;
   margin-bottom: 1rem;
   color: #ffffff;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
   -webkit-background-clip: text;
   -webkit-text-fill-color: transparent;
   background-clip: text;
@@ -882,7 +886,7 @@ watch(
   display: flex;
   align-items: center;
   gap: 0.5rem;
-  background: #667eea;
+  background: var(--sage);
   color: white;
   border: none;
   padding: 1rem 2rem;
@@ -894,9 +898,9 @@ watch(
 }
 
 .btn-primary:hover {
-  background: #5a67d8;
+  background: var(--sage);
   transform: translateY(-1px);
-  box-shadow: 0 4px 12px rgba(102, 126, 234, 0.3);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.3);
 }
 
 /* Empty State */

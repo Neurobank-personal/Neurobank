@@ -285,7 +285,7 @@ const goToLogin = () => {
 .app-layout {
   display: flex;
   min-height: 100vh;
-  background: linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%);
+  background: linear-gradient(135deg, var(--cream) 0%, var(--light-gray) 100%);
   font-family: "Inter", -apple-system, BlinkMacSystemFont, "Segoe UI",
     sans-serif;
 }
@@ -324,10 +324,10 @@ const goToLogin = () => {
 .logo h1 {
   font-size: 2rem;
   font-weight: 700;
-  color: #1f2937;
+  color: var(--sage);
   margin: 0;
   letter-spacing: -0.5px;
-  font-family: "Inter", sans-serif;
+  font-family: "Playfair Display", serif;
 }
 
 .register-section {
@@ -346,15 +346,15 @@ const goToLogin = () => {
 
 .register-content h2 {
   font-size: 3rem;
-  font-weight: 400;
-  color: #1f2937;
+  font-weight: 700;
+  color: var(--sage);
   margin: 0 0 0.5rem 0;
   letter-spacing: -1px;
-  font-family: "Inter", sans-serif;
+  font-family: "Playfair Display", serif;
 }
 
 .subtitle {
-  color: #6b7280;
+  color: var(--text-medium);
   margin-bottom: 3rem;
   font-size: 1.125rem;
   line-height: 1.5;
@@ -380,12 +380,11 @@ const goToLogin = () => {
 .input-group input {
   width: 100%;
   padding: 1rem 1.25rem;
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  border: 2px solid var(--border);
   border-radius: 12px;
   font-size: 1rem;
-  background: rgba(255, 255, 255, 0.05);
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  color: var(--text-dark);
   box-sizing: border-box;
   transition: all 0.2s ease;
   font-family: "Inter", sans-serif;
@@ -394,13 +393,13 @@ const goToLogin = () => {
 
 .input-group input:focus {
   outline: none;
-  border-color: #10b981;
-  box-shadow: 0 0 0 4px rgba(16, 185, 129, 0.1);
+  border-color: var(--sage);
+  box-shadow: 0 0 0 4px rgba(162, 175, 155, 0.1);
 }
 
 .input-group input:disabled {
-  background: rgba(255, 255, 255, 0.03);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--light-gray);
+  border: 2px solid var(--border);
   opacity: 0.6;
   cursor: not-allowed;
 }
@@ -408,25 +407,29 @@ const goToLogin = () => {
 .register-btn {
   width: 100%;
   padding: 1rem 1.25rem;
-  background-color: #10b981;
-  color: white;
+  background: linear-gradient(135deg, var(--sage), var(--beige));
+  color: var(--cream);
   border: none;
   border-radius: 12px;
   font-size: 1rem;
-  font-weight: 500;
+  font-weight: 600;
   cursor: pointer;
   margin-top: 1rem;
-  transition: background-color 0.2s ease;
+  transition: all 0.2s ease;
   font-family: "Inter", sans-serif;
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
 }
 
 .register-btn:hover:not(:disabled) {
-  background-color: #059669;
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgba(162, 175, 155, 0.3);
 }
 
 .register-btn:disabled {
-  background-color: #9ca3af;
+  background: var(--beige);
   cursor: not-allowed;
+  transform: none;
+  box-shadow: none;
 }
 
 .login-link {
@@ -435,7 +438,7 @@ const goToLogin = () => {
 }
 
 .login-link p {
-  color: #6b7280;
+  color: var(--text-medium);
   margin: 0;
   font-size: 1rem;
   font-family: "Inter", sans-serif;
@@ -445,10 +448,10 @@ const goToLogin = () => {
 .link-btn {
   background: none;
   border: none;
-  color: #10b981;
+  color: var(--sage);
   cursor: pointer;
   font-size: inherit;
-  font-weight: 500;
+  font-weight: 600;
   text-decoration: none;
   font-family: "Inter", sans-serif;
 }

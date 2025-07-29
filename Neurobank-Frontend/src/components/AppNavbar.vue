@@ -8,6 +8,7 @@ interface Props {
 
 interface Emits {
   (e: "logout"): void;
+  (e: "toggle"): void;
 }
 
 withDefaults(defineProps<Props>(), {
@@ -61,11 +62,25 @@ onUnmounted(() => {
 <template>
   <div class="navbar">
     <div class="navbar-left">
+      <button class="sidebar-toggle" @click="$emit('toggle')">
+        <svg
+          width="20"
+          height="20"
+          viewBox="0 0 24 24"
+          fill="none"
+          stroke="currentColor"
+          stroke-width="2"
+        >
+          <line x1="3" y1="6" x2="21" y2="6" />
+          <line x1="3" y1="12" x2="21" y2="12" />
+          <line x1="3" y1="18" x2="21" y2="18" />
+        </svg>
+      </button>
       <div class="logo">
         <div class="brain-icon">
           <img src="/Neurobank_logo.png" alt="Neurobank" />
         </div>
-        <h1 v-show="isOpen || !isMobile">NEUROBANK</h1>
+        <h1>NEUROBANK</h1>
       </div>
     </div>
     <div class="navbar-right">
@@ -120,57 +135,114 @@ onUnmounted(() => {
 
 <style scoped>
 .navbar {
-  background: rgba(15, 23, 42, 0.8);
+  background: rgba(250, 249, 238, 0.95);
   backdrop-filter: blur(20px);
-  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+  border-bottom: 2px solid rgba(162, 175, 155, 0.2);
   padding: 1.5rem 2rem;
   display: flex;
   justify-content: space-between;
   align-items: center;
   position: sticky;
   top: 0;
-  z-index: 5;
+  left: 0;
+  right: 0;
+  z-index: 50;
+  box-shadow: 0 4px 20px rgba(162, 175, 155, 0.1);
+  width: 100%;
 }
 
 .navbar-left {
   display: flex;
   align-items: center;
+  gap: 1rem;
+}
+
+.sidebar-toggle {
+  background: var(--sage);
+  border: none;
+  padding: 0.875rem;
+  border-radius: 16px;
+  cursor: pointer;
+  color: white;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+  position: relative;
+  overflow: hidden;
+}
+
+.sidebar-toggle::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: -100%;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(255, 255, 255, 0.2),
+    transparent
+  );
+  transition: left 0.5s ease;
+}
+
+.sidebar-toggle:hover {
+  background: var(--accent);
+  transform: translateY(-2px) scale(1.05);
+  box-shadow: 0 6px 24px rgba(162, 175, 155, 0.4);
+}
+
+.sidebar-toggle:hover::before {
+  left: 100%;
 }
 
 .logo {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 1rem;
 }
 
 .brain-icon {
-  width: 40px;
-  height: 40px;
+  width: 48px;
+  height: 48px;
   display: flex;
   align-items: center;
   justify-content: center;
   overflow: hidden;
-  border-radius: 12px;
-  background: linear-gradient(135deg, #3b82f6, #8b5cf6);
-  padding: 8px;
+  border-radius: 16px;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  padding: 10px;
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.3);
+  transition: all 0.3s ease;
+}
+
+.brain-icon:hover {
+  transform: scale(1.05);
+  box-shadow: 0 6px 24px rgba(162, 175, 155, 0.4);
 }
 
 .brain-icon img {
-  width: 24px;
-  height: 24px;
+  width: 28px;
+  height: 28px;
   object-fit: contain;
   filter: brightness(0) invert(1);
 }
 
 .logo h1 {
-  font-size: 1.5rem;
+  font-size: 1.75rem;
   font-weight: 700;
-  color: #ffffff;
+  color: var(--text-dark);
   margin: 0;
-  letter-spacing: -0.5px;
-  font-family: "Inter", sans-serif;
+  letter-spacing: -0.02em;
+  font-family: "Playfair Display", serif;
   transition: opacity 0.3s ease;
-  text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
 }
 
 .navbar-right {
@@ -183,46 +255,39 @@ onUnmounted(() => {
 }
 
 .user-menu {
-  width: 44px;
-  height: 44px;
+  width: 48px;
+  height: 48px;
   border-radius: 50%;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.2),
-    rgba(139, 92, 246, 0.2)
-  );
-  backdrop-filter: blur(10px);
-  border: 1px solid rgba(255, 255, 255, 0.2);
+  background: var(--beige);
+  border: 2px solid var(--border);
   display: flex;
   align-items: center;
   justify-content: center;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #e2e8f0;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--sage);
+  box-shadow: 0 4px 16px rgba(162, 175, 155, 0.2);
 }
 
 .user-menu:hover {
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.3),
-    rgba(139, 92, 246, 0.3)
-  );
+  background: var(--sage);
+  color: white;
+  border-color: var(--sage);
   transform: translateY(-2px);
-  box-shadow: 0 8px 32px rgba(59, 130, 246, 0.3);
+  box-shadow: 0 8px 24px rgba(162, 175, 155, 0.3);
 }
 
 .dropdown-menu {
   position: absolute;
-  top: calc(100% + 0.75rem);
+  top: calc(100% + 1rem);
   right: 0;
-  background: rgba(15, 23, 42, 0.95);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
-  border-radius: 16px;
-  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3);
-  min-width: 240px;
+  background: var(--cream);
+  border: 2px solid var(--border);
+  border-radius: 20px;
+  box-shadow: 0 20px 40px rgba(162, 175, 155, 0.15);
+  min-width: 260px;
   z-index: 50;
-  animation: fadeIn 0.3s ease;
+  animation: fadeIn 0.3s cubic-bezier(0.4, 0, 0.2, 1);
   overflow: hidden;
 }
 
@@ -238,12 +303,19 @@ onUnmounted(() => {
 }
 
 .dropdown-header {
-  padding: 1.5rem;
-  background: linear-gradient(
-    135deg,
-    rgba(59, 130, 246, 0.1),
-    rgba(139, 92, 246, 0.1)
-  );
+  padding: 2rem;
+  background: linear-gradient(135deg, var(--beige), var(--light-gray));
+  position: relative;
+}
+
+.dropdown-header::after {
+  content: "";
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .user-info {
@@ -252,54 +324,50 @@ onUnmounted(() => {
 
 .user-name {
   font-weight: 600;
-  color: #ffffff;
-  font-size: 1rem;
+  color: var(--text-dark);
+  font-size: 1.1rem;
   font-family: "Inter", sans-serif;
 }
 
 .user-email {
-  color: #94a3b8;
-  font-size: 0.875rem;
+  color: var(--text-medium);
+  font-size: 0.9rem;
   margin-top: 0.25rem;
   font-family: "Inter", sans-serif;
 }
 
 .dropdown-divider {
   height: 1px;
-  background: linear-gradient(
-    90deg,
-    transparent,
-    rgba(255, 255, 255, 0.1),
-    transparent
-  );
+  background: linear-gradient(90deg, transparent, var(--border), transparent);
   margin: 0;
 }
 
 .dropdown-items {
-  padding: 0.75rem;
+  padding: 1rem;
 }
 
 .dropdown-item {
   width: 100%;
   display: flex;
   align-items: center;
-  gap: 0.75rem;
-  padding: 0.875rem 1rem;
+  gap: 1rem;
+  padding: 1rem 1.25rem;
   border: none;
   background: none;
-  border-radius: 12px;
+  border-radius: 16px;
   cursor: pointer;
-  transition: all 0.3s ease;
-  color: #94a3b8;
+  transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+  color: var(--text-medium);
   font-family: "Inter", sans-serif;
-  font-size: 0.9rem;
+  font-size: 0.95rem;
   font-weight: 500;
 }
 
 .dropdown-item:hover {
-  background: rgba(255, 255, 255, 0.1);
-  color: #ffffff;
+  background: var(--sage);
+  color: white;
   transform: translateX(4px);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
 }
 
 .dropdown-item svg {
@@ -316,7 +384,17 @@ onUnmounted(() => {
   }
 
   .dropdown-menu {
-    min-width: 220px;
+    min-width: 240px;
+  }
+
+  .brain-icon {
+    width: 40px;
+    height: 40px;
+  }
+
+  .brain-icon img {
+    width: 24px;
+    height: 24px;
   }
 }
 </style>
