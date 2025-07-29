@@ -1,7 +1,10 @@
 <template>
   <div class="tasks">
     <div class="tasks-header">
-      <h2>Tasks</h2>
+      <div class="header-content">
+        <h2>Tasks</h2>
+        <p class="subtitle">Organize and track your daily tasks efficiently</p>
+      </div>
       <button class="add-btn" @click="showAddTaskModal = true">
         <svg
           width="20"
@@ -421,8 +424,28 @@ onMounted(() => {
   padding: 2rem;
   background: linear-gradient(135deg, var(--cream), var(--beige));
   border: 2px solid var(--beige);
-  border-radius: 20px;
+  border-radius: 32px;
   box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+  position: relative;
+  overflow: hidden;
+  flex-wrap: wrap;
+  gap: 1rem;
+}
+
+.header-content {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+}
+
+.tasks-header::before {
+  content: "";
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  height: 4px;
+  background: linear-gradient(90deg, var(--sage), var(--accent));
 }
 
 .tasks-header h2 {
@@ -432,12 +455,24 @@ onMounted(() => {
   font-family: "Playfair Display", serif;
   margin: 0;
   letter-spacing: -0.02em;
+  background: linear-gradient(135deg, var(--sage), var(--accent));
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+}
+
+.subtitle {
+  color: var(--text-medium);
+  margin: 0.5rem 0 0 0;
+  font-size: 1.125rem;
+  font-weight: 400;
+  font-family: "Inter", sans-serif;
 }
 
 .add-btn {
   display: flex;
   align-items: center;
-  gap: 0.75rem;
+  gap: 0.5rem;
   background: linear-gradient(135deg, var(--sage), var(--accent));
   color: white;
   border: none;
@@ -533,30 +568,32 @@ onMounted(() => {
 .empty-state {
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 24px;
-  color: #94a3b8;
+  color: var(--sage);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
 }
 
 .empty-state svg {
   margin-bottom: 1.5rem;
-  opacity: 0.6;
-  color: #64748b;
+  opacity: 0.7;
+  color: var(--sage);
 }
 
 .empty-state h3 {
   margin: 0 0 0.75rem 0;
   font-size: 1.5rem;
   font-weight: 600;
-  color: #ffffff;
+  color: var(--sage);
+  font-family: "Playfair Display", serif;
 }
 
 .empty-state p {
   margin: 0;
-  opacity: 0.8;
+  color: var(--text-medium);
   font-size: 1rem;
+  line-height: 1.5;
 }
 
 .tasks-list {

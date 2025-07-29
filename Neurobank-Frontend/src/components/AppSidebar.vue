@@ -119,11 +119,11 @@ const navigateToSection = (section: string) => {
   display: flex;
   flex-direction: column;
   box-shadow: 4px 0 20px rgba(162, 175, 155, 0.1);
-  height: 100vh;
+  height: calc(100vh - 90px);
   position: fixed;
-  top: 80px;
+  top: 90px;
   left: 0;
-  z-index: 100;
+  z-index: 40;
 }
 
 .sidebar.closed {
@@ -246,8 +246,8 @@ const navigateToSection = (section: string) => {
 @media (max-width: 768px) {
   .sidebar {
     transform: translateX(-100%);
-    top: 80px;
-    height: calc(100vh - 80px);
+    top: 90px;
+    height: calc(100vh - 90px);
   }
 
   .sidebar.open {

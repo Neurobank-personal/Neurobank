@@ -115,13 +115,13 @@
           </div>
           <div class="folder-actions">
             <button
-              class="edit-btn"
-              @click.stop="editFolder(folder)"
+              class="edit-btn action-btn"
+              @click.stop.prevent="editFolder(folder)"
               title="Edit folder"
             >
               <svg
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -134,13 +134,13 @@
               </svg>
             </button>
             <button
-              class="delete-btn"
-              @click.stop="deleteFolder(folder.id)"
+              class="delete-btn action-btn"
+              @click.stop.prevent="deleteFolder(folder.id)"
               title="Delete folder"
             >
               <svg
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -352,7 +352,7 @@ const editFolder = (folder: NoteFolder) => {
 const deleteFolder = async (folderId: string) => {
   if (
     !confirm(
-      "Are you sure you want to delete this folder? All notes in this folder will be moved to the general collection."
+      "Är du säker på att du vill radera denna mapp? Alla anteckningar i denna mapp kommer att flyttas till den allmänna samlingen."
     )
   ) {
     return;
@@ -363,7 +363,7 @@ const deleteFolder = async (folderId: string) => {
     await Promise.all([loadFolders(), loadGeneralNotesCount()]);
   } catch (err) {
     console.error("Error deleting folder:", err);
-    error.value = "Failed to delete folder";
+    error.value = "Kunde inte radera mappen";
   }
 };
 
@@ -473,7 +473,8 @@ const formatDate = (date: Date) => {
 .empty-icon {
   font-size: 3rem;
   margin-bottom: 1rem;
-  color: #94a3b8;
+  color: var(--sage);
+  opacity: 0.7;
   display: flex;
   justify-content: center;
   align-items: center;
@@ -493,6 +494,33 @@ const formatDate = (date: Date) => {
   cursor: pointer;
   font-weight: 500;
   margin-top: 1rem;
+}
+
+.empty-folder-message {
+  grid-column: 1 / -1;
+  text-align: center;
+  padding: 4rem 2rem;
+  background: var(--cream);
+  border: 2px solid var(--beige);
+  border-radius: 24px;
+  margin-top: 1.5rem;
+  color: var(--sage);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+}
+
+.empty-folder-message h3 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--sage);
+  font-family: "Playfair Display", serif;
+}
+
+.empty-folder-message p {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-medium);
+  font-size: 1rem;
+  line-height: 1.5;
 }
 
 /* Folders Grid */
@@ -585,25 +613,67 @@ const formatDate = (date: Date) => {
   align-items: center;
 }
 
+.action-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--beige);
+  padding: 0.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--sage);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
+  z-index: 10;
+}
+
+.action-btn:hover {
+  background: var(--cream);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
+}
+
+.action-btn.delete-btn:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
 .edit-btn,
 .delete-btn {
-  background: transparent;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 0.5rem;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--beige);
+  padding: 0.6rem;
+  border-radius: 10px;
   cursor: pointer;
-  color: #64748b;
+  color: var(--sage);
   transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
+  z-index: 10;
 }
 
 .edit-btn:hover {
-  background: rgba(255, 255, 255, 0.05);
-  color: #334155;
+  background: var(--cream);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
 }
 
 .delete-btn:hover {
-  color: #ef4444;
-  background: rgba(239, 68, 68, 0.1);
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border-color: #dc3545;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }
 
 .note-count {

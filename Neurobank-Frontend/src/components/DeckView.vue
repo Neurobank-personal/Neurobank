@@ -25,7 +25,7 @@
               color: 'white',
             }"
           >
-            {{ deckId ? deck?.name?.charAt(0)?.toUpperCase() || "📋" : "🎯" }}
+            {{ deckId ? deck?.name?.charAt(0)?.toUpperCase() || "G" : "G" }}
           </div>
           <div>
             <h2>{{ deck?.name || "General Collection" }}</h2>

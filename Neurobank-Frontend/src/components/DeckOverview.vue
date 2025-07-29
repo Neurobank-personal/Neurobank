@@ -113,13 +113,13 @@
           </div>
           <div class="deck-actions">
             <button
-              class="edit-btn"
-              @click.stop="editDeck(deck)"
+              class="edit-btn action-btn"
+              @click.stop.prevent="editDeck(deck)"
               title="Edit deck"
             >
               <svg
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -132,13 +132,13 @@
               </svg>
             </button>
             <button
-              class="delete-btn"
-              @click.stop="deleteDeck(deck.id)"
+              class="delete-btn action-btn"
+              @click.stop.prevent="deleteDeck(deck.id)"
               title="Delete deck"
             >
               <svg
-                width="14"
-                height="14"
+                width="16"
+                height="16"
                 viewBox="0 0 24 24"
                 fill="none"
                 stroke="currentColor"
@@ -345,7 +345,7 @@ const editDeck = (deck: Deck) => {
 const deleteDeck = async (deckId: string) => {
   if (
     !confirm(
-      "Are you sure you want to delete this deck? All flashcards in this deck will still be available in the general collection."
+      "Är du säker på att du vill radera detta deck? Alla flashcards i detta deck kommer fortfarande att finnas kvar i den allmänna samlingen."
     )
   ) {
     return;
@@ -356,7 +356,7 @@ const deleteDeck = async (deckId: string) => {
     await Promise.all([loadDecks(), loadGeneralFlashcardsCount()]);
   } catch (err) {
     console.error("Error deleting deck:", err);
-    error.value = "Failed to delete deck";
+    error.value = "Kunde inte radera deck";
   }
 };
 
@@ -492,12 +492,32 @@ const formatDate = (date: Date) => {
   grid-column: 1 / -1;
   text-align: center;
   padding: 4rem 2rem;
-  background: rgba(15, 23, 42, 0.7);
-  backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.1);
+  background: var(--cream);
+  border: 2px solid var(--beige);
   border-radius: 24px;
   margin-top: 1.5rem;
-  color: #94a3b8;
+  color: var(--sage);
+  box-shadow: 0 8px 32px rgba(162, 175, 155, 0.1);
+}
+
+.empty-deck-message h3 {
+  margin: 1rem 0 0.5rem 0;
+  font-size: 1.5rem;
+  font-weight: 600;
+  color: var(--sage);
+  font-family: "Playfair Display", serif;
+}
+
+.empty-deck-message p {
+  margin: 0 0 1.5rem 0;
+  color: var(--text-medium);
+  font-size: 1rem;
+  line-height: 1.5;
+}
+
+.empty-deck-message .empty-icon {
+  color: var(--sage);
+  opacity: 0.7;
 }
 
 .loading-spinner {
@@ -641,47 +661,66 @@ const formatDate = (date: Date) => {
 }
 
 .action-btn {
-  background: transparent;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 8px;
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--beige);
+  padding: 0.6rem;
+  border-radius: 10px;
   cursor: pointer;
   color: var(--sage);
-  transition: all 0.2s ease;
-}
-
-.action-btn:hover {
-  background: var(--beige);
-  color: var(--sage);
-}
-
-.action-btn.delete:hover {
-  color: #dc3545;
-  background: rgba(220, 53, 69, 0.1);
-}
-
-.edit-btn,
-.delete-btn {
-  background: transparent;
-  border: none;
-  padding: 0.5rem;
-  border-radius: 8px;
-  cursor: pointer;
-  color: var(--text-light);
   transition: all 0.2s ease;
   display: flex;
   align-items: center;
   justify-content: center;
+  backdrop-filter: blur(10px);
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
+  z-index: 10;
+}
+
+.action-btn:hover {
+  background: var(--cream);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
+}
+
+.action-btn.delete-btn:hover {
+  background: rgba(220, 53, 69, 0.1);
+  color: #dc3545;
+  border-color: #dc3545;
+}
+
+.edit-btn,
+.delete-btn {
+  background: rgba(255, 255, 255, 0.9);
+  border: 1px solid var(--beige);
+  padding: 0.6rem;
+  border-radius: 10px;
+  cursor: pointer;
+  color: var(--sage);
+  transition: all 0.2s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  backdrop-filter: blur(10px);
+  min-width: 32px;
+  min-height: 32px;
+  position: relative;
+  z-index: 10;
 }
 
 .edit-btn:hover {
-  background: var(--beige);
-  color: var(--sage);
+  background: var(--cream);
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(162, 175, 155, 0.2);
 }
 
 .delete-btn:hover {
   background: rgba(220, 53, 69, 0.1);
   color: #dc3545;
+  border-color: #dc3545;
+  transform: scale(1.05);
+  box-shadow: 0 4px 12px rgba(220, 53, 69, 0.2);
 }
 
 .card-count {
@@ -702,12 +741,20 @@ const formatDate = (date: Date) => {
   margin: 0 0 0.5rem 0;
 }
 
+.deck-card.general-collection .deck-content h3 {
+  color: var(--sage);
+}
+
 .deck-content p {
   color: rgba(162, 175, 155, 0.8);
   margin: 0;
   font-size: 0.875rem;
   font-family: "Inter", sans-serif;
   line-height: 1.4;
+}
+
+.deck-card.general-collection .deck-content p {
+  color: var(--text-dark);
 }
 
 .deck-footer {
@@ -718,6 +765,10 @@ const formatDate = (date: Date) => {
   font-size: 0.875rem;
   font-family: "Inter", sans-serif;
   color: rgba(162, 175, 155, 0.8);
+}
+
+.deck-card.general-collection .deck-footer {
+  color: var(--text-light);
 }
 
 /* Modal Styles */

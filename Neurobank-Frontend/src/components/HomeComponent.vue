@@ -38,8 +38,7 @@
             <div class="card-content">
               <h3>NOTES</h3>
               <div class="card-item">
-                <span class="item-title">Weekly notes</span>
-                <span class="item-meta">Updated Aug 21, 2023</span>
+                <span class="item-meta">{{ notesCount }} notes</span>
               </div>
             </div>
             <button class="card-action">
@@ -79,8 +78,7 @@
             <div class="card-content">
               <h3>FLASHCARDS</h3>
               <div class="card-item">
-                <span class="item-title">August 2023</span>
-                <span class="item-meta">{{ flashcardsCount }} new cards</span>
+                <span class="item-meta">{{ flashcardsCount }} cards</span>
               </div>
             </div>
             <button class="card-action">
@@ -115,12 +113,7 @@
                   <span class="task-title">{{ task.title }}</span>
                 </div>
                 <div v-if="pendingTasks.length === 0" class="task-item">
-                  <div class="task-checkbox">
-                    <input type="checkbox" checked />
-                  </div>
-                  <span class="task-title completed"
-                    >All tasks completed! 🎉</span
-                  >
+                  <span class="task-title">All tasks completed!</span>
                 </div>
               </div>
             </div>
