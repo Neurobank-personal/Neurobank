@@ -1,4 +1,4 @@
-const fileService = require("./fileService");
+const dataService = require("./dataService");
 const { v4: uuidv4 } = require("uuid");
 
 class NoteFolderService {
@@ -8,11 +8,11 @@ class NoteFolderService {
 
   async getUserNoteFolders(userId) {
     try {
-      const folders = await fileService.readNoteFolders();
+      const folders = await dataService.getNoteFolders();
       const userFolders = folders.filter((folder) => folder.userId === userId);
 
       // Add note count to each folder
-      const notes = await fileService.readNotes();
+      const notes = await dataService.getNotes();
 
       return userFolders.map((folder) => ({
         ...folder,
@@ -26,13 +26,13 @@ class NoteFolderService {
 
   async getNoteFolder(folderId) {
     try {
-      const folders = await fileService.readNoteFolders();
+      const folders = await dataService.getNoteFolders();
       const folder = folders.find((f) => f.id === folderId);
 
       if (!folder) return null;
 
       // Add note count
-      const notes = await fileService.readNotes();
+      const notes = await dataService.getNotes();
       folder.noteCount = notes.filter(
         (note) => note.folderId === folderId
       ).length;
@@ -46,7 +46,7 @@ class NoteFolderService {
 
   async createNoteFolder(folderData) {
     try {
-      const folders = await fileService.readNoteFolders();
+      const folders = await dataService.getNoteFolders();
 
       const newFolder = {
         id: uuidv4(),
@@ -60,7 +60,7 @@ class NoteFolderService {
       };
 
       folders.push(newFolder);
-      await fileService.writeNoteFolders(folders);
+      await dataService.saveNoteFolders(folders);
 
       return newFolder;
     } catch (error) {
@@ -71,7 +71,7 @@ class NoteFolderService {
 
   async updateNoteFolder(folderId, updates) {
     try {
-      const folders = await fileService.readNoteFolders();
+      const folders = await dataService.getNoteFolders();
       const folderIndex = folders.findIndex((f) => f.id === folderId);
 
       if (folderIndex === -1) return null;
@@ -83,10 +83,10 @@ class NoteFolderService {
       };
 
       folders[folderIndex] = updatedFolder;
-      await fileService.writeNoteFolders(folders);
+      await dataService.saveNoteFolders(folders);
 
       // Add note count
-      const notes = await fileService.readNotes();
+      const notes = await dataService.getNotes();
       updatedFolder.noteCount = notes.filter(
         (note) => note.folderId === folderId
       ).length;
@@ -100,7 +100,7 @@ class NoteFolderService {
 
   async deleteNoteFolder(folderId) {
     try {
-      const folders = await fileService.readNoteFolders();
+      const folders = await dataService.getNoteFolders();
       const filteredFolders = folders.filter(
         (folder) => folder.id !== folderId
       );
@@ -110,7 +110,7 @@ class NoteFolderService {
       }
 
       // Move all notes in this folder to general collection (no folderId)
-      const notes = await fileService.readNotes();
+      const notes = await dataService.getNotes();
       const updatedNotes = notes.map((note) => {
         if (note.folderId === folderId) {
           return {
@@ -122,8 +122,8 @@ class NoteFolderService {
         return note;
       });
 
-      await fileService.writeNoteFolders(filteredFolders);
-      await fileService.writeNotes(updatedNotes);
+      await dataService.saveNoteFolders(filteredFolders);
+      await dataService.saveNotes(updatedNotes);
 
       return true;
     } catch (error) {
@@ -134,7 +134,7 @@ class NoteFolderService {
 
   async getNoteFolderNotes(folderId) {
     try {
-      const notes = await fileService.readNotes();
+      const notes = await dataService.getNotes();
       return notes.filter((note) => note.folderId === folderId);
     } catch (error) {
       console.error("Error getting note folder notes:", error);

@@ -1,4 +1,4 @@
-const fileService = require("./fileService");
+const dataService = require("./dataService");
 const aiService = require("./aiService");
 const flashcardService = require("./flashcardService");
 const statisticsService = require("./statisticsService");
@@ -13,7 +13,7 @@ class NoteService {
     validateNote(noteData);
 
     const { title, content, processType, userId, folderId } = noteData;
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
 
     const newNote = {
       id: this.generateId(),
@@ -27,7 +27,7 @@ class NoteService {
     };
 
     notes.push(newNote);
-    await fileService.writeNotes(notes);
+    await dataService.saveNotes(notes);
 
     // Registrera statistik för skapad note
     try {
@@ -40,17 +40,17 @@ class NoteService {
   }
 
   async getUserNotes(userId) {
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
     return notes.filter((note) => note.userId === userId);
   }
 
   async getNoteById(noteId) {
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
     return notes.find((note) => note.id === noteId);
   }
 
   async updateNote(noteId, updates) {
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
     const noteIndex = notes.findIndex((note) => note.id === noteId);
 
     if (noteIndex === -1) {
@@ -63,7 +63,7 @@ class NoteService {
       updatedAt: new Date().toISOString(),
     };
 
-    await fileService.writeNotes(notes);
+    await dataService.saveNotes(notes);
     return notes[noteIndex];
   }
 
@@ -88,20 +88,20 @@ class NoteService {
   }
 
   async deleteNote(noteId) {
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
     const filteredNotes = notes.filter((note) => note.id !== noteId);
 
     if (notes.length === filteredNotes.length) {
       throw new Error("Anteckning hittades inte");
     }
 
-    await fileService.writeNotes(filteredNotes);
+    await dataService.saveNotes(filteredNotes);
     return true;
   }
 
   async generateFlashcardsFromNotes(noteIds, userId, deckId = null) {
     // Hämta alla specificerade anteckningar
-    const notes = await fileService.readNotes();
+    const notes = await dataService.getNotes();
     const selectedNotes = notes.filter(
       (note) => noteIds.includes(note.id) && note.userId === userId
     );

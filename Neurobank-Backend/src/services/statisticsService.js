@@ -1,4 +1,4 @@
-const fileService = require("./fileService");
+const dataService = require("./dataService");
 
 class StatisticsService {
   generateId() {
@@ -7,7 +7,7 @@ class StatisticsService {
 
   // Hämta eller skapa användarstatistik
   async getUserStats(userId) {
-    const allStats = await fileService.readUserStats();
+    const allStats = await dataService.getUserStats();
     let userStats = allStats.find((stats) => stats.userId === userId);
 
     if (!userStats) {
@@ -19,7 +19,12 @@ class StatisticsService {
         updatedAt: new Date().toISOString(),
       };
       allStats.push(userStats);
-      await fileService.writeUserStats(allStats);
+      await dataService.saveUserStats(allStats);
+    }
+
+    // Säkerställ att dailyStats alltid är en array
+    if (!userStats.dailyStats || !Array.isArray(userStats.dailyStats)) {
+      userStats.dailyStats = [];
     }
 
     return userStats;
@@ -58,11 +63,11 @@ class StatisticsService {
     todayStats.notesCreated += 1;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
+    const allStats = await dataService.getUserStats();
     const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
     allStats[statsIndex] = userStats;
 
-    await fileService.writeUserStats(allStats);
+    await dataService.saveUserStats(allStats);
     return todayStats;
   }
 
@@ -73,11 +78,11 @@ class StatisticsService {
     todayStats.flashcardsStudied += count;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
+    const allStats = await dataService.getUserStats();
     const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
     allStats[statsIndex] = userStats;
 
-    await fileService.writeUserStats(allStats);
+    await dataService.saveUserStats(allStats);
     return todayStats;
   }
 
@@ -88,11 +93,11 @@ class StatisticsService {
     todayStats.flashcardsCreated += count;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
+    const allStats = await dataService.getUserStats();
     const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
     allStats[statsIndex] = userStats;
 
-    await fileService.writeUserStats(allStats);
+    await dataService.saveUserStats(allStats);
     return todayStats;
   }
 
@@ -215,11 +220,11 @@ class StatisticsService {
     );
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
+    const allStats = await dataService.getUserStats();
     const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
     allStats[statsIndex] = userStats;
 
-    await fileService.writeUserStats(allStats);
+    await dataService.saveUserStats(allStats);
     return userStats;
   }
 
@@ -227,8 +232,8 @@ class StatisticsService {
   // OBS: flashcardsStudied är en kumulativ räknare och beräknas inte från källdata
   async calculateActualStats(userId) {
     const [notes, flashcards] = await Promise.all([
-      fileService.readNotes(),
-      fileService.readFlashcards(),
+      dataService.getNotes(),
+      dataService.getFlashcards(),
     ]);
 
     const userNotes = notes.filter((note) => note.userId === userId);
@@ -311,11 +316,11 @@ class StatisticsService {
       repairedStats.dailyStats = updatedDailyStats;
       repairedStats.updatedAt = new Date().toISOString();
 
-      const allStats = await fileService.readUserStats();
+      const allStats = await dataService.getUserStats();
       const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
       if (statsIndex >= 0) {
         allStats[statsIndex] = repairedStats;
-        await fileService.writeUserStats(allStats);
+        await dataService.saveUserStats(allStats);
       }
     }
 
@@ -476,7 +481,7 @@ class StatisticsService {
 
   // Beräkna flashcardsStudied från källdata (endast för jämförelse, inte reparation)
   async calculateFlashcardsStudiedFromSource(userId) {
-    const flashcards = await fileService.readFlashcards();
+    const flashcards = await dataService.getFlashcards();
     const userFlashcards = flashcards.filter((card) => card.userId === userId);
 
     const dailyStats = new Map();

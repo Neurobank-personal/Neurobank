@@ -1,4 +1,4 @@
-const fileService = require("./fileService");
+const dataService = require("./dataService");
 const statisticsService = require("./statisticsService");
 
 class FlashcardService {
@@ -7,7 +7,7 @@ class FlashcardService {
   }
 
   async createFlashcard(flashcardData, userId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
 
     const newFlashcard = {
       id: this.generateId(),
@@ -30,7 +30,7 @@ class FlashcardService {
     };
 
     allFlashcards.push(newFlashcard);
-    await fileService.writeFlashcards(allFlashcards);
+    await dataService.saveFlashcards(allFlashcards);
 
     // Registrera statistik för skapad flashcard
     try {
@@ -46,7 +46,7 @@ class FlashcardService {
   }
 
   async saveFlashcards(flashcards, userId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
 
     const flashcardsToSave = flashcards.map((card) => ({
       id: this.generateId(),
@@ -69,7 +69,7 @@ class FlashcardService {
     }));
 
     allFlashcards.push(...flashcardsToSave);
-    await fileService.writeFlashcards(allFlashcards);
+    await dataService.saveFlashcards(allFlashcards);
 
     // Registrera statistik för skapade flashcards
     try {
@@ -88,17 +88,17 @@ class FlashcardService {
   }
 
   async getUserFlashcards(userId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     return allFlashcards.filter((card) => card.userId === userId);
   }
 
   async getFlashcardById(flashcardId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     return allFlashcards.find((card) => card.id === flashcardId);
   }
 
   async updateFlashcard(flashcardId, updates) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     const cardIndex = allFlashcards.findIndex(
       (card) => card.id === flashcardId
     );
@@ -113,12 +113,12 @@ class FlashcardService {
       updatedAt: new Date().toISOString(),
     };
 
-    await fileService.writeFlashcards(allFlashcards);
+    await dataService.saveFlashcards(allFlashcards);
     return allFlashcards[cardIndex];
   }
 
   async deleteFlashcard(flashcardId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     const filteredFlashcards = allFlashcards.filter(
       (card) => card.id !== flashcardId
     );
@@ -127,7 +127,7 @@ class FlashcardService {
       throw new Error("Flashcard not found");
     }
 
-    await fileService.writeFlashcards(filteredFlashcards);
+    await dataService.saveFlashcards(filteredFlashcards);
     return true;
   }
 
@@ -231,7 +231,7 @@ class FlashcardService {
   }
 
   async moveExpiredCardsToRemaining(userId) {
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     const userFlashcards = allFlashcards.filter(
       (card) => card.userId === userId
     );
@@ -256,7 +256,7 @@ class FlashcardService {
     });
 
     if (movedCount > 0) {
-      await fileService.writeFlashcards(updatedFlashcards);
+      await dataService.saveFlashcards(updatedFlashcards);
     }
 
     return movedCount;
@@ -275,7 +275,7 @@ class FlashcardService {
     // First move expired cards back to remaining
     await this.moveExpiredCardsToRemaining(userId);
 
-    const allFlashcards = await fileService.readFlashcards();
+    const allFlashcards = await dataService.getFlashcards();
     return allFlashcards.filter((card) => card.userId === userId);
   }
 }
