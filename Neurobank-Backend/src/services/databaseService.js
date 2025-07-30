@@ -49,6 +49,8 @@ class DatabaseService {
                 id VARCHAR PRIMARY KEY,
                 title VARCHAR,
                 content TEXT,
+                process_type VARCHAR,
+                processed_content TEXT,
                 user_id VARCHAR,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
@@ -65,6 +67,24 @@ class DatabaseService {
       // Kolumnen finns redan eller annat fel - ignorera
     }
 
+    // Lägg till process_type kolumn om den saknas
+    try {
+      await this.query(
+        `ALTER TABLE notes ADD COLUMN IF NOT EXISTS process_type VARCHAR`
+      );
+    } catch (error) {
+      // Kolumnen finns redan eller annat fel - ignorera
+    }
+
+    // Lägg till processed_content kolumn om den saknas
+    try {
+      await this.query(
+        `ALTER TABLE notes ADD COLUMN IF NOT EXISTS processed_content TEXT`
+      );
+    } catch (error) {
+      // Kolumnen finns redan eller annat fel - ignorera
+    }
+
     // Skapa flashcards-tabell
     await this.query(`
             CREATE TABLE IF NOT EXISTS flashcards (
@@ -72,9 +92,15 @@ class DatabaseService {
                 deck_id VARCHAR,
                 question TEXT,
                 answer TEXT,
+                categories JSONB,
                 difficulty INTEGER DEFAULT 1,
-                user_id VARCHAR,
+                source_note_id VARCHAR,
+                last_reviewed TIMESTAMP,
                 next_review_date TIMESTAMP,
+                review_count INTEGER DEFAULT 0,
+                easy_count INTEGER DEFAULT 0,
+                status VARCHAR DEFAULT 'active',
+                user_id VARCHAR,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
             )
@@ -88,6 +114,43 @@ class DatabaseService {
     } catch (error) {
       // Kolumnen finns redan eller annat fel - ignorera
     }
+
+    // Lägg till saknade kolumner för flashcards
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS categories JSONB`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS source_note_id VARCHAR`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS last_reviewed TIMESTAMP`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS review_count INTEGER DEFAULT 0`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS easy_count INTEGER DEFAULT 0`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE flashcards ADD COLUMN IF NOT EXISTS status VARCHAR DEFAULT 'active'`
+      );
+    } catch (error) {}
 
     // Skapa decks-tabell
     await this.query(`
@@ -116,6 +179,8 @@ class DatabaseService {
                 id VARCHAR PRIMARY KEY,
                 name VARCHAR NOT NULL,
                 description TEXT,
+                color VARCHAR,
+                note_count INTEGER DEFAULT 0,
                 user_id VARCHAR,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -131,15 +196,29 @@ class DatabaseService {
       // Kolumnen finns redan eller annat fel - ignorera
     }
 
+    // Lägg till saknade kolumner för note_folders
+    try {
+      await this.query(
+        `ALTER TABLE note_folders ADD COLUMN IF NOT EXISTS color VARCHAR`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE note_folders ADD COLUMN IF NOT EXISTS note_count INTEGER DEFAULT 0`
+      );
+    } catch (error) {}
+
     // Skapa tasks-tabell
     await this.query(`
             CREATE TABLE IF NOT EXISTS tasks (
                 id VARCHAR PRIMARY KEY,
                 title VARCHAR NOT NULL,
                 description TEXT,
-                completed BOOLEAN DEFAULT false,
+                status VARCHAR DEFAULT 'pending',
                 priority VARCHAR DEFAULT 'medium',
                 due_date TIMESTAMP,
+                completed_at TIMESTAMP,
                 user_id VARCHAR,
                 created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
                 updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
@@ -154,6 +233,24 @@ class DatabaseService {
     } catch (error) {
       // Kolumnen finns redan eller annat fel - ignorera
     }
+
+    // Lägg till saknade kolumner för tasks
+    try {
+      await this.query(
+        `ALTER TABLE tasks ADD COLUMN IF NOT EXISTS status VARCHAR DEFAULT 'pending'`
+      );
+    } catch (error) {}
+
+    try {
+      await this.query(
+        `ALTER TABLE tasks ADD COLUMN IF NOT EXISTS completed_at TIMESTAMP`
+      );
+    } catch (error) {}
+
+    // Ta bort gamla completed kolumn om den finns
+    try {
+      await this.query(`ALTER TABLE tasks DROP COLUMN IF EXISTS completed`);
+    } catch (error) {}
 
     // Skapa user_stats-tabell
     await this.query(`

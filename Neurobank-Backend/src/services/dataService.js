@@ -158,6 +158,8 @@ class DataService {
         id: row.id,
         title: row.title,
         content: row.content,
+        processType: row.process_type,
+        processedContent: row.processed_content,
         userId: row.user_id,
         folderId: row.folder_id,
         createdAt: row.created_at?.toISOString(),
@@ -177,11 +179,13 @@ class DataService {
 
         for (const note of notes) {
           await client.query(
-            "INSERT INTO notes (id, title, content, user_id, folder_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7)",
+            "INSERT INTO notes (id, title, content, process_type, processed_content, user_id, folder_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9)",
             [
               note.id,
               note.title,
               note.content,
+              note.processType,
+              note.processedContent,
               note.userId,
               note.folderId,
               note.createdAt,
@@ -213,8 +217,15 @@ class DataService {
         deckId: row.deck_id,
         question: row.question,
         answer: row.answer,
+        categories: row.categories || [],
         difficulty: row.difficulty,
+        sourceNoteId: row.source_note_id,
+        lastReviewed: row.last_reviewed?.toISOString(),
         nextReviewDate: row.next_review_date?.toISOString(),
+        reviewCount: row.review_count || 0,
+        easyCount: row.easy_count || 0,
+        status: row.status || "active",
+        userId: row.user_id,
         createdAt: row.created_at?.toISOString(),
         updatedAt: row.updated_at?.toISOString(),
       }));
@@ -232,14 +243,21 @@ class DataService {
 
         for (const card of flashcards) {
           await client.query(
-            "INSERT INTO flashcards (id, deck_id, question, answer, difficulty, next_review_date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+            "INSERT INTO flashcards (id, deck_id, question, answer, categories, difficulty, source_note_id, last_reviewed, next_review_date, review_count, easy_count, status, user_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12, $13, $14, $15)",
             [
               card.id,
               card.deckId,
               card.question,
               card.answer,
+              JSON.stringify(card.categories || []),
               card.difficulty,
+              card.sourceNoteId,
+              card.lastReviewed,
               card.nextReviewDate,
+              card.reviewCount || 0,
+              card.easyCount || 0,
+              card.status || "active",
+              card.userId,
               card.createdAt,
               card.updatedAt,
             ]
@@ -268,6 +286,7 @@ class DataService {
         id: row.id,
         name: row.name,
         description: row.description,
+        userId: row.user_id,
         createdAt: row.created_at?.toISOString(),
         updatedAt: row.updated_at?.toISOString(),
       }));
@@ -285,11 +304,12 @@ class DataService {
 
         for (const deck of decks) {
           await client.query(
-            "INSERT INTO decks (id, name, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)",
+            "INSERT INTO decks (id, name, description, user_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6)",
             [
               deck.id,
               deck.name,
               deck.description,
+              deck.userId,
               deck.createdAt,
               deck.updatedAt,
             ]
@@ -318,6 +338,9 @@ class DataService {
         id: row.id,
         name: row.name,
         description: row.description,
+        color: row.color,
+        noteCount: row.note_count || 0,
+        userId: row.user_id,
         createdAt: row.created_at?.toISOString(),
         updatedAt: row.updated_at?.toISOString(),
       }));
@@ -335,11 +358,14 @@ class DataService {
 
         for (const folder of folders) {
           await client.query(
-            "INSERT INTO note_folders (id, name, description, created_at, updated_at) VALUES ($1, $2, $3, $4, $5)",
+            "INSERT INTO note_folders (id, name, description, color, note_count, user_id, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
             [
               folder.id,
               folder.name,
               folder.description,
+              folder.color,
+              folder.noteCount || 0,
+              folder.userId,
               folder.createdAt,
               folder.updatedAt,
             ]
@@ -368,8 +394,10 @@ class DataService {
         id: row.id,
         title: row.title,
         description: row.description,
-        completed: row.completed,
+        status: row.status || "pending",
         priority: row.priority,
+        completedAt: row.completed_at?.toISOString(),
+        userId: row.user_id,
         dueDate: row.due_date?.toISOString(),
         createdAt: row.created_at?.toISOString(),
         updatedAt: row.updated_at?.toISOString(),
@@ -388,13 +416,15 @@ class DataService {
 
         for (const task of tasks) {
           await client.query(
-            "INSERT INTO tasks (id, title, description, completed, priority, due_date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8)",
+            "INSERT INTO tasks (id, title, description, status, priority, completed_at, user_id, due_date, created_at, updated_at) VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10)",
             [
               task.id,
               task.title,
               task.description,
-              task.completed,
+              task.status || "pending",
               task.priority,
+              task.completedAt,
+              task.userId,
               task.dueDate,
               task.createdAt,
               task.updatedAt,
