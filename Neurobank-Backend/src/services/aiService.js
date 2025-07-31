@@ -26,7 +26,7 @@ class AIService {
             expand: `Utveckla och utvidga följande text på svenska med mer djupgående analys och exempel:\n\n${content}`,
             analyze: `Analysera följande text på svenska och ge djupgående insikter:\n\n${content}`,
             structure: `Strukturera och organisera följande text på svenska på ett tydligt sätt:\n\n${content}`,
-            flashcards: `Generate flashcards from the following text in English. Create 3-7 flashcards with questions and answers based on the most important content. Also categorize each flashcard with an appropriate category. Respond in the following JSON format:
+            flashcards: `Generate flashcards from the following text in English. Create flashcards with questions and answers based on the content. Also categorize each flashcard with an appropriate category. Respond in the following JSON format:
 {
   "flashcards": [
     {
