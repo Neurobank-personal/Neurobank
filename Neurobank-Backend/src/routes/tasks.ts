@@ -1,12 +1,17 @@
-const express = require('express')
-const TaskService = require('../services/taskService')
-const { validateRequired } = require('../utils/validation')
+import { Router, Request, Response } from 'express'
+import TaskService from '../services/taskService'
+import { validateRequired } from '../utils/validation'
+import { Task, CreateTaskRequest, UpdateTaskRequest } from '../types/Task'
 
-const router = express.Router()
+const router = Router()
 const taskService = new TaskService()
 
+interface CreateTaskBody extends CreateTaskRequest {
+  userId: string;
+}
+
 // Get all tasks for a user
-router.get('/user/:userId', async (req, res) => {
+router.get('/user/:userId', async (req: Request<{userId: string}>, res: Response<Task[] | {error: string}>) => {
     try {
         const { userId } = req.params
         const tasks = await taskService.getUserTasks(userId)
@@ -18,7 +23,7 @@ router.get('/user/:userId', async (req, res) => {
 })
 
 // Get a specific task
-router.get('/:taskId', async (req, res) => {
+router.get('/:taskId', async (req: Request<{taskId: string}>, res: Response<Task | {error: string}>) => {
     try {
         const { taskId } = req.params
         const task = await taskService.getTaskById(taskId)
@@ -35,9 +40,9 @@ router.get('/:taskId', async (req, res) => {
 })
 
 // Create a new task
-router.post('/', async (req, res) => {
+router.post('/', async (req: Request<{}, Task | {error: string}, CreateTaskBody>, res: Response<Task | {error: string}>) => {
     try {
-        const { userId, title, description, priority, dueDate } = req.body
+        const { userId, title, description, priority, dueDate } = req.body as CreateTaskBody
 
         // Validate required fields
         const requiredFields = { userId, title }
@@ -73,10 +78,10 @@ router.post('/', async (req, res) => {
 })
 
 // Update a task
-router.put('/:taskId', async (req, res) => {
+router.put('/:taskId', async (req: Request<{taskId: string}, Task | {error: string}, UpdateTaskRequest>, res: Response<Task | {error: string}>) => {
     try {
         const { taskId } = req.params
-        const { title, description, priority, status, dueDate, completedAt } = req.body
+        const { title, description, priority, status, dueDate, completedAt } = req.body as UpdateTaskRequest
 
         // Validate priority if provided
         if (priority && !['low', 'medium', 'high'].includes(priority)) {
@@ -93,7 +98,7 @@ router.put('/:taskId', async (req, res) => {
             return res.status(400).json({ error: 'Invalid due date format' })
         }
 
-        const updates = {}
+        const updates: Partial<Task> = {}
         if (title !== undefined) updates.title = title.trim()
         if (description !== undefined) updates.description = description?.trim() || ''
         if (priority !== undefined) updates.priority = priority
@@ -103,7 +108,7 @@ router.put('/:taskId', async (req, res) => {
 
         const updatedTask = await taskService.updateTask(taskId, updates)
         res.json(updatedTask)
-    } catch (error) {
+    } catch (error: any) {
         if (error.message === 'Task not found') {
             return res.status(404).json({ error: 'Task not found' })
         }
@@ -113,12 +118,12 @@ router.put('/:taskId', async (req, res) => {
 })
 
 // Delete a task
-router.delete('/:taskId', async (req, res) => {
+router.delete('/:taskId', async (req: Request<{taskId: string}>, res: Response<{error: string} | void>) => {
     try {
         const { taskId } = req.params
         await taskService.deleteTask(taskId)
         res.status(204).send()
-    } catch (error) {
+    } catch (error: any) {
         if (error.message === 'Task not found') {
             return res.status(404).json({ error: 'Task not found' })
         }
@@ -127,4 +132,4 @@ router.delete('/:taskId', async (req, res) => {
     }
 })
 
-module.exports = router
+export default router

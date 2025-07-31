@@ -1,15 +1,34 @@
-const express = require("express");
-const router = express.Router();
-const flashcardService = require("../services/flashcardService");
+import { Router, Request, Response, NextFunction } from 'express'
+import flashcardService from '../services/flashcardService'
+import { Flashcard } from '../types/Flashcard'
+
+const router = Router()
+
+interface CreateFlashcardRequest {
+  question: string;
+  answer: string;
+  categories?: string[];
+  userId: string;
+  deckId?: string;
+}
+
+interface ReviewFlashcardRequest {
+  difficulty: 'easy' | 'medium' | 'hard';
+}
+
+interface CustomReviewRequest {
+  days: number;
+  timeUnit: 'days' | 'months';
+}
 
 // Skapa ny flashcard
-router.post("/", async (req, res, next) => {
+router.post('/', async (req: Request<{}, Flashcard | {error: string}, CreateFlashcardRequest>, res: Response<Flashcard | {error: string}>, next: NextFunction) => {
   try {
-    const { question, answer, categories, userId, deckId } = req.body;
+    const { question, answer, categories, userId, deckId } = req.body as CreateFlashcardRequest;
 
     if (!question || !answer || !userId) {
       return res.status(400).json({
-        error: "Question, answer, and userId are required",
+        error: 'Question, answer, and userId are required',
       });
     }
 
@@ -30,7 +49,7 @@ router.post("/", async (req, res, next) => {
 });
 
 // Hämta användarens flashcards
-router.get("/user/:userId", async (req, res, next) => {
+router.get('/user/:userId', async (req: Request<{userId: string}>, res: Response<Flashcard[]>, next: NextFunction) => {
   try {
     const userFlashcards = await flashcardService.getUserFlashcards(
       req.params.userId
@@ -42,13 +61,13 @@ router.get("/user/:userId", async (req, res, next) => {
 });
 
 // Hämta specifik flashcard
-router.get("/:flashcardId", async (req, res, next) => {
+router.get('/:flashcardId', async (req: Request<{flashcardId: string}>, res: Response<Flashcard | {error: string}>, next: NextFunction) => {
   try {
     const flashcard = await flashcardService.getFlashcardById(
       req.params.flashcardId
     );
     if (!flashcard) {
-      return res.status(404).json({ error: "Flashcard not found" });
+      return res.status(404).json({ error: 'Flashcard not found' });
     }
     res.json(flashcard);
   } catch (error) {
@@ -57,11 +76,11 @@ router.get("/:flashcardId", async (req, res, next) => {
 });
 
 // Uppdatera flashcard
-router.put("/:flashcardId", async (req, res, next) => {
+router.put('/:flashcardId', async (req: Request<{flashcardId: string}, Flashcard, Partial<Flashcard>>, res: Response<Flashcard>, next: NextFunction) => {
   try {
     const updatedFlashcard = await flashcardService.updateFlashcard(
       req.params.flashcardId,
-      req.body
+      req.body as Partial<Flashcard>
     );
     res.json(updatedFlashcard);
   } catch (error) {
@@ -70,13 +89,13 @@ router.put("/:flashcardId", async (req, res, next) => {
 });
 
 // Markera flashcard som granskad
-router.patch("/:flashcardId/review", async (req, res, next) => {
+router.patch('/:flashcardId/review', async (req: Request<{flashcardId: string}, Flashcard | {error: string}, ReviewFlashcardRequest>, res: Response<Flashcard | {error: string}>, next: NextFunction) => {
   try {
-    const { difficulty } = req.body;
+    const { difficulty } = req.body as ReviewFlashcardRequest;
 
-    if (!difficulty || !["easy", "medium", "hard"].includes(difficulty)) {
+    if (!difficulty || !['easy', 'medium', 'hard'].includes(difficulty)) {
       return res.status(400).json({
-        error: "Valid difficulty (easy, medium, hard) is required",
+        error: 'Valid difficulty (easy, medium, hard) is required',
       });
     }
 
@@ -91,18 +110,18 @@ router.patch("/:flashcardId/review", async (req, res, next) => {
 });
 
 // Markera flashcard med custom review datum
-router.patch("/:flashcardId/custom-review", async (req, res, next) => {
+router.patch('/:flashcardId/custom-review', async (req: Request<{flashcardId: string}, Flashcard | {error: string}, CustomReviewRequest>, res: Response<Flashcard | {error: string}>, next: NextFunction) => {
   try {
-    const { days, timeUnit } = req.body;
+    const { days, timeUnit } = req.body as CustomReviewRequest;
 
     if (!days || !timeUnit || days < 1 || days > 30) {
       return res.status(400).json({
         error:
-          "Days must be between 1-30 and timeUnit (days/months) are required",
+          'Days must be between 1-30 and timeUnit (days/months) are required',
       });
     }
 
-    if (!["days", "months"].includes(timeUnit)) {
+    if (!['days', 'months'].includes(timeUnit)) {
       return res.status(400).json({
         error: "TimeUnit must be 'days' or 'months'",
       });
@@ -120,7 +139,7 @@ router.patch("/:flashcardId/custom-review", async (req, res, next) => {
 });
 
 // Flytta expired cards tillbaka till remaining
-router.post("/user/:userId/refresh-reviews", async (req, res, next) => {
+router.post('/user/:userId/refresh-reviews', async (req: Request<{userId: string}>, res: Response<{success: boolean; movedCount: number; message: string}>, next: NextFunction) => {
   try {
     const movedCount = await flashcardService.moveExpiredCardsToRemaining(
       req.params.userId
@@ -136,7 +155,7 @@ router.post("/user/:userId/refresh-reviews", async (req, res, next) => {
 });
 
 // Flytta kort manuellt tillbaka till remaining
-router.patch("/:flashcardId/reset-to-remaining", async (req, res, next) => {
+router.patch('/:flashcardId/reset-to-remaining', async (req: Request<{flashcardId: string}>, res: Response<Flashcard>, next: NextFunction) => {
   try {
     const updatedFlashcard = await flashcardService.resetCardToRemaining(
       req.params.flashcardId
@@ -148,7 +167,7 @@ router.patch("/:flashcardId/reset-to-remaining", async (req, res, next) => {
 });
 
 // Ta bort flashcard
-router.delete("/:flashcardId", async (req, res, next) => {
+router.delete('/:flashcardId', async (req: Request<{flashcardId: string}>, res: Response<{success: boolean}>, next: NextFunction) => {
   try {
     await flashcardService.deleteFlashcard(req.params.flashcardId);
     res.json({ success: true });
@@ -157,4 +176,4 @@ router.delete("/:flashcardId", async (req, res, next) => {
   }
 });
 
-module.exports = router;
+export default router
