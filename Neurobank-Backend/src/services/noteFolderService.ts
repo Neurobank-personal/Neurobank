@@ -1,23 +1,35 @@
-import fileService from "./fileService";
 import { v4 as uuidv4 } from "uuid";
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { INoteFolderRepository } from '../repositories/interfaces/INoteFolderRepository';
+import { INoteRepository } from '../repositories/interfaces/INoteRepository';
 import { NoteFolder, CreateNoteFolderRequest, UpdateNoteFolderRequest } from "../types/NoteFolder";
 import { Note } from "../types/Note";
 
 class NoteFolderService {
-  private dataFile: string = "noteFolders.json";
+  private noteFolderRepository: INoteFolderRepository;
+  private noteRepository: INoteRepository;
+
+  constructor() {
+    this.noteFolderRepository = RepositoryFactory.getNoteFolderRepository();
+    this.noteRepository = RepositoryFactory.getNoteRepository();
+  }
 
   async getUserNoteFolders(userId: string): Promise<NoteFolder[]> {
     try {
-      const folders = await fileService.readNoteFolders();
-      const userFolders = folders.filter((folder) => folder.userId === userId);
+      const userFolders = await this.noteFolderRepository.findByUserId(userId);
 
       // Add note count to each folder
-      const notes = await fileService.readNotes();
+      const foldersWithCount = await Promise.all(
+        userFolders.map(async (folder) => {
+          const folderNotes = await this.noteRepository.findByFolderId(folder.id);
+          return {
+            ...folder,
+            noteCount: folderNotes.length,
+          };
+        })
+      );
 
-      return userFolders.map((folder) => ({
-        ...folder,
-        noteCount: notes.filter((note) => note.folderId === folder.id).length,
-      }));
+      return foldersWithCount;
     } catch (error) {
       console.error("Error getting user note folders:", error);
       throw error;
@@ -26,16 +38,15 @@ class NoteFolderService {
 
   async getNoteFolder(folderId: string): Promise<NoteFolder | null> {
     try {
-      const folders = await fileService.readNoteFolders();
-      const folder = folders.find((f) => f.id === folderId);
+      const folder = await this.noteFolderRepository.findById(folderId);
 
       if (!folder) return null;
 
       // Add note count
-      const notes = await fileService.readNotes();
+      const folderNotes = await this.noteRepository.findByFolderId(folderId);
       const folderWithCount: NoteFolder = {
         ...folder,
-        noteCount: notes.filter((note) => note.folderId === folderId).length,
+        noteCount: folderNotes.length,
       };
 
       return folderWithCount;
@@ -47,8 +58,6 @@ class NoteFolderService {
 
   async createNoteFolder(folderData: CreateNoteFolderRequest): Promise<NoteFolder> {
     try {
-      const folders = await fileService.readNoteFolders();
-
       const newFolder: NoteFolder = {
         id: uuidv4(),
         name: folderData.name,
@@ -60,10 +69,7 @@ class NoteFolderService {
         noteCount: 0,
       };
 
-      folders.push(newFolder);
-      await fileService.writeNoteFolders(folders);
-
-      return newFolder;
+      return await this.noteFolderRepository.create(newFolder);
     } catch (error) {
       console.error("Error creating note folder:", error);
       throw error;
@@ -72,25 +78,18 @@ class NoteFolderService {
 
   async updateNoteFolder(folderId: string, updates: Omit<UpdateNoteFolderRequest, 'id'>): Promise<NoteFolder | null> {
     try {
-      const folders = await fileService.readNoteFolders();
-      const folderIndex = folders.findIndex((f) => f.id === folderId);
-
-      if (folderIndex === -1) return null;
-
-      const updatedFolder: NoteFolder = {
-        ...folders[folderIndex],
+      const updatesWithTimestamp = {
         ...updates,
         updatedAt: new Date().toISOString(),
       };
 
-      folders[folderIndex] = updatedFolder;
-      await fileService.writeNoteFolders(folders);
+      const updatedFolder = await this.noteFolderRepository.update(folderId, updatesWithTimestamp);
+      
+      if (!updatedFolder) return null;
 
       // Add note count
-      const notes = await fileService.readNotes();
-      updatedFolder.noteCount = notes.filter(
-        (note) => note.folderId === folderId
-      ).length;
+      const folderNotes = await this.noteRepository.findByFolderId(folderId);
+      updatedFolder.noteCount = folderNotes.length;
 
       return updatedFolder;
     } catch (error) {
@@ -101,30 +100,21 @@ class NoteFolderService {
 
   async deleteNoteFolder(folderId: string): Promise<boolean> {
     try {
-      const folders = await fileService.readNoteFolders();
-      const filteredFolders = folders.filter(
-        (folder) => folder.id !== folderId
-      );
-
-      if (folders.length === filteredFolders.length) {
+      const success = await this.noteFolderRepository.delete(folderId);
+      
+      if (!success) {
         throw new Error("Note folder not found");
       }
 
       // Move all notes in this folder to general collection (no folderId)
-      const notes = await fileService.readNotes();
-      const updatedNotes = notes.map((note) => {
-        if (note.folderId === folderId) {
-          return {
-            ...note,
-            folderId: undefined,
-            updatedAt: new Date().toISOString(),
-          };
-        }
-        return note;
-      });
-
-      await fileService.writeNoteFolders(filteredFolders);
-      await fileService.writeNotes(updatedNotes);
+      const folderNotes = await this.noteRepository.findByFolderId(folderId);
+      
+      for (const note of folderNotes) {
+        await this.noteRepository.update(note.id, {
+          folderId: undefined,
+          updatedAt: new Date().toISOString(),
+        });
+      }
 
       return true;
     } catch (error) {
@@ -135,8 +125,7 @@ class NoteFolderService {
 
   async getNoteFolderNotes(folderId: string): Promise<Note[]> {
     try {
-      const notes = await fileService.readNotes();
-      return notes.filter((note) => note.folderId === folderId);
+      return await this.noteRepository.findByFolderId(folderId);
     } catch (error) {
       console.error("Error getting note folder notes:", error);
       throw error;

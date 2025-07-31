@@ -1,4 +1,7 @@
-import fileService from "./fileService";
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { IStatisticsRepository } from '../repositories/interfaces/IStatisticsRepository';
+import { INoteRepository } from '../repositories/interfaces/INoteRepository';
+import { IFlashcardRepository } from '../repositories/interfaces/IFlashcardRepository';
 import { UserStatistics, DailyStats, WeeklyStats, TotalStats, Streaks, DashboardStats } from "../types/Statistics";
 import { Note } from "../types/Note";
 import { Flashcard } from "../types/Flashcard";
@@ -29,13 +32,22 @@ interface VerificationResult {
 }
 
 class StatisticsService {
+  private statisticsRepository: IStatisticsRepository;
+  private noteRepository: INoteRepository;
+  private flashcardRepository: IFlashcardRepository;
+
+  constructor() {
+    this.statisticsRepository = RepositoryFactory.getStatisticsRepository();
+    this.noteRepository = RepositoryFactory.getNoteRepository();
+    this.flashcardRepository = RepositoryFactory.getFlashcardRepository();
+  }
   generateId(): string {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   }
 
   // Hämta eller skapa användarstatistik
   async getUserStats(userId: string): Promise<UserStatistics> {
-    const allStats = await fileService.readUserStats();
+    const allStats = await this.statisticsRepository.findAll();
     let userStats = allStats.find((stats) => stats.userId === userId);
 
     if (!userStats) {
@@ -46,8 +58,7 @@ class StatisticsService {
         createdAt: new Date().toISOString(),
         updatedAt: new Date().toISOString(),
       };
-      allStats.push(userStats);
-      await fileService.writeUserStats(allStats);
+      await this.statisticsRepository.create(userStats);
     }
 
     return userStats;
@@ -86,11 +97,7 @@ class StatisticsService {
     todayStats.notesCreated += 1;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
-    const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
-    allStats[statsIndex] = userStats;
-
-    await fileService.writeUserStats(allStats);
+    await this.statisticsRepository.update(userStats.id, userStats);
     return todayStats;
   }
 
@@ -101,11 +108,7 @@ class StatisticsService {
     todayStats.flashcardsStudied += count;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
-    const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
-    allStats[statsIndex] = userStats;
-
-    await fileService.writeUserStats(allStats);
+    await this.statisticsRepository.update(userStats.id, userStats);
     return todayStats;
   }
 
@@ -116,11 +119,7 @@ class StatisticsService {
     todayStats.flashcardsCreated += count;
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
-    const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
-    allStats[statsIndex] = userStats;
-
-    await fileService.writeUserStats(allStats);
+    await this.statisticsRepository.update(userStats.id, userStats);
     return todayStats;
   }
 
@@ -243,11 +242,7 @@ class StatisticsService {
     );
     userStats.updatedAt = new Date().toISOString();
 
-    const allStats = await fileService.readUserStats();
-    const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
-    allStats[statsIndex] = userStats;
-
-    await fileService.writeUserStats(allStats);
+    await this.statisticsRepository.update(userStats.id, userStats);
     return userStats;
   }
 
@@ -255,8 +250,8 @@ class StatisticsService {
   // OBS: flashcardsStudied är en kumulativ räknare och beräknas inte från källdata
   async calculateActualStats(userId: string): Promise<DailyStats[]> {
     const [notes, flashcards] = await Promise.all([
-      fileService.readNotes(),
-      fileService.readFlashcards(),
+      this.noteRepository.findAll(),
+      this.flashcardRepository.findAll(),
     ]);
 
     const userNotes = notes.filter((note) => note.userId === userId);
@@ -342,12 +337,7 @@ class StatisticsService {
       repairedStats.dailyStats = updatedDailyStats;
       repairedStats.updatedAt = new Date().toISOString();
 
-      const allStats = await fileService.readUserStats();
-      const statsIndex = allStats.findIndex((stats) => stats.userId === userId);
-      if (statsIndex >= 0) {
-        allStats[statsIndex] = repairedStats;
-        await fileService.writeUserStats(allStats);
-      }
+      await this.statisticsRepository.update(repairedStats.id, repairedStats);
     }
 
     // För diskrepans-rapporten, använd fullständig beräknad data för jämförelse
@@ -507,7 +497,7 @@ class StatisticsService {
 
   // Beräkna flashcardsStudied från källdata (endast för jämförelse, inte reparation)
   async calculateFlashcardsStudiedFromSource(userId: string): Promise<{ date: string; flashcardsStudied: number }[]> {
-    const flashcards = await fileService.readFlashcards();
+    const flashcards = await this.flashcardRepository.findAll();
     const userFlashcards = flashcards.filter((card) => card.userId === userId);
 
     const dailyStats = new Map<string, { date: string; flashcardsStudied: number }>();

@@ -1,30 +1,33 @@
-import fileService from './fileService';
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { IUserRepository } from '../repositories/interfaces/IUserRepository';
 import { validateUser } from '../utils/validation';
 import { User, CreateUserRequest } from '../types/User';
 
 class UserService {
+    private userRepository: IUserRepository;
+
+    constructor() {
+        this.userRepository = RepositoryFactory.getUserRepository();
+    }
+
     async getUsers(): Promise<User[]> {
-        return fileService.readUsers();
+        return this.userRepository.findAll();
     }
 
     async saveUsers(users: User[]): Promise<void> {
-        return fileService.writeUsers(users);
+        return this.userRepository.save(users);
     }
 
     async getUserById(userId: string): Promise<User | undefined> {
-        const users = await this.getUsers();
-        return users.find(user => user.id === userId);
+        return this.userRepository.findById(userId);
     }
 
     async getUserByEmail(email: string): Promise<User | undefined> {
-        const users = await this.getUsers();
-        return users.find(user => user.email === email);
+        return this.userRepository.findByEmail(email);
     }
 
     async createUser(userData: CreateUserRequest): Promise<User> {
         validateUser(userData);
-
-        const users = await this.getUsers();
 
         // Kolla om användaren redan finns
         const existingUser = await this.getUserByEmail(userData.email);
@@ -38,38 +41,26 @@ class UserService {
             createdAt: new Date().toISOString()
         };
 
-        users.push(newUser);
-        await this.saveUsers(users);
-
-        return newUser;
+        return this.userRepository.create(newUser);
     }
 
     async updateUser(userId: string, updates: Partial<Omit<User, 'id' | 'createdAt'>>): Promise<User> {
-        const users = await this.getUsers();
-        const userIndex = users.findIndex(user => user.id === userId);
-
-        if (userIndex === -1) {
+        const updatedUser = await this.userRepository.update(userId, updates);
+        
+        if (!updatedUser) {
             throw new Error('Användare hittades inte');
         }
 
-        users[userIndex] = {
-            ...users[userIndex],
-            ...updates
-        };
-
-        await this.saveUsers(users);
-        return users[userIndex];
+        return updatedUser;
     }
 
     async deleteUser(userId: string): Promise<boolean> {
-        const users = await this.getUsers();
-        const filteredUsers = users.filter(user => user.id !== userId);
-
-        if (users.length === filteredUsers.length) {
+        const success = await this.userRepository.delete(userId);
+        
+        if (!success) {
             throw new Error('Användare hittades inte');
         }
 
-        await this.saveUsers(filteredUsers);
         return true;
     }
 }

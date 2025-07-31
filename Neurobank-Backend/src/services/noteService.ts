@@ -1,4 +1,5 @@
-import fileService from "./fileService";
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { INoteRepository } from '../repositories/interfaces/INoteRepository';
 import aiService from "./aiService";
 import flashcardService from "./flashcardService";
 import statisticsService from "./statisticsService";
@@ -7,6 +8,12 @@ import { Note, CreateNoteRequest, ProcessNoteRequest } from "../types/Note";
 import { Flashcard } from "../types/Flashcard";
 
 class NoteService {
+  private noteRepository: INoteRepository;
+
+  constructor() {
+    this.noteRepository = RepositoryFactory.getNoteRepository();
+  }
+
   generateId(): string {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   }
@@ -15,7 +22,6 @@ class NoteService {
     validateNote(noteData);
 
     const { title, content, processType, userId, folderId } = noteData;
-    const notes = await fileService.readNotes();
 
     const newNote: Note = {
       id: this.generateId(),
@@ -28,8 +34,7 @@ class NoteService {
       updatedAt: new Date().toISOString(),
     };
 
-    notes.push(newNote);
-    await fileService.writeNotes(notes);
+    await this.noteRepository.create(newNote);
 
     // Registrera statistik för skapad note
     try {
@@ -42,31 +47,26 @@ class NoteService {
   }
 
   async getUserNotes(userId: string): Promise<Note[]> {
-    const notes = await fileService.readNotes();
-    return notes.filter((note) => note.userId === userId);
+    return await this.noteRepository.findByUserId(userId);
   }
 
   async getNoteById(noteId: string): Promise<Note | undefined> {
-    const notes = await fileService.readNotes();
-    return notes.find((note) => note.id === noteId);
+    return await this.noteRepository.findById(noteId);
   }
 
   async updateNote(noteId: string, updates: Partial<Omit<Note, 'id' | 'createdAt'>>): Promise<Note> {
-    const notes = await fileService.readNotes();
-    const noteIndex = notes.findIndex((note) => note.id === noteId);
-
-    if (noteIndex === -1) {
-      throw new Error("Anteckning hittades inte");
-    }
-
-    notes[noteIndex] = {
-      ...notes[noteIndex],
+    const updatesWithTimestamp = {
       ...updates,
       updatedAt: new Date().toISOString(),
     };
 
-    await fileService.writeNotes(notes);
-    return notes[noteIndex];
+    const updatedNote = await this.noteRepository.update(noteId, updatesWithTimestamp);
+    
+    if (!updatedNote) {
+      throw new Error("Anteckning hittades inte");
+    }
+
+    return updatedNote;
   }
 
   async processNoteWithAI(noteId: string, processType: "summarize" | "expand"): Promise<Note> {
@@ -90,23 +90,19 @@ class NoteService {
   }
 
   async deleteNote(noteId: string): Promise<boolean> {
-    const notes = await fileService.readNotes();
-    const filteredNotes = notes.filter((note) => note.id !== noteId);
-
-    if (notes.length === filteredNotes.length) {
+    const success = await this.noteRepository.delete(noteId);
+    
+    if (!success) {
       throw new Error("Anteckning hittades inte");
     }
-
-    await fileService.writeNotes(filteredNotes);
-    return true;
+    
+    return success;
   }
 
   async generateFlashcardsFromNotes(noteIds: string[], userId: string, deckId: string | null = null): Promise<Flashcard[]> {
     // Hämta alla specificerade anteckningar
-    const notes = await fileService.readNotes();
-    const selectedNotes = notes.filter(
-      (note) => noteIds.includes(note.id) && note.userId === userId
-    );
+    const allNotes = await this.noteRepository.findByUserId(userId);
+    const selectedNotes = allNotes.filter((note) => noteIds.includes(note.id));
 
     if (selectedNotes.length === 0) {
       throw new Error("Inga anteckningar hittades för de angivna ID:na");

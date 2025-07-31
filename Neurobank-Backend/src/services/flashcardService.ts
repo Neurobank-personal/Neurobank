@@ -1,4 +1,5 @@
-import fileService from "./fileService";
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { IFlashcardRepository } from '../repositories/interfaces/IFlashcardRepository';
 import statisticsService from "./statisticsService";
 import { Flashcard } from "../types/Flashcard";
 
@@ -19,13 +20,17 @@ interface SaveFlashcardData {
 }
 
 class FlashcardService {
+  private flashcardRepository: IFlashcardRepository;
+
+  constructor() {
+    this.flashcardRepository = RepositoryFactory.getFlashcardRepository();
+  }
+
   generateId(): string {
     return Date.now().toString() + Math.random().toString(36).substr(2, 9);
   }
 
   async createFlashcard(flashcardData: CreateFlashcardData, userId: string): Promise<Flashcard> {
-    const allFlashcards = await fileService.readFlashcards();
-
     const newFlashcard: Flashcard = {
       id: this.generateId(),
       question: flashcardData.question,
@@ -46,8 +51,7 @@ class FlashcardService {
       updatedAt: new Date().toISOString(),
     };
 
-    allFlashcards.push(newFlashcard);
-    await fileService.writeFlashcards(allFlashcards);
+    await this.flashcardRepository.create(newFlashcard);
 
     // Registrera statistik för skapad flashcard
     try {
@@ -63,8 +67,6 @@ class FlashcardService {
   }
 
   async saveFlashcards(flashcards: SaveFlashcardData[], userId: string): Promise<Flashcard[]> {
-    const allFlashcards = await fileService.readFlashcards();
-
     const flashcardsToSave: Flashcard[] = flashcards.map((card) => ({
       id: this.generateId(),
       question: card.question,
@@ -85,8 +87,12 @@ class FlashcardService {
       updatedAt: new Date().toISOString(),
     }));
 
-    allFlashcards.push(...flashcardsToSave);
-    await fileService.writeFlashcards(allFlashcards);
+    // Create each flashcard using repository
+    const savedFlashcards: Flashcard[] = [];
+    for (const card of flashcardsToSave) {
+      const savedCard = await this.flashcardRepository.create(card);
+      savedFlashcards.push(savedCard);
+    }
 
     // Registrera statistik för skapade flashcards
     try {
@@ -101,54 +107,43 @@ class FlashcardService {
       );
     }
 
-    return flashcardsToSave;
+    return savedFlashcards;
   }
 
   async getUserFlashcards(userId: string): Promise<Flashcard[]> {
     // First move expired cards back to remaining
     await this.moveExpiredCardsToRemaining(userId);
 
-    const allFlashcards = await fileService.readFlashcards();
-    return allFlashcards.filter((card) => card.userId === userId);
+    return await this.flashcardRepository.findByUserId(userId);
   }
 
   async getFlashcardById(flashcardId: string): Promise<Flashcard | undefined> {
-    const allFlashcards = await fileService.readFlashcards();
-    return allFlashcards.find((card) => card.id === flashcardId);
+    return await this.flashcardRepository.findById(flashcardId);
   }
 
   async updateFlashcard(flashcardId: string, updates: Partial<Omit<Flashcard, 'id' | 'createdAt'>>): Promise<Flashcard> {
-    const allFlashcards = await fileService.readFlashcards();
-    const cardIndex = allFlashcards.findIndex(
-      (card) => card.id === flashcardId
-    );
-
-    if (cardIndex === -1) {
-      throw new Error("Flashcard not found");
-    }
-
-    allFlashcards[cardIndex] = {
-      ...allFlashcards[cardIndex],
+    const updatesWithTimestamp = {
       ...updates,
       updatedAt: new Date().toISOString(),
     };
 
-    await fileService.writeFlashcards(allFlashcards);
-    return allFlashcards[cardIndex];
-  }
-
-  async deleteFlashcard(flashcardId: string): Promise<boolean> {
-    const allFlashcards = await fileService.readFlashcards();
-    const filteredFlashcards = allFlashcards.filter(
-      (card) => card.id !== flashcardId
-    );
-
-    if (allFlashcards.length === filteredFlashcards.length) {
+    const updatedCard = await this.flashcardRepository.update(flashcardId, updatesWithTimestamp);
+    
+    if (!updatedCard) {
       throw new Error("Flashcard not found");
     }
 
-    await fileService.writeFlashcards(filteredFlashcards);
-    return true;
+    return updatedCard;
+  }
+
+  async deleteFlashcard(flashcardId: string): Promise<boolean> {
+    const success = await this.flashcardRepository.delete(flashcardId);
+    
+    if (!success) {
+      throw new Error("Flashcard not found");
+    }
+    
+    return success;
   }
 
   async markCardReviewed(flashcardId: string, difficulty: "easy" | "medium" | "hard"): Promise<Flashcard> {
@@ -251,29 +246,22 @@ class FlashcardService {
   }
 
   async moveExpiredCardsToRemaining(userId: string): Promise<number> {
-    const allFlashcards = await fileService.readFlashcards();
+    const userFlashcards = await this.flashcardRepository.findByUserId(userId);
     const now = new Date();
     let movedCount = 0;
 
-    const updatedFlashcards = allFlashcards.map((card) => {
+    for (const card of userFlashcards) {
       if (
-        card.userId === userId &&
         card.status === "completed" &&
         card.nextReviewDate &&
         new Date(card.nextReviewDate) <= now
       ) {
-        movedCount++;
-        return {
-          ...card,
-          status: "remaining" as const,
+        await this.flashcardRepository.update(card.id, {
+          status: "remaining",
           updatedAt: new Date().toISOString(),
-        };
+        });
+        movedCount++;
       }
-      return card;
-    });
-
-    if (movedCount > 0) {
-      await fileService.writeFlashcards(updatedFlashcards);
     }
 
     return movedCount;

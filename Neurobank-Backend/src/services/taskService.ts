@@ -1,40 +1,24 @@
-import { promises as fs } from 'fs';
-import path from 'path';
 import { v4 as uuidv4 } from 'uuid';
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { ITaskRepository } from '../repositories/interfaces/ITaskRepository';
 import { Task, CreateTaskRequest, UpdateTaskRequest } from '../types/Task';
 
-const TASKS_FILE = path.join(__dirname, '../../data/tasks.json');
-
 class TaskService {
-    async getAllTasks(): Promise<Task[]> {
-        try {
-            const data = await fs.readFile(TASKS_FILE, 'utf8');
-            return JSON.parse(data);
-        } catch (error: any) {
-            if (error.code === 'ENOENT') {
-                return [];
-            }
-            throw error;
-        }
-    }
+    private taskRepository: ITaskRepository;
 
-    async saveTasks(tasks: Task[]): Promise<void> {
-        await fs.writeFile(TASKS_FILE, JSON.stringify(tasks, null, 2));
+    constructor() {
+        this.taskRepository = RepositoryFactory.getTaskRepository();
     }
 
     async getUserTasks(userId: string): Promise<Task[]> {
-        const tasks = await this.getAllTasks();
-        return tasks.filter(task => task.userId === userId);
+        return await this.taskRepository.findByUserId(userId);
     }
 
     async getTaskById(taskId: string): Promise<Task | undefined> {
-        const tasks = await this.getAllTasks();
-        return tasks.find(task => task.id === taskId);
+        return await this.taskRepository.findById(taskId);
     }
 
     async createTask(taskData: CreateTaskRequest & { userId: string }): Promise<Task> {
-        const tasks = await this.getAllTasks();
-
         const newTask: Task = {
             id: uuidv4(),
             userId: taskData.userId,
@@ -47,51 +31,46 @@ class TaskService {
             completedAt: undefined
         };
 
-        tasks.push(newTask);
-        await this.saveTasks(tasks);
-        return newTask;
+        return await this.taskRepository.create(newTask);
     }
 
     async updateTask(taskId: string, updates: UpdateTaskRequest): Promise<Task> {
-        const tasks = await this.getAllTasks();
-        const taskIndex = tasks.findIndex(task => task.id === taskId);
-
-        if (taskIndex === -1) {
+        const currentTask = await this.taskRepository.findById(taskId);
+        
+        if (!currentTask) {
             throw new Error('Task not found');
         }
 
-        const updatedTask: Task = {
-            ...tasks[taskIndex],
-            ...updates
-        };
+        const updatedData = { ...updates };
 
         // If status is being changed to completed, set completedAt
-        if (updates.status === 'completed' && tasks[taskIndex].status !== 'completed') {
-            updatedTask.completedAt = new Date().toISOString();
+        if (updates.status === 'completed' && currentTask.status !== 'completed') {
+            updatedData.completedAt = new Date().toISOString();
         }
 
         // If status is being changed from completed to pending, clear completedAt
-        if (updates.status === 'pending' && tasks[taskIndex].status === 'completed') {
-            updatedTask.completedAt = undefined;
+        if (updates.status === 'pending' && currentTask.status === 'completed') {
+            updatedData.completedAt = undefined;
         }
 
-        tasks[taskIndex] = updatedTask;
-        await this.saveTasks(tasks);
+        const updatedTask = await this.taskRepository.update(taskId, updatedData);
+        
+        if (!updatedTask) {
+            throw new Error('Task not found');
+        }
+        
         return updatedTask;
     }
 
     async deleteTask(taskId: string): Promise<boolean> {
-        const tasks = await this.getAllTasks();
-        const taskIndex = tasks.findIndex(task => task.id === taskId);
-
-        if (taskIndex === -1) {
+        const success = await this.taskRepository.delete(taskId);
+        
+        if (!success) {
             throw new Error('Task not found');
         }
-
-        tasks.splice(taskIndex, 1);
-        await this.saveTasks(tasks);
-        return true;
+        
+        return success;
     }
 }
 
-export default TaskService;
+export default new TaskService();

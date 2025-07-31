@@ -1,23 +1,35 @@
 import { v4 as uuidv4 } from 'uuid';
-import fileService from './fileService';
+import { RepositoryFactory } from '../repositories/RepositoryFactory';
+import { IDeckRepository } from '../repositories/interfaces/IDeckRepository';
+import { IFlashcardRepository } from '../repositories/interfaces/IFlashcardRepository';
 import { Deck, CreateDeckRequest, UpdateDeckRequest } from '../types/Deck';
 import { Flashcard } from '../types/Flashcard';
 
 class DeckService {
-    private dataFile: string = 'decks.json';
+    private deckRepository: IDeckRepository;
+    private flashcardRepository: IFlashcardRepository;
+
+    constructor() {
+        this.deckRepository = RepositoryFactory.getDeckRepository();
+        this.flashcardRepository = RepositoryFactory.getFlashcardRepository();
+    }
 
     async getUserDecks(userId: string): Promise<Deck[]> {
         try {
-            const decks = await fileService.readDecks();
-            const userDecks = decks.filter(deck => deck.userId === userId);
+            const userDecks = await this.deckRepository.findByUserId(userId);
 
             // Add flashcard count to each deck
-            const flashcards = await fileService.readFlashcards();
+            const decksWithCount = await Promise.all(
+                userDecks.map(async (deck) => {
+                    const deckFlashcards = await this.flashcardRepository.findByDeckId(deck.id);
+                    return {
+                        ...deck,
+                        flashcardCount: deckFlashcards.length
+                    };
+                })
+            );
 
-            return userDecks.map(deck => ({
-                ...deck,
-                flashcardCount: flashcards.filter(card => card.deckId === deck.id).length
-            }));
+            return decksWithCount;
         } catch (error) {
             console.error('Error getting user decks:', error);
             throw error;
@@ -26,16 +38,15 @@ class DeckService {
 
     async getDeck(deckId: string): Promise<Deck | null> {
         try {
-            const decks = await fileService.readDecks();
-            const deck = decks.find(d => d.id === deckId);
+            const deck = await this.deckRepository.findById(deckId);
 
             if (!deck) return null;
 
             // Add flashcard count
-            const flashcards = await fileService.readFlashcards();
+            const deckFlashcards = await this.flashcardRepository.findByDeckId(deckId);
             const deckWithCount: Deck = {
                 ...deck,
-                flashcardCount: flashcards.filter(card => card.deckId === deckId).length
+                flashcardCount: deckFlashcards.length
             };
 
             return deckWithCount;
@@ -47,8 +58,6 @@ class DeckService {
 
     async createDeck(deckData: CreateDeckRequest): Promise<Deck> {
         try {
-            const decks = await fileService.readDecks();
-
             const newDeck: Deck = {
                 id: uuidv4(),
                 name: deckData.name,
@@ -60,10 +69,7 @@ class DeckService {
                 flashcardCount: 0
             };
 
-            decks.push(newDeck);
-            await fileService.writeDecks(decks);
-
-            return newDeck;
+            return await this.deckRepository.create(newDeck);
         } catch (error) {
             console.error('Error creating deck:', error);
             throw error;
@@ -72,23 +78,18 @@ class DeckService {
 
     async updateDeck(deckId: string, updates: Omit<UpdateDeckRequest, 'id'>): Promise<Deck | null> {
         try {
-            const decks = await fileService.readDecks();
-            const deckIndex = decks.findIndex(d => d.id === deckId);
-
-            if (deckIndex === -1) return null;
-
-            const updatedDeck: Deck = {
-                ...decks[deckIndex],
+            const updatesWithTimestamp = {
                 ...updates,
                 updatedAt: new Date().toISOString()
             };
 
-            decks[deckIndex] = updatedDeck;
-            await fileService.writeDecks(decks);
+            const updatedDeck = await this.deckRepository.update(deckId, updatesWithTimestamp);
+            
+            if (!updatedDeck) return null;
 
             // Add flashcard count
-            const flashcards = await fileService.readFlashcards();
-            updatedDeck.flashcardCount = flashcards.filter(card => card.deckId === deckId).length;
+            const deckFlashcards = await this.flashcardRepository.findByDeckId(deckId);
+            updatedDeck.flashcardCount = deckFlashcards.length;
 
             return updatedDeck;
         } catch (error) {
@@ -99,26 +100,16 @@ class DeckService {
 
     async deleteDeck(deckId: string): Promise<boolean> {
         try {
-            const decks = await fileService.readDecks();
-            const deckIndex = decks.findIndex(d => d.id === deckId);
-
-            if (deckIndex === -1) return false;
-
-            // Remove deck
-            decks.splice(deckIndex, 1);
-            await fileService.writeDecks(decks);
+            const success = await this.deckRepository.delete(deckId);
+            
+            if (!success) return false;
 
             // Move flashcards from this deck to general collection (remove deckId)
-            const flashcards = await fileService.readFlashcards();
-            const updatedFlashcards = flashcards.map(card => {
-                if (card.deckId === deckId) {
-                    const { deckId: _, ...cardWithoutDeck } = card;
-                    return { ...cardWithoutDeck, deckId: null };
-                }
-                return card;
-            });
-
-            await fileService.writeFlashcards(updatedFlashcards);
+            const deckFlashcards = await this.flashcardRepository.findByDeckId(deckId);
+            
+            for (const card of deckFlashcards) {
+                await this.flashcardRepository.update(card.id, { deckId: null });
+            }
 
             return true;
         } catch (error) {
@@ -129,8 +120,7 @@ class DeckService {
 
     async getDeckFlashcards(deckId: string): Promise<Flashcard[]> {
         try {
-            const flashcards = await fileService.readFlashcards();
-            return flashcards.filter(card => card.deckId === deckId);
+            return await this.flashcardRepository.findByDeckId(deckId);
         } catch (error) {
             console.error('Error getting deck flashcards:', error);
             throw error;

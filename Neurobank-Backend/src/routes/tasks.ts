@@ -1,10 +1,9 @@
 import { Router, Request, Response } from 'express'
-import TaskService from '../services/taskService'
+import taskService from '../services/taskService'
 import { validateRequired } from '../utils/validation'
 import { Task, CreateTaskRequest, UpdateTaskRequest } from '../types/Task'
 
 const router = Router()
-const taskService = new TaskService()
 
 interface CreateTaskBody extends CreateTaskRequest {
   userId: string;
