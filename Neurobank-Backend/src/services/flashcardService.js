@@ -132,17 +132,23 @@ class FlashcardService {
   }
 
   async markCardReviewed(flashcardId, difficulty) {
+    console.log("markCardReviewed called with:", flashcardId, difficulty);
+
     const updates = {
       difficulty,
       lastReviewed: new Date().toISOString(),
       status: "completed",
     };
 
+    console.log("Getting flashcard by ID...");
     // Calculate next review date based on difficulty and previous intervals
     const card = await this.getFlashcardById(flashcardId);
     if (!card) {
+      console.log("Flashcard not found!");
       throw new Error("Flashcard not found");
     }
+
+    console.log("Found card:", card.id);
 
     const now = new Date();
     const lastReviewed = card.lastReviewed
@@ -156,6 +162,8 @@ class FlashcardService {
     let nextReviewDays = 1; // Default minimum
     const easyCount = card.easyCount || 0;
     const reviewCount = (card.reviewCount || 0) + 1;
+
+    console.log("Calculating review intervals...");
 
     if (difficulty === "easy") {
       // Progressive intervals: 1, 2, 3, 5, 8, 13, 20, 30, 45, 70, 100, 150, 210, 270, 300 days max
@@ -191,8 +199,10 @@ class FlashcardService {
     updates.nextReviewDate = nextReviewDate.toISOString();
     updates.reviewCount = reviewCount;
 
+    console.log("Updating flashcard...");
     const updatedCard = await this.updateFlashcard(flashcardId, updates);
 
+    console.log("Recording statistics...");
     // Registrera statistik för studerad flashcard
     try {
       await statisticsService.recordFlashcardStudied(card.userId, 1);
@@ -200,6 +210,7 @@ class FlashcardService {
       console.error("Failed to record flashcard study in statistics:", error);
     }
 
+    console.log("markCardReviewed completed successfully");
     return updatedCard;
   }
 

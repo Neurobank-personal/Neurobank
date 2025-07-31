@@ -1,5 +1,5 @@
 export interface Flashcard {
-  id: number;
+  id: string; // Changed from number to string to match backend implementation
   question: string;
   answer: string;
   categories: string[]; // Changed from single category to array

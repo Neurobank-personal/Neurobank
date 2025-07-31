@@ -1,6 +1,31 @@
 const express = require("express");
 const router = express.Router();
-const flashcardService = require("../services/flashcardService");
+
+// Mark a flashcard as reviewed
+router.patch("/:id/review", async (req, res) => {
+  console.log("Route handler called - PATCH /:id/review");
+  console.log("Params:", req.params);
+  console.log("Body:", req.body);
+
+  try {
+    const { id } = req.params;
+    const { difficulty } = req.body;
+
+    console.log("Calling flashcardService.markCardReviewed...");
+    const updatedCard = await flashcardService.markCardReviewed(id, difficulty);
+
+    console.log("Success! Returning card:", updatedCard.id);
+    res.json(updatedCard);
+  } catch (error) {
+    console.error("Error in PATCH /:id/review:", error);
+    console.error("Error stack:", error.stack);
+    res.status(500).json({
+      error: "Något gick fel på servern",
+      code: "INTERNAL_SERVER_ERROR",
+      details: error.message,
+    });
+  }
+});
 
 // Skapa ny flashcard
 router.post("/", async (req, res, next) => {

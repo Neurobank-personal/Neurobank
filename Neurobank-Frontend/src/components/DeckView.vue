@@ -178,7 +178,7 @@
               <button
                 v-if="card.status === 'completed'"
                 class="action-btn reset"
-                @click="resetCardToRemaining(card.id.toString())"
+                @click="resetCardToRemaining(card.id)"
                 title="Reset to Remaining"
               >
                 <svg
@@ -528,9 +528,7 @@ const handleMarkCard = async (
     );
 
     // Update the specific card in the local array
-    const cardIndex = flashcards.value.findIndex(
-      (card) => card.id.toString() === cardId
-    );
+    const cardIndex = flashcards.value.findIndex((card) => card.id === cardId);
     if (cardIndex !== -1) {
       flashcards.value[cardIndex] = updatedCard;
     }
@@ -555,9 +553,7 @@ const handleMarkCardCustom = async (
     );
 
     // Update the specific card in the local array
-    const cardIndex = flashcards.value.findIndex(
-      (card) => card.id.toString() === cardId
-    );
+    const cardIndex = flashcards.value.findIndex((card) => card.id === cardId);
     if (cardIndex !== -1) {
       flashcards.value[cardIndex] = updatedCard;
     }
@@ -574,9 +570,7 @@ const resetCardToRemaining = async (cardId: string) => {
     const updatedCard = await FlashcardService.resetCardToRemaining(cardId);
 
     // Update the specific card in the local array
-    const cardIndex = flashcards.value.findIndex(
-      (card) => card.id.toString() === cardId
-    );
+    const cardIndex = flashcards.value.findIndex((card) => card.id === cardId);
     if (cardIndex !== -1) {
       flashcards.value[cardIndex] = updatedCard;
     }
@@ -633,11 +627,11 @@ const editCard = (card: Flashcard) => {
   showEditForm.value = true;
 };
 
-const deleteCard = async (cardId: number) => {
+const deleteCard = async (cardId: string) => {
   if (!confirm("Are you sure you want to delete this card?")) return;
 
   try {
-    await FlashcardService.deleteFlashcard(cardId.toString());
+    await FlashcardService.deleteFlashcard(cardId);
     await loadFlashcards();
   } catch (err) {
     console.error("Error deleting card:", err);

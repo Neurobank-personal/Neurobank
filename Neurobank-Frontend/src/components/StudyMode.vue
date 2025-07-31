@@ -268,7 +268,7 @@ const currentCard = computed(() => {
   if (!card) return null;
 
   return {
-    id: card.id.toString(),
+    id: card.id, // ID is already a string, no need to convert
     question: card.question,
     answer: card.answer,
     categories: Array.isArray(card.categories)

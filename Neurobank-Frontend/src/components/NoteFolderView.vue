@@ -428,10 +428,12 @@ import { ref, computed, onMounted, watch } from "vue";
 import { useAuth } from "../stores/auth";
 import { NoteService } from "../services/NoteService";
 import NoteFolderService from "../services/NoteFolderService";
+import FlashcardService from "../services/FlashcardService";
 import NoteViewer from "./NoteViewer.vue";
 import { handleCreateNote, handleProcessNote } from "../services/handleNotes";
 import type { Note } from "../types/Note";
 import type { NoteFolder } from "../types/NoteFolder";
+import type { Flashcard } from "../types/Flashcard";
 
 // Props and Emits
 const props = defineProps<{
@@ -694,18 +696,21 @@ const generateFlashcards = async () => {
   flashcardError.value = "";
 
   try {
-    // Here you would call the actual flashcard service
-    // For now, just simulate the process
-    await new Promise((resolve) => setTimeout(resolve, 2000));
+    // Call the actual flashcard service to generate and save flashcards
+    const generatedCards = await FlashcardService.generateFromNotes(
+      selectedNoteIds.value,
+      userId.value,
+      selectedDeckId.value || undefined
+    );
 
-    // Mock generated flashcards
-    generatedFlashcards.value = [
-      {
-        question: "Sample question from your notes",
-        answer: "Sample answer",
-        categories: ["General"],
-      },
-    ];
+    // Convert the saved flashcards to the display format
+    generatedFlashcards.value = generatedCards.map((card: Flashcard) => ({
+      question: card.question,
+      answer: card.answer,
+      categories: Array.isArray(card.categories)
+        ? card.categories
+        : [card.categories],
+    }));
 
     // Clear selection after successful generation
     selectedNoteIds.value = [];
